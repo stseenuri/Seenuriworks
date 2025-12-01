@@ -4,108 +4,59 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Seenuri Works — Shivateja</title>
-
-<!-- Google font -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
 <style>
   :root{
-    --bg: #0b0f12;
-    --card: #0f1720;
-    --muted: #9aa4ac;
-    --accent: #b2d12e; /* your previous color — can change */
-    --glass: rgba(255,255,255,0.03);
-    --maxw: 1100px;
+    --bg:#0b0f12; --card:#0f1720; --muted:#9aa4ac; --accent:#b2d12e;
+    --glass:rgba(255,255,255,0.03); --maxw:1100px;
   }
-  *{box-sizing:border-box}
-  html,body{height:100%}
+  *{box-sizing:border-box} html,body{height:100%}
   body{
-    margin:0;
-    font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;
-    background:linear-gradient(180deg,var(--bg),#071018 30%);
-    color:#e6eef6;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-    line-height:1.4;
+    margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
+    background:linear-gradient(180deg,var(--bg),#071018 30%); color:#e6eef6;
   }
-
   .wrap{max-width:var(--maxw); margin:48px auto; padding:32px;}
-
-/* header */
-  header{
-    display:flex; gap:20px; align-items:center;
-    justify-content:space-between;
-  }
-  .brand{
-    display:flex; gap:16px; align-items:center;
-  }
+  header{display:flex; gap:20px; align-items:center; justify-content:space-between;}
+  .brand{display:flex; gap:16px; align-items:center;}
   .logo-small{width:56px; height:56px; border-radius:12px; overflow:hidden; background:var(--glass); display:flex; align-items:center; justify-content:center;}
-  .logo-small img{width:100%; height:100%; object-fit:cover; display:block}
-
-/* hero */
-  .hero{
-    display:grid;
-    grid-template-columns: 220px 1fr;
-    gap:28px;
-    align-items:center;
-    margin-top:28px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
-    padding:28px;
-    border-radius:14px;
-    box-shadow: 0 4px 30px rgba(0,0,0,0.4);
-    backdrop-filter: blur(6px);
-  }
-
-  .dp{
-    width:180px; height:180px; border-radius:50%; overflow:hidden; margin:auto;
-    border:4px solid rgba(178,209,46,0.12);
-  }
-  .dp img{width:100%; height:100%; object-fit:cover; display:block}
-
+  .logo-small img{width:100%; height:100%; object-fit:cover}
+  nav.muted{display:flex; gap:16px; align-items:center; color:var(--muted)}
+  .hero{display:grid; grid-template-columns:220px 1fr; gap:28px; align-items:center; margin-top:28px;
+        background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); padding:28px; border-radius:14px;}
+  .dp{width:180px; height:180px; border-radius:50%; overflow:hidden; margin:auto; border:4px solid rgba(178,209,46,0.12)}
+  .dp img{width:100%; height:100%; object-fit:cover}
   .hero h1{margin:0 0 8px 0; font-size:28px}
-  .hero p.lead{margin:0; color:var(--muted)}
-
+  .lead{margin:0; color:var(--muted)}
   .cta-row{margin-top:18px; display:flex; gap:12px; align-items:center}
-
-/* logos row */
-  .logos{
-    display:flex; gap:18px; justify-content:center; margin-top:20px; flex-wrap:wrap;
-  }
+  .logos{display:flex; gap:18px; justify-content:center; margin-top:20px; flex-wrap:wrap}
   .logos img{width:120px; height:auto; border-radius:10px; background:var(--card); padding:8px; box-shadow:0 6px 18px rgba(0,0,0,0.5)}
-
-/* sections */
-  .sections{display:grid; grid-template-columns: 1fr 320px; gap:24px; margin-top:30px}
+  .sections{display:grid; grid-template-columns:1fr 320px; gap:24px; margin-top:30px}
   .card{background:var(--card); padding:18px; border-radius:12px; color:#d9e6f0}
   .muted{color:var(--muted); font-size:14px}
-
-/* footer */
+  /* services grid */
+  .services{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px; margin-top:12px}
+  .service-item{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); padding:10px 12px; border-radius:10px; display:flex; gap:10px; align-items:center; box-shadow:0 6px 18px rgba(0,0,0,0.35)}
+  .service-item strong{font-size:14px}
+  /* projects */
+  .projects{display:grid; gap:12px; margin-top:12px}
+  .proj-card{display:flex; gap:12px; align-items:center; padding:12px; border-radius:10px; background:linear-gradient(180deg,#081018,#071018); box-shadow:0 6px 18px rgba(0,0,0,0.35)}
+  .proj-thumb{width:86px; height:60px; background:#0a0d10; border-radius:8px; display:flex; align-items:center; justify-content:center; overflow:hidden}
+  .proj-thumb img{width:100%; height:100%; object-fit:cover}
   footer{margin-top:32px; text-align:center; color:var(--muted); font-size:13px}
-
-/* responsiveness */
-  @media (max-width:880px){
-    .hero{grid-template-columns: 1fr; text-align:center}
-    .sections{grid-template-columns:1fr}
-    header{flex-direction:column; align-items:flex-start}
-  }
+  @media (max-width:880px){ .hero{grid-template-columns:1fr; text-align:center} .sections{grid-template-columns:1fr} header{flex-direction:column; align-items:flex-start} }
 </style>
 </head>
 <body>
-
 <div class="wrap">
-
   <header>
     <div class="brand">
-      <div class="logo-small">
-        <!-- logo: use logo-chinkulu.png (rename recommended) -->
-        <img src="logo-chinkulu.png" alt="Seenuri Works">
-      </div>
+      <div class="logo-small"><img src="logo-chinkulu.png" alt="Seenuri Works logo"></div>
       <div>
         <div style="font-weight:700">Seenuri Works</div>
         <div class="muted" style="font-size:13px">Marketer • Designer • Creative</div>
       </div>
     </div>
-
-    <nav class="muted" style="display:flex; gap:16px; align-items:center">
+    <nav class="muted">
       <a href="#work" style="color:inherit; text-decoration:none">Work</a>
       <a href="#services" style="color:inherit; text-decoration:none">Services</a>
       <a href="#contact" style="color:inherit; text-decoration:none">Contact</a>
@@ -116,10 +67,13 @@
   <section class="hero" aria-labelledby="hero-heading">
     <div>
       <div class="dp"><img src="dp.jpg" alt="Shivateja DP"></div>
+
       <div class="logos" aria-hidden="true" style="margin-top:14px">
-        <img src="logo-zapwash.png" alt="logo zapwash">
+        <img src="logo-chatgpt.png" alt="logo chatgpt">
         <img src="logo-chinkulu.png" alt="logo chinkulu">
         <img src="logo-vinthapadalu.png" alt="logo vinthapadalu">
+        <!-- Zapwash logo (rename your zapwash image to logo-zapwash.png) -->
+        <img src="logo-zapwash.png" alt="logo zapwash" style="width:120px;">
       </div>
     </div>
 
@@ -142,32 +96,46 @@
         <h3 style="margin-top:0">Selected case studies</h3>
         <p class="muted">Projects where design and marketing moved metrics.</p>
 
-        <div style="display:grid; gap:12px; margin-top:12px">
-          <div style="display:flex; gap:12px; align-items:center;">
-            <div style="width:86px; height:60px; background:linear-gradient(180deg,#091016, #071018); border-radius:8px; display:flex; align-items:center; justify-content:center">Image</div>
+        <!-- Projects (three companies) -->
+        <div class="projects" id="projects">
+          <div class="proj-card">
+            <div class="proj-thumb"><img src="project-company1.jpg" alt="Company 1"></div>
             <div>
-              <strong>Acquisition — Landing page</strong>
-              <div class="muted" style="font-size:13px">Increased CTR by 38% through hero experiments.</div>
+              <strong>Company One — Growth Campaign</strong>
+              <div class="muted" style="font-size:13px">Paid acquisition + landing optimization that increased leads by 42%.</div>
             </div>
           </div>
 
-          <div style="display:flex; gap:12px; align-items:center;">
-            <div style="width:86px; height:60px; background:linear-gradient(180deg,#091016, #071018); border-radius:8px; display:flex; align-items:center; justify-content:center">Image</div>
+          <div class="proj-card">
+            <div class="proj-thumb"><img src="project-company2.jpg" alt="Company 2"></div>
             <div>
-              <strong>Brand Launch</strong>
-              <div class="muted" style="font-size:13px">Naming, identity and product launch playbook.</div>
+              <strong>Company Two — Brand Identity</strong>
+              <div class="muted" style="font-size:13px">End-to-end identity, packaging and launch playbook.</div>
+            </div>
+          </div>
+
+          <div class="proj-card">
+            <div class="proj-thumb"><img src="project-company3.jpg" alt="Company 3"></div>
+            <div>
+              <strong>Company Three — Product UX</strong>
+              <div class="muted" style="font-size:13px">UI redesign and conversion funnel improvements.</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="card" style="margin-top:18px">
-        <h4 style="margin:0 0 8px 0">What I do</h4>
-        <ul style="margin:0; padding-left:18px; color:var(--muted)">
-          <li>Acquisition funnels & CRO</li>
-          <li>Brand identity & positioning</li>
-          <li>Creative strategy & short-form ads</li>
-        </ul>
+      <div class="card" id="services" style="margin-top:18px">
+        <h4 style="margin:0 0 8px 0">Services — Online & Offline</h4>
+        <p class="muted">I offer both digital and offline growth services tailored to your brand:</p>
+
+        <div class="services">
+          <div class="service-item"><div>🔍</div><div><strong>Online SEO</strong><div class="muted" style="font-size:12px">Technical SEO, content strategy</div></div></div>
+          <div class="service-item"><div>📄</div><div><strong>Offline SEO</strong><div class="muted" style="font-size:12px">Local listings, offline presence</div></div></div>
+          <div class="service-item"><div>📱</div><div><strong>Social Media Strategy</strong><div class="muted" style="font-size:12px">Campaigns, content calendar</div></div></div>
+          <div class="service-item"><div>🎨</div><div><strong>UI Designing</strong><div class="muted" style="font-size:12px">Prototypes & pixel-perfect UI</div></div></div>
+          <div class="service-item"><div>✏️</div><div><strong>Logo Designing</strong><div class="muted" style="font-size:12px">Identity & brand marks</div></div></div>
+          <div class="service-item"><div>📈</div><div><strong>Marketing Strategy</strong><div class="muted" style="font-size:12px">Funnel & GTM planning</div></div></div>
+        </div>
       </div>
     </div>
 
@@ -184,11 +152,7 @@
     </aside>
   </div>
 
-  <footer>
-    © Seenuri Works — Shivateja • Built with care
-  </footer>
-
+  <footer>© Seenuri Works — Shivateja • Built with care</footer>
 </div>
-
 </body>
 </html>
