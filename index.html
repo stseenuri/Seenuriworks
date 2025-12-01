@@ -1,338 +1,194 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Seenuri Works — Shivateja</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Seenuri Works — Shivateja</title>
 
-  <!-- Google font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<!-- Google font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
-  <style>
-    :root{
-      --bg:#0d0d0d;
-      --muted:#c9c9c9;
-      --accent:#b2d12e;
-      --card:#0b0b0b;
-      --glass: rgba(255,255,255,0.06);
-      --glass-2: rgba(255,255,255,0.12);
-      --max-w: 1100px;
-    }
+<style>
+  :root{
+    --bg: #0b0f12;
+    --card: #0f1720;
+    --muted: #9aa4ac;
+    --accent: #b2d12e; /* your previous color — can change */
+    --glass: rgba(255,255,255,0.03);
+    --maxw: 1100px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    background:linear-gradient(180deg,var(--bg),#071018 30%);
+    color:#e6eef6;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.4;
+  }
 
-    /* Reset + base */
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0;
-      font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-      background:var(--bg);
-      color:#fff;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      line-height:1.45;
-    }
+  .wrap{max-width:var(--maxw); margin:48px auto; padding:32px;}
 
-    a{color:inherit;text-decoration:none}
-    .container{max-width:var(--max-w);margin:0 auto;padding:0 20px}
+/* header */
+  header{
+    display:flex; gap:20px; align-items:center;
+    justify-content:space-between;
+  }
+  .brand{
+    display:flex; gap:16px; align-items:center;
+  }
+  .logo-small{width:56px; height:56px; border-radius:12px; overflow:hidden; background:var(--glass); display:flex; align-items:center; justify-content:center;}
+  .logo-small img{width:100%; height:100%; object-fit:cover; display:block}
 
-    /* Header / nav */
-    header.site-header{
-      position:fixed;
-      inset:0 auto auto 0;
-      width:100%;
-      z-index:40;
-      backdrop-filter: blur(6px);
-      background: rgba(0,0,0,0.28);
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
-    .brand{font-weight:700;letter-spacing:0.4px}
-    .brand .accent{color:var(--accent)}
-    .nav-links{display:none;gap:22px;font-size:14px;opacity:0.9}
-    .nav-links a:hover{opacity:1}
-    .cta{background:var(--accent);color:#000;padding:8px 14px;border-radius:8px;font-weight:600}
-    .menu-btn{background:rgba(255,255,255,0.06);border:0;padding:8px 10px;border-radius:8px;color:#fff}
+/* hero */
+  .hero{
+    display:grid;
+    grid-template-columns: 220px 1fr;
+    gap:28px;
+    align-items:center;
+    margin-top:28px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    padding:28px;
+    border-radius:14px;
+    box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+    backdrop-filter: blur(6px);
+  }
 
-    /* Hero */
-    .hero{padding:110px 0 56px}
-    .grid{display:grid;gap:28px}
-    .two-col{grid-template-columns:1fr;align-items:center}
-    @media(min-width:880px){.two-col{grid-template-columns:1fr 540px}}
+  .dp{
+    width:180px; height:180px; border-radius:50%; overflow:hidden; margin:auto;
+    border:4px solid rgba(178,209,46,0.12);
+  }
+  .dp img{width:100%; height:100%; object-fit:cover; display:block}
 
-    .eyebrow{font-size:13px;color:var(--accent);text-transform:uppercase;font-weight:600;letter-spacing:0.8px}
-    h1{font-size:34px;margin:6px 0 10px;line-height:1.06}
-    @media(min-width:880px){h1{font-size:48px}}
-    p.lead{color:rgba(255,255,255,0.82);max-width:52ch;font-size:16px}
+  .hero h1{margin:0 0 8px 0; font-size:28px}
+  .hero p.lead{margin:0; color:var(--muted)}
 
-    .hero-actions{margin-top:18px;display:flex;gap:12px;align-items:center}
-    .btn-ghost{padding:10px 16px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.08)}
-    .btn-primary{padding:10px 16px;border-radius:10px;background:var(--accent);color:#000;font-weight:700}
+  .cta-row{margin-top:18px; display:flex; gap:12px; align-items:center}
 
-    .socials{margin-top:18px;display:flex;gap:12px;color:rgba(255,255,255,0.7)}
+/* logos row */
+  .logos{
+    display:flex; gap:18px; justify-content:center; margin-top:20px; flex-wrap:wrap;
+  }
+  .logos img{width:120px; height:auto; border-radius:10px; background:var(--card); padding:8px; box-shadow:0 6px 18px rgba(0,0,0,0.5)}
 
-    /* Mock card */
-    .mock-card{border-radius:18px;overflow:hidden;padding:18px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.08);box-shadow:0 10px 30px rgba(0,0,0,0.5)}
-    .project{background:var(--card);border-radius:12px;padding:14px;display:flex;gap:12px;align-items:stretch}
-    .project img{width:48%;object-fit:cover;border-radius:10px}
-    .project .meta{padding:6px 0;color:rgba(255,255,255,0.85)}
-    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.06);font-size:12px;margin-right:8px}
+/* sections */
+  .sections{display:grid; grid-template-columns: 1fr 320px; gap:24px; margin-top:30px}
+  .card{background:var(--card); padding:18px; border-radius:12px; color:#d9e6f0}
+  .muted{color:var(--muted); font-size:14px}
 
-    /* Sections */
-    section{padding:30px 0}
-    h2{font-size:20px;margin:0 0 6px}
-    .muted{color:rgba(255,255,255,0.7)}
+/* footer */
+  footer{margin-top:32px; text-align:center; color:var(--muted); font-size:13px}
 
-    .grid-3{display:grid;grid-template-columns:1fr;gap:18px}
-    @media(min-width:880px){.grid-3{grid-template-columns:repeat(3,1fr)}}
-
-    .card{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border-radius:12px;padding:18px;border:1px solid rgba(255,255,255,0.06)}
-
-    /* Cases */
-    .cases{display:grid;gap:18px}
-    @media(min-width:880px){.cases{grid-template-columns:repeat(3,1fr)}}
-    .case img{width:100%;height:176px;object-fit:cover}
-
-    /* About */
-    .about-grid{display:grid;gap:18px}
-    @media(min-width:880px){.about-grid{grid-template-columns:2fr 1fr;align-items:center}}
-
-    .avatar{width:180px;height:180px;border-radius:999px;overflow:hidden;border:6px solid rgba(255,255,255,0.06);margin:0 auto}
-    .small{font-size:14px;color:rgba(255,255,255,0.78)}
-
-    /* Contact form */
-    form.grid-form{display:grid;gap:12px}
-    @media(min-width:880px){form.grid-form{grid-template-columns:1fr 1fr;align-items:start}}
-    .input,textarea{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);padding:12px;border-radius:8px;color:#fff}
-    textarea{min-height:120px;grid-column:1/-1}
-    button[type="submit"]{background:var(--accent);color:#000;padding:10px 16px;border-radius:10px;border:0;font-weight:700;cursor:pointer;grid-column:1/-1}
-
-    /* Footer */
-    footer{border-top:1px solid rgba(255,255,255,0.04);margin-top:40px;padding:18px 0;text-align:center;color:rgba(255,255,255,0.6);font-size:14px}
-
-    /* Utility */
-    .row{display:flex;gap:12px;align-items:center}
-    .mt-8{margin-top:32px}
-    .muted-2{color:rgba(255,255,255,0.55)}
-  </style>
+/* responsiveness */
+  @media (max-width:880px){
+    .hero{grid-template-columns: 1fr; text-align:center}
+    .sections{grid-template-columns:1fr}
+    header{flex-direction:column; align-items:flex-start}
+  }
+</style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container nav-inner">
-      <div class="brand">Seenuri <span class="accent">Works</span></div>
 
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="#work">Work</a>
-        <a href="#services">Services</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-      </nav>
+<div class="wrap">
 
-      <div class="row">
-        <a class="cta" href="#contact">Hire me</a>
-        <button class="menu-btn" aria-label="menu">☰</button>
+  <header>
+    <div class="brand">
+      <div class="logo-small">
+        <!-- logo: use logo-chinkulu.png (rename recommended) -->
+        <img src="logo-chinkulu.png" alt="Seenuri Works">
+      </div>
+      <div>
+        <div style="font-weight:700">Seenuri Works</div>
+        <div class="muted" style="font-size:13px">Marketer • Designer • Creative</div>
       </div>
     </div>
+
+    <nav class="muted" style="display:flex; gap:16px; align-items:center">
+      <a href="#work" style="color:inherit; text-decoration:none">Work</a>
+      <a href="#services" style="color:inherit; text-decoration:none">Services</a>
+      <a href="#contact" style="color:inherit; text-decoration:none">Contact</a>
+      <a href="mailto:contact@thezapwash.com" style="background:var(--accent); padding:8px 12px; border-radius:8px; color:#06110a; font-weight:600; text-decoration:none">Hire me</a>
+    </nav>
   </header>
 
-  <main>
-    <section class="hero">
-      <div class="container two-col grid">
-        <div>
-          <div class="eyebrow">Hi, I’m <strong>Shivateja</strong> — Marketer & Designer</div>
-          <h1>I design growth-focused brand experiences<br/>and build conversion-first digital products.</h1>
-          <p class="lead">I combine consumer psychology, data-driven strategy and elegant UI to help brands win attention and revenue. Case studies include acquisition funnels, product landing pages, and brand identity systems.</p>
+  <section class="hero" aria-labelledby="hero-heading">
+    <div>
+      <div class="dp"><img src="dp.jpg" alt="Shivateja DP"></div>
+      <div class="logos" aria-hidden="true" style="margin-top:14px">
+        <img src="logo-chatgpt.png" alt="logo chatgpt">
+        <img src="logo-chinkulu.png" alt="logo chinkulu">
+        <img src="logo-vinthapadalu.png" alt="logo vinthapadalu">
+      </div>
+    </div>
 
-          <div class="hero-actions">
-            <a class="btn-ghost" href="#work">View case studies →</a>
-            <a class="btn-primary" href="#contact">Let's work</a>
+    <div>
+      <h1 id="hero-heading">Hi, I’m <strong>Shivateja</strong> — Marketer & Designer</h1>
+      <p class="lead">I design growth-focused brand experiences and build conversion-first digital products. I combine consumer psychology, data-driven strategy and elegant UI to help brands win attention and revenue.</p>
+
+      <div class="cta-row">
+        <a href="#work" style="padding:10px 14px; border-radius:9px; background:transparent; border:1px solid rgba(255,255,255,0.06); color:inherit; text-decoration:none">View case studies →</a>
+        <a href="#contact" style="padding:10px 14px; border-radius:9px; background:var(--accent); color:#06110a; text-decoration:none; font-weight:600">Let's work</a>
+      </div>
+
+      <div style="margin-top:18px" class="muted">LinkedIn • GitHub • Email</div>
+    </div>
+  </section>
+
+  <div class="sections">
+    <div>
+      <div id="work" class="card">
+        <h3 style="margin-top:0">Selected case studies</h3>
+        <p class="muted">Projects where design and marketing moved metrics.</p>
+
+        <div style="display:grid; gap:12px; margin-top:12px">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div style="width:86px; height:60px; background:linear-gradient(180deg,#091016, #071018); border-radius:8px; display:flex; align-items:center; justify-content:center">Image</div>
+            <div>
+              <strong>Acquisition — Landing page</strong>
+              <div class="muted" style="font-size:13px">Increased CTR by 38% through hero experiments.</div>
+            </div>
           </div>
 
-          <div class="socials">
-            <a href="#" aria-label="LinkedIn">LinkedIn</a>
-            <a href="#" aria-label="GitHub">GitHub</a>
-            <a href="#contact" aria-label="Email">Email</a>
-          </div>
-        </div>
-
-        <div>
-          <div class="mock-card">
-            <div class="project">
-              <img src="https://images.unsplash.com/photo-1542744094-24638eff58bb?q=80&w=1400&auto=format&fit=crop" alt="project" />
-              <div>
-                <div class="muted">Case study</div>
-                <h3 style="margin:8px 0 6px;font-size:20px">Brand Launch — Tea Co.</h3>
-                <p class="small">Performance-first landing page that increased CTR by 38% and reduced bounce by 21% through messaging and hero experiments.</p>
-                <div style="margin-top:12px">
-                  <span class="pill">Acquisition</span>
-                  <span class="pill">Landing Page</span>
-                </div>
-              </div>
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div style="width:86px; height:60px; background:linear-gradient(180deg,#091016, #071018); border-radius:8px; display:flex; align-items:center; justify-content:center">Image</div>
+            <div>
+              <strong>Brand Launch</strong>
+              <div class="muted" style="font-size:13px">Naming, identity and product launch playbook.</div>
             </div>
           </div>
         </div>
       </div>
-    </section>
 
-    <!-- Services -->
-    <section id="services">
-      <div class="container">
-        <h2>What I do</h2>
-        <p class="muted">Marketing + Design services focused on measurable outcomes.</p>
-
-        <div class="grid-3 mt-8">
-          <div class="card">
-            <div style="color:var(--accent);font-weight:700">1</div>
-            <h3 style="margin:8px 0 6px">Acquisition Funnels</h3>
-            <p class="muted-2">Landing pages, funnels, CRO experiments, analytics</p>
-            <div style="margin-top:12px"><a class="muted" href="#work">See examples</a></div>
-          </div>
-
-          <div class="card">
-            <div style="color:var(--accent);font-weight:700">2</div>
-            <h3 style="margin:8px 0 6px">Brand & Positioning</h3>
-            <p class="muted-2">Naming, identity systems, tone of voice, launch plans</p>
-            <div style="margin-top:12px"><a class="muted" href="#work">See examples</a></div>
-          </div>
-
-          <div class="card">
-            <div style="color:var(--accent);font-weight:700">3</div>
-            <h3 style="margin:8px 0 6px">Content & Creative</h3>
-            <p class="muted-2">Short-form ads, story-driven scripts, visual systems</p>
-            <div style="margin-top:12px"><a class="muted" href="#work">See examples</a></div>
-          </div>
-        </div>
+      <div class="card" style="margin-top:18px">
+        <h4 style="margin:0 0 8px 0">What I do</h4>
+        <ul style="margin:0; padding-left:18px; color:var(--muted)">
+          <li>Acquisition funnels & CRO</li>
+          <li>Brand identity & positioning</li>
+          <li>Creative strategy & short-form ads</li>
+        </ul>
       </div>
-    </section>
+    </div>
 
-    <!-- Work / cases -->
-    <section id="work">
-      <div class="container">
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div>
-            <h2>Selected case studies</h2>
-            <p class="muted">Projects where design and marketing moved metrics.</p>
-          </div>
-          <a class="muted" href="#contact">Request full deck</a>
-        </div>
-
-        <div class="cases mt-8">
-          <article class="case card">
-            <img src="https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=1200&auto=format&fit=crop" alt="case 1" />
-            <div style="padding-top:8px">
-              <div class="muted">Acquisition • Landing page</div>
-              <h3 style="margin:8px 0 6px">Project title 1</h3>
-              <p class="muted-2">Short summary that highlights the impact: CTR, conversion uplift and outcomes.</p>
-            </div>
-          </article>
-
-          <article class="case card">
-            <img src="https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=1200&auto=format&fit=crop" alt="case 2" />
-            <div style="padding-top:8px">
-              <div class="muted">Acquisition • Landing page</div>
-              <h3 style="margin:8px 0 6px">Project title 2</h3>
-              <p class="muted-2">Short summary that highlights the impact: CTR, conversion uplift and outcomes.</p>
-            </div>
-          </article>
-
-          <article class="case card">
-            <img src="https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=1200&auto=format&fit=crop" alt="case 3" />
-            <div style="padding-top:8px">
-              <div class="muted">Acquisition • Landing page</div>
-              <h3 style="margin:8px 0 6px">Project title 3</h3>
-              <p class="muted-2">Short summary that highlights the impact: CTR, conversion uplift and outcomes.</p>
-            </div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section id="testimonials">
-      <div class="container">
-        <h2>What clients say</h2>
-        <div style="display:grid;gap:18px;margin-top:12px;">
-          <div class="card">
-            <p class="muted-2">"Shivateja helped us reframe our homepage and landing flows. We saw a 40% uplift in trial signups."</p>
-            <div style="margin-top:10px" class="muted">— Product Head, Tea Co.</div>
-          </div>
-
-          <div class="card">
-            <p class="muted-2">"Excellent mix of practical strategy and beautiful executions. Fast, pragmatic and creative."</p>
-            <div style="margin-top:10px" class="muted">— Founder, D2C brand</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- About -->
-    <section id="about">
-      <div class="container about-grid">
-        <div>
-          <h2>About me</h2>
-          <p class="muted">I am a marketer who cares about craft. I use user research, A/B testing, and clean UI to build measurable brand systems and acquisition engines. I have worked across D2C, SaaS and mid-stage startups.</p>
-
-          <ul style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
-            <li class="card">Growth experiments & CRO</li>
-            <li class="card">Product marketing & GTM</li>
-            <li class="card">Creative direction & ads</li>
-            <li class="card">Analytics & tracking</li>
-          </ul>
-        </div>
-
-        <aside style="text-align:center">
-          <div class="avatar">
-            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop" alt="Shivateja" style="width:100%;height:100%;object-fit:cover" />
-          </div>
-          <div style="margin-top:12px" class="small">Available for freelance & full-time</div>
-          <a href="#contact" class="btn-primary" style="display:inline-block;margin-top:12px">Get in touch</a>
-        </aside>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact">
-      <div class="container">
-        <h2>Contact</h2>
+    <aside>
+      <div class="card">
+        <h4 style="margin:0 0 8px 0">Contact</h4>
         <p class="muted">Interested in working together? Send a note and I will reply within 24–48 hours.</p>
-
-        <div style="margin-top:16px">
-          <!-- To hook to Formspree: set form action to 'https://formspree.io/f/<your-id>' and remove the JS preventDefault -->
-          <form class="grid-form" onsubmit="handleForm(event)">
-            <input class="input" type="text" name="name" placeholder="Your name" required />
-            <input class="input" type="email" name="email" placeholder="Your email" required />
-            <input class="input" type="text" name="subject" placeholder="Subject" />
-            <textarea class="input" name="message" placeholder="Message" required></textarea>
-            <button type="submit">Send message</button>
-          </form>
-        </div>
+        <a id="contact" href="mailto:contact@thezapwash.com" style="display:inline-block; margin-top:10px; padding:10px 12px; border-radius:9px; background:var(--accent); color:#06110a; text-decoration:none; font-weight:700">Email me</a>
       </div>
-    </section>
 
-  </main>
+      <div class="card" style="margin-top:16px; text-align:center">
+        <div class="muted" style="font-size:13px">Available for freelance & full-time</div>
+      </div>
+    </aside>
+  </div>
 
   <footer>
-    <div class="container">
-      © <span id="year"></span> Seenuri Works — Shivateja • Built with care • Available for hire
-    </div>
+    © Seenuri Works — Shivateja • Built with care
   </footer>
 
-  <script>
-    // small helpers
-    document.getElementById('year').textContent = new Date().getFullYear();
+</div>
 
-    function handleForm(e){
-      e.preventDefault();
-      // Demo behavior: show alert. Replace with a real form provider by setting `action` and removing preventDefault.
-      alert('Thanks — this demo does not send email. To accept messages, connect to Formspree, Netlify Forms, or similar.');
-      e.target.reset();
-    }
-
-    // simple mobile nav toggle (optional)
-    document.querySelector('.menu-btn').addEventListener('click', function(){
-      var nav = document.querySelector('.nav-links');
-      nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
-      nav.style.flexDirection = 'row';
-    });
-  </script>
 </body>
 </html>
