@@ -28,8 +28,6 @@
   .hero h1{margin:0 0 8px 0; font-size:28px}
   .lead{margin:0; color:var(--muted)}
   .cta-row{margin-top:18px; display:flex; gap:12px; align-items:center}
-  .logos{display:flex; gap:18px; justify-content:center; margin-top:20px; flex-wrap:wrap}
-  .logos img{width:120px; height:auto; border-radius:10px; background:var(--card); padding:8px; box-shadow:0 6px 18px rgba(0,0,0,0.5)}
   .sections{display:grid; grid-template-columns:1fr 320px; gap:24px; margin-top:30px}
   .card{background:var(--card); padding:18px; border-radius:12px; color:#d9e6f0}
   .muted{color:var(--muted); font-size:14px}
@@ -40,17 +38,19 @@
   /* projects */
   .projects{display:grid; gap:12px; margin-top:12px}
   .proj-card{display:flex; gap:12px; align-items:center; padding:12px; border-radius:10px; background:linear-gradient(180deg,#081018,#071018); box-shadow:0 6px 18px rgba(0,0,0,0.35)}
-  .proj-thumb{width:86px; height:60px; background:#0a0d10; border-radius:8px; display:flex; align-items:center; justify-content:center; overflow:hidden}
-  .proj-thumb img{width:100%; height:100%; object-fit:cover}
+  .proj-thumb{width:86px; height:86px; background:#0a0d10; border-radius:8px; display:flex; align-items:center; justify-content:center; overflow:hidden}
+  .proj-thumb img{width:100%; height:100%; object-fit:contain}
+  .proj-meta{display:flex; flex-direction:column; gap:6px}
+  .proj-meta small{color:var(--muted); font-size:13px}
   footer{margin-top:32px; text-align:center; color:var(--muted); font-size:13px}
-  @media (max-width:880px){ .hero{grid-template-columns:1fr; text-align:center} .sections{grid-template-columns:1fr} header{flex-direction:column; align-items:flex-start} }
+  @media (max-width:880px){ .hero{grid-template-columns:1fr; text-align:center} .sections{grid-template-columns:1fr} header{flex-direction:column; align-items:flex-start} .proj-card{flex-direction:row} }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <div class="brand">
-      <div class="logo-small"><img src="logo-chinkulu.png" alt="Seenuri Works logo"></div>
+      <div class="logo-small"><img src="logo-chinkulu.png" alt="Seenuri Works logo" onerror="this.style.display='none'"></div>
       <div>
         <div style="font-weight:700">Seenuri Works</div>
         <div class="muted" style="font-size:13px">Marketer • Designer • Creative</div>
@@ -66,15 +66,8 @@
 
   <section class="hero" aria-labelledby="hero-heading">
     <div>
-      <div class="dp"><img src="dp.jpg" alt="Shivateja DP"></div>
-
-      <div class="logos" aria-hidden="true" style="margin-top:14px">
-  <!-- If you have a ChatGPT logo file later, add it back here with correct filename -->
-  <img src="logo-chinkulu.png" alt="logo chinkulu" onerror="this.style.display='none'">
-  <img src="logo-vinthapadalu.png" alt="logo vinthapadalu" onerror="this.style.display='none'">
-  <img src="logo-zapwash.png" alt="logo zapwash" style="width:120px;" onerror="this.style.display='none'">
-</div>
-
+      <div class="dp"><img src="dp.jpg" alt="Shivateja DP" onerror="this.style.display='none'"></div>
+      <!-- removed logo row from hero as requested -->
     </div>
 
     <div>
@@ -82,7 +75,7 @@
       <p class="lead">I design growth-focused brand experiences and build conversion-first digital products. I combine consumer psychology, data-driven strategy and elegant UI to help brands win attention and revenue.</p>
 
       <div class="cta-row">
-        <a href="#work" style="padding:10px 14px; border-radius:9px; background:transparent; border:1px solid rgba(255,255,255,0.06); color:inherit; text-decoration:none">View case studies →</a>
+        <a href="#projects" style="padding:10px 14px; border-radius:9px; background:transparent; border:1px solid rgba(255,255,255,0.06); color:inherit; text-decoration:none">View projects →</a>
         <a href="#contact" style="padding:10px 14px; border-radius:9px; background:var(--accent); color:#06110a; text-decoration:none; font-weight:600">Let's work</a>
       </div>
 
@@ -93,32 +86,41 @@
   <div class="sections">
     <div>
       <div id="work" class="card">
-        <h3 style="margin-top:0">Selected case studies</h3>
-        <p class="muted">Projects where design and marketing moved metrics.</p>
+        <h3 style="margin-top:0">Selected projects</h3>
+        <p class="muted">Below are three brands / projects I’ve worked on — click any and tell me the backstory and I’ll add your copy.</p>
 
-        <!-- Projects (three companies) -->
+        <!-- Projects (using your logos as thumbnails) -->
         <div class="projects" id="projects">
-          <div class="proj-card">
-            <div class="proj-thumb"><img src="project-company1.jpg" alt="Company 1"></div>
-            <div>
-              <strong>Company One — Growth Campaign</strong>
-              <div class="muted" style="font-size:13px">Paid acquisition + landing optimization that increased leads by 42%.</div>
+          <!-- Project: Zapwash -->
+          <div class="proj-card" id="project-zapwash">
+            <div class="proj-thumb">
+              <img src="logo-zapwash.png" alt="Zapwash logo" onerror="this.style.display='none'">
+            </div>
+            <div class="proj-meta">
+              <strong>Zapwash — Laundry Operations & Aggregator</strong>
+              <small class="muted">Pickup & delivery laundry aggregator — service model, onboarding and local ops.</small>
             </div>
           </div>
 
-          <div class="proj-card">
-            <div class="proj-thumb"><img src="project-company2.jpg" alt="Company 2"></div>
-            <div>
-              <strong>Company Two — Brand Identity</strong>
-              <div class="muted" style="font-size:13px">End-to-end identity, packaging and launch playbook.</div>
+          <!-- Project: Chinkulu (logo-chinkulu.png) -->
+          <div class="proj-card" id="project-chinkulu">
+            <div class="proj-thumb">
+              <img src="logo-chinkulu.png" alt="Chinkulu logo" onerror="this.style.display='none'">
+            </div>
+            <div class="proj-meta">
+              <strong>Chinkulu — Signature Brand / Creative</strong>
+              <small class="muted">Identity and visual system for a personal / creative mark.</small>
             </div>
           </div>
 
-          <div class="proj-card">
-            <div class="proj-thumb"><img src="project-company3.jpg" alt="Company 3"></div>
-            <div>
-              <strong>Company Three — Product UX</strong>
-              <div class="muted" style="font-size:13px">UI redesign and conversion funnel improvements.</div>
+          <!-- Project: Vinthapadalu (logo-vinthapadalu.png) -->
+          <div class="proj-card" id="project-vinthapadalu">
+            <div class="proj-thumb">
+              <img src="logo-vinthapadalu.png" alt="Vinthapadalu logo" onerror="this.style.display='none'">
+            </div>
+            <div class="proj-meta">
+              <strong>Vinthapadalu — Telugu literature brand</strong>
+              <small class="muted">A brand for Telugu literature — identity, content and social presence.</small>
             </div>
           </div>
         </div>
