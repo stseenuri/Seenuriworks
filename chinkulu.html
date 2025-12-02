@@ -2,113 +2,895 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Chinkulu — Case Study</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chinkulu — Case Study | Seenuri Works</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-body{
+:root{
+  --black:#0a0a0a;
+  --white:#f8f8f8;
+  --gray:#888;
+  --accent:#ff4d00;
+  --maxw:1000px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{
   font-family:'Space Grotesk',sans-serif;
-  background:#fff;
-  color:#000;
-  padding:40px;
-  line-height:1.6;
-}
-.container{max-width:900px;margin:auto;}
-a{color:#000;text-decoration:none;}
-.back{margin-bottom:20px;display:inline-block;font-size:14px;}
-
-.logo{
-  width:180px;
-  border:2px solid #000;
-  padding:20px;
-  background:#fff;
-  border-radius:14px;
-  margin-bottom:40px;
+  background:var(--white);
+  color:var(--black);
+  line-height:1.7;
+  overflow-x:hidden;
+  cursor:none;
 }
 
-h1{font-size:42px;font-weight:700;margin-bottom:20px;}
-h2{font-size:26px;margin-top:50px;margin-bottom:10px;font-weight:600;}
-p{margin-bottom:18px;font-size:18px;color:#222;}
-
-ul li{
-  margin-bottom:8px;
-  font-size:18px;
+::selection{
+  background:var(--accent);
+  color:#fff;
 }
 
-.tools{
+/* LOADER */
+.loader{
+  position:fixed;
+  inset:0;
+  background:var(--black);
+  z-index:10000;
   display:flex;
-  gap:12px;
-  margin-top:14px;
-  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
 }
-.tool{
-  padding:6px 14px;
-  border:1px solid #000;
-  border-radius:8px;
-  font-size:14px;
-  background:#fff;
+.loader-text{
+  font-size:clamp(32px,6vw,64px);
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-2px;
+  overflow:hidden;
+}
+.loader-text span{
+  display:inline-block;
+  transform:translateY(100%);
+  animation:loaderUp 0.6s cubic-bezier(0.7,0,0.3,1) forwards;
+}
+.loader-text span:nth-child(1){animation-delay:0.1s;}
+.loader-text span:nth-child(2){animation-delay:0.15s;}
+.loader-text span:nth-child(3){animation-delay:0.2s;}
+.loader-text span:nth-child(4){animation-delay:0.25s;}
+.loader-text span:nth-child(5){animation-delay:0.3s;}
+.loader-text span:nth-child(6){animation-delay:0.35s;}
+.loader-text span:nth-child(7){animation-delay:0.4s;}
+.loader-text span:nth-child(8){animation-delay:0.45s;}
+@keyframes loaderUp{
+  to{transform:translateY(0);}
+}
+.loader.done{
+  transform:translateY(-100%);
+  transition:transform 1s cubic-bezier(0.7,0,0.3,1) 0.6s;
 }
 
-.fade{
-  opacity:0;transform:translateY(20px);
-  animation:fade 0.7s forwards;
+/* CURSOR */
+.cursor{
+  position:fixed;
+  width:16px;
+  height:16px;
+  border:1.5px solid var(--black);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9999;
+  transition:transform 0.2s, width 0.3s, height 0.3s, background 0.3s;
 }
-@keyframes fade{to{opacity:1;transform:translateY(0);}}
+.cursor.active{
+  width:60px;
+  height:60px;
+  background:var(--accent);
+  border-color:var(--accent);
+  mix-blend-mode:normal;
+}
+
+/* NOISE */
+.noise{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9998;
+  opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* PROGRESS */
+.progress{
+  position:fixed;
+  top:0;
+  left:0;
+  width:0%;
+  height:3px;
+  background:var(--accent);
+  z-index:1000;
+  transition:width 0.1s;
+}
+
+/* BACK BUTTON */
+.back-btn{
+  position:fixed;
+  top:30px;
+  left:50px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:13px;
+  font-weight:500;
+  text-decoration:none;
+  z-index:100;
+  mix-blend-mode:difference;
+  color:#fff;
+}
+.back-btn .arrow{
+  width:40px;
+  height:40px;
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all 0.4s cubic-bezier(0.7,0,0.3,1);
+}
+.back-btn:hover .arrow{
+  background:#fff;
+  color:var(--black);
+  transform:translateX(-5px);
+}
+
+/* HERO SECTION */
+.hero{
+  min-height:100vh;
+  background:var(--black);
+  color:#fff;
+  display:flex;
+  align-items:flex-end;
+  padding:100px 80px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-bg{
+  position:absolute;
+  top:50%;
+  right:10%;
+  transform:translateY(-50%);
+  width:400px;
+  height:400px;
+  opacity:0.08;
+  pointer-events:none;
+}
+.hero-bg img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.hero-content{
+  max-width:800px;
+  position:relative;
+  z-index:1;
+}
+
+.hero-label{
+  font-size:11px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:30px;
+  overflow:hidden;
+}
+.hero-label span{
+  display:inline-block;
+  transform:translateY(100%);
+  animation:slideUp 0.8s cubic-bezier(0.7,0,0.3,1) forwards;
+  animation-delay:1.8s;
+}
+@keyframes slideUp{
+  to{transform:translateY(0);}
+}
+
+.hero h1{
+  font-size:clamp(48px,10vw,120px);
+  font-weight:700;
+  letter-spacing:-4px;
+  line-height:0.9;
+  margin-bottom:30px;
+}
+.hero h1 .line{
+  display:block;
+  overflow:hidden;
+}
+.hero h1 .line span{
+  display:inline-block;
+  transform:translateY(110%);
+  animation:titleUp 1s cubic-bezier(0.7,0,0.3,1) forwards;
+}
+.hero h1 .line:nth-child(1) span{animation-delay:2s;}
+.hero h1 .line:nth-child(2) span{animation-delay:2.1s;}
+@keyframes titleUp{
+  to{transform:translateY(0);}
+}
+.hero h1 .outline{
+  -webkit-text-stroke:1.5px #fff;
+  -webkit-text-fill-color:transparent;
+}
+
+.hero-desc{
+  font-size:18px;
+  color:var(--gray);
+  max-width:500px;
+  line-height:1.8;
+  overflow:hidden;
+  margin-bottom:50px;
+}
+.hero-desc span{
+  display:inline-block;
+  transform:translateY(100%);
+  animation:slideUp 0.8s cubic-bezier(0.7,0,0.3,1) forwards;
+  animation-delay:2.3s;
+}
+
+.hero-meta{
+  display:flex;
+  gap:50px;
+  padding-top:30px;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+.hero-meta-item{
+  overflow:hidden;
+}
+.hero-meta-item span{
+  display:block;
+  transform:translateY(100%);
+  animation:slideUp 0.8s cubic-bezier(0.7,0,0.3,1) forwards;
+}
+.hero-meta-item:nth-child(1) span{animation-delay:2.5s;}
+.hero-meta-item:nth-child(2) span{animation-delay:2.6s;}
+.hero-meta-item:nth-child(3) span{animation-delay:2.7s;}
+.hero-meta-label{
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--gray);
+  margin-bottom:8px;
+}
+.hero-meta-value{
+  font-size:16px;
+  font-weight:500;
+}
+
+.scroll-indicator{
+  position:absolute;
+  bottom:50px;
+  right:80px;
+  writing-mode:vertical-rl;
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--gray);
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+.scroll-indicator .line{
+  width:1px;
+  height:80px;
+  background:rgba(255,255,255,0.2);
+  position:relative;
+  overflow:hidden;
+}
+.scroll-indicator .line::after{
+  content:'';
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:var(--accent);
+  animation:scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine{
+  0%{transform:translateY(-100%);}
+  50%{transform:translateY(0);}
+  100%{transform:translateY(100%);}
+}
+
+/* QUOTE SECTION */
+.quote-section{
+  padding:150px 80px;
+  background:var(--white);
+  text-align:center;
+}
+.quote{
+  font-size:clamp(28px,4vw,48px);
+  font-weight:600;
+  letter-spacing:-1px;
+  line-height:1.3;
+  max-width:900px;
+  margin:auto;
+}
+.quote .highlight{
+  color:var(--accent);
+}
+
+/* CONTENT SECTIONS */
+.content{
+  max-width:var(--maxw);
+  margin:auto;
+  padding:0 80px;
+}
+
+.section{
+  padding:120px 0;
+  border-bottom:1px solid #eee;
+}
+.section:last-of-type{
+  border-bottom:none;
+}
+
+.section-grid{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:80px;
+  align-items:start;
+}
+
+.section-label{
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--accent);
+  position:sticky;
+  top:100px;
+}
+
+.section-content h2{
+  font-size:clamp(32px,4vw,48px);
+  font-weight:700;
+  letter-spacing:-1px;
+  margin-bottom:30px;
+  line-height:1.1;
+}
+.section-content h2 .line{
+  display:block;
+  overflow:hidden;
+}
+.section-content h2 .line span{
+  display:inline-block;
+  transform:translateY(100%);
+  transition:transform 0.8s cubic-bezier(0.7,0,0.3,1);
+}
+.section-content h2.in-view .line span{
+  transform:translateY(0);
+}
+.section-content h2 .line:nth-child(2) span{transition-delay:0.1s;}
+
+.section-content p{
+  font-size:18px;
+  color:#555;
+  line-height:1.9;
+  max-width:600px;
+}
+
+/* ROLE LIST */
+.role-list{
+  list-style:none;
+  margin-top:30px;
+}
+.role-item{
+  padding:20px 0;
+  border-bottom:1px solid #eee;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:18px;
+  transition:all 0.4s;
+  cursor:default;
+}
+.role-item:hover{
+  padding-left:20px;
+  color:var(--accent);
+}
+.role-item .num{
+  font-size:13px;
+  color:var(--gray);
+  font-weight:500;
+}
+.role-item:hover .num{
+  color:var(--accent);
+}
+
+/* TOOLS */
+.tools-grid{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-top:30px;
+}
+.tool-item{
+  padding:16px 28px;
+  border:1px solid #e0e0e0;
+  border-radius:100px;
+  font-size:15px;
+  font-weight:500;
+  transition:all 0.4s cubic-bezier(0.7,0,0.3,1);
+  cursor:default;
+}
+.tool-item:hover{
+  background:var(--black);
+  color:#fff;
+  border-color:var(--black);
+  transform:translateY(-4px);
+}
+
+/* IMPACT SECTION */
+.impact-section{
+  background:var(--black);
+  color:#fff;
+  padding:150px 80px;
+}
+.impact-grid{
+  max-width:var(--maxw);
+  margin:auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:80px;
+  align-items:center;
+}
+.impact-label{
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:20px;
+}
+.impact-title{
+  font-size:clamp(36px,5vw,56px);
+  font-weight:700;
+  letter-spacing:-2px;
+  line-height:1.1;
+  margin-bottom:30px;
+}
+.impact-text{
+  font-size:18px;
+  color:var(--gray);
+  line-height:1.8;
+}
+.impact-visual{
+  display:flex;
+  flex-direction:column;
+  gap:30px;
+}
+.impact-stat{
+  padding:30px;
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:16px;
+  transition:all 0.4s;
+}
+.impact-stat:hover{
+  border-color:var(--accent);
+  background:rgba(255,77,0,0.05);
+}
+.impact-stat-label{
+  font-size:13px;
+  color:var(--gray);
+  margin-bottom:8px;
+}
+.impact-stat-value{
+  font-size:28px;
+  font-weight:700;
+}
+
+/* NEXT PROJECT */
+.next-project{
+  background:var(--white);
+  padding:150px 80px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.next-label{
+  font-size:11px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--gray);
+  margin-bottom:30px;
+}
+.next-title{
+  font-size:clamp(48px,10vw,120px);
+  font-weight:700;
+  letter-spacing:-4px;
+  transition:color 0.3s;
+  color:var(--black);
+}
+.next-project:hover .next-title{
+  color:var(--accent);
+}
+.next-project a{
+  text-decoration:none;
+  color:inherit;
+  display:block;
+}
+.next-arrow{
+  margin-top:40px;
+  font-size:32px;
+  opacity:0.3;
+  transition:all 0.4s;
+}
+.next-project:hover .next-arrow{
+  opacity:1;
+  transform:translateY(10px);
+}
+
+/* CTA */
+.cta-section{
+  padding:200px 80px;
+  text-align:center;
+  background:var(--black);
+  color:#fff;
+}
+.cta-section h2{
+  font-size:clamp(36px,6vw,72px);
+  font-weight:700;
+  letter-spacing:-2px;
+  margin-bottom:20px;
+}
+.cta-section h2 a{
+  color:#fff;
+  text-decoration:none;
+  position:relative;
+}
+.cta-section h2 a::after{
+  content:'';
+  position:absolute;
+  bottom:-5px;
+  left:0;
+  width:100%;
+  height:6px;
+  background:var(--accent);
+  transform:scaleX(0);
+  transform-origin:right;
+  transition:transform 0.6s cubic-bezier(0.7,0,0.3,1);
+}
+.cta-section h2 a:hover{
+  color:var(--accent);
+}
+.cta-section h2 a:hover::after{
+  transform:scaleX(1);
+  transform-origin:left;
+}
+.cta-meta{
+  font-size:16px;
+  color:var(--gray);
+  margin-top:20px;
+}
+
+/* FOOTER */
+footer{
+  padding:30px 80px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-top:1px solid rgba(255,255,255,0.1);
+  font-size:13px;
+  color:var(--gray);
+  background:var(--black);
+}
+
+/* REVEAL */
+.reveal{
+  opacity:0;
+  transform:translateY(60px);
+  transition:all 1s cubic-bezier(0.7,0,0.3,1);
+}
+.reveal.in-view{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero{padding:80px 24px;}
+  .hero-meta{flex-direction:column;gap:20px;}
+  .scroll-indicator{display:none;}
+  .back-btn{left:24px;top:20px;}
+  .quote-section{padding:80px 24px;}
+  .content{padding:0 24px;}
+  .section{padding:80px 0;}
+  .section-grid{grid-template-columns:1fr;gap:30px;}
+  .section-label{position:static;}
+  .impact-section{padding:80px 24px;}
+  .impact-grid{grid-template-columns:1fr;gap:50px;}
+  .next-project{padding:100px 24px;}
+  .cta-section{padding:120px 24px;}
+  footer{padding:30px 24px;flex-direction:column;gap:16px;}
+}
 </style>
 </head>
 
 <body>
-<div class="container fade">
 
-<a href="index.html" class="back">← Back to Portfolio</a>
-
-<div class="logo">
-  <img src="logo-chinkulu.png" style="width:100%;">
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader-text">
+    <span>C</span><span>h</span><span>i</span><span>n</span><span>k</span><span>u</span><span>l</span><span>u</span>
+  </div>
 </div>
 
-<h1>Chinkulu — Handcrafted Fashion Label</h1>
+<!-- NOISE -->
+<div class="noise"></div>
 
-<p>
-Chinkulu is a slow-fashion brand handcrafted with the support of local women stitching artists.
-Every piece is stitched by hand, making the brand emotionally meaningful and culturally rooted.
-My goal was to shape Chinkulu into a brand that celebrates real craftsmanship.
-</p>
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
 
-<h2>Overview</h2>
-<p>
-Chinkulu positions itself away from fast-fashion noise.  
-It highlights slow, thoughtful creation — the kind that only community-led craftsmanship can produce.
-</p>
+<!-- PROGRESS -->
+<div class="progress" id="progress"></div>
 
-<h2>Challenge</h2>
-<p>
-Local stitching artists have skill but no visibility.  
-The brand needed an identity that translated handmade beauty into a digital-first story consumers would notice.
-</p>
+<!-- BACK BUTTON -->
+<a href="index.html" class="back-btn">
+  <span class="arrow">←</span>
+  <span>Back</span>
+</a>
 
-<h2>My Role</h2>
-<ul>
-  <li>Logo & handcrafted identity</li>
-  <li>Narrative & brand messaging</li>
-  <li>Marketing funnel mapping</li>
-  <li>Story-driven content direction</li>
-  <li>Brand positioning</li>
-</ul>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="logo-chinkulu.png" alt="">
+  </div>
+  
+  <div class="hero-content">
+    <div class="hero-label"><span>Case Study</span></div>
+    <h1>
+      <span class="line"><span>Chin</span></span>
+      <span class="line"><span class="outline">kulu.</span></span>
+    </h1>
+    
+    <p class="hero-desc">
+      <span>Slow fashion. Handcrafted stories. Built with local women artisans.</span>
+    </p>
+    
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-label"><span>Type</span></div>
+        <div class="hero-meta-value"><span>Fashion Label</span></div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label"><span>Focus</span></div>
+        <div class="hero-meta-value"><span>Handcrafted</span></div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label"><span>Role</span></div>
+        <div class="hero-meta-value"><span>Brand & Strategy</span></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="scroll-indicator">
+    <div class="line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
 
-<h2>Outcome</h2>
-<p>
-Chinkulu became a brand with emotional weight —  
-a bridge between craftsmanship and modern storytelling, built on authenticity and community empowerment.
-</p>
+<!-- QUOTE -->
+<section class="quote-section">
+  <p class="quote reveal">
+    "Every stitch tells a story. Every piece carries the <span class="highlight">hands that made it.</span>"
+  </p>
+</section>
 
-<h2>Tools Used</h2>
-<div class="tools">
-  <div class="tool">Canva</div>
-  <div class="tool">SEMrush</div>
-  <div class="tool">Ubersuggest</div>
-  <div class="tool">GA4</div>
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Overview</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>Away from</span></span>
+          <span class="line"><span>fast-fashion noise.</span></span>
+        </h2>
+        <p class="reveal">
+          Chinkulu positions itself as slow, thoughtful creation. 
+          The kind that only community-led craftsmanship can produce. 
+          Real hands. Real stories. Real value.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHALLENGE -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Challenge</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>Skill without</span></span>
+          <span class="line"><span>visibility.</span></span>
+        </h2>
+        <p class="reveal">
+          Local stitching artists have the craft but no platform. 
+          The brand needed an identity that translated handmade beauty 
+          into a digital-first story consumers would notice and remember.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROACH -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Approach</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>Craft meets</span></span>
+          <span class="line"><span>narrative.</span></span>
+        </h2>
+        <p class="reveal">
+          Build around the makers, not the product. 
+          Let the process become the story. 
+          Position authenticity as the differentiator in a market full of mass-produced alternatives.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCOPE -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Scope</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>What I did.</span></span>
+        </h2>
+        <ul class="role-list reveal">
+          <li class="role-item"><span>Logo & handcrafted identity</span><span class="num">01</span></li>
+          <li class="role-item"><span>Narrative & brand messaging</span><span class="num">02</span></li>
+          <li class="role-item"><span>Marketing funnel mapping</span><span class="num">03</span></li>
+          <li class="role-item"><span>Story-driven content direction</span><span class="num">04</span></li>
+          <li class="role-item"><span>Brand positioning strategy</span><span class="num">05</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Stack</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>Tools used.</span></span>
+        </h2>
+        <div class="tools-grid reveal">
+          <span class="tool-item">Canva</span>
+          <span class="tool-item">SEMrush</span>
+          <span class="tool-item">Ubersuggest</span>
+          <span class="tool-item">GA4</span>
+          <span class="tool-item">Notion</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </div>
 
-</div>
+<!-- IMPACT -->
+<section class="impact-section">
+  <div class="impact-grid">
+    <div class="impact-content reveal">
+      <div class="impact-label">Impact</div>
+      <h2 class="impact-title">A brand with emotional weight.</h2>
+      <p class="impact-text">
+        Chinkulu became a bridge between craftsmanship and modern storytelling. 
+        Built on authenticity and community empowerment. 
+        A brand people connect with, not just buy from.
+      </p>
+    </div>
+    <div class="impact-visual reveal">
+      <div class="impact-stat">
+        <div class="impact-stat-label">Brand Foundation</div>
+        <div class="impact-stat-value">Identity system complete</div>
+      </div>
+      <div class="impact-stat">
+        <div class="impact-stat-label">Positioning</div>
+        <div class="impact-stat-value">Slow fashion narrative</div>
+      </div>
+      <div class="impact-stat">
+        <div class="impact-stat-label">Community</div>
+        <div class="impact-stat-value">Local artisan network</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT PROJECT -->
+<section class="next-project" id="nextProject">
+  <a href="vinthapadalu.html">
+    <div class="next-label">Next Project</div>
+    <div class="next-title">Vinthapadalu</div>
+    <div class="next-arrow">↓</div>
+  </a>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2><a href="mailto:stseenuri@outlook.com">Let's work together.</a></h2>
+  <p class="cta-meta">Have a brand story to tell?</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 Seenuri Works</span>
+  <span>Hyderabad, India</span>
+</footer>
+
+<script>
+// LOADER
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('done');
+  }, 1400);
+});
+
+// CURSOR
+const cursor = document.getElementById('cursor');
+let cursorX = 0, cursorY = 0;
+let targetX = 0, targetY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  targetX = e.clientX;
+  targetY = e.clientY;
+});
+
+function animateCursor() {
+  cursorX += (targetX - cursorX) * 0.12;
+  cursorY += (targetY - cursorY) * 0.12;
+  cursor.style.left = cursorX + 'px';
+  cursor.style.top = cursorY + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// Cursor hover
+const hoverElements = document.querySelectorAll('a, .tool-item, .role-item, .impact-stat');
+hoverElements.forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+});
+
+// PROGRESS BAR
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const scrollPercent = (scrollTop / docHeight) * 100;
+  progress.style.width = scrollPercent + '%';
+});
+
+// REVEAL ON SCROLL
+const reveals = document.querySelectorAll('.reveal, .reveal-title');
+const revealOnScroll = () => {
+  reveals.forEach(el => {
+    const top = el.getBoundingClientRect().top;
+    if (top < window.innerHeight - 100) {
+      el.classList.add('in-view');
+    }
+  });
+};
+window.addEventListener('scroll', revealOnScroll);
+revealOnScroll();
+
+// PARALLAX HERO BG
+const heroBg = document.querySelector('.hero-bg');
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  if (scrollY < window.innerHeight) {
+    heroBg.style.transform = `translateY(calc(-50% + ${scrollY * 0.3}px))`;
+  }
+});
+</script>
+
 </body>
 </html>
