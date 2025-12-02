@@ -3,179 +3,169 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>Seenuri Works — Shivateja</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- FONT -->
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
   :root{
-    --black:#000000;
-    --white:#ffffff;
-    --gray:#d1d1d1;
-    --light:#f6f6f6;
-    --border:#e5e5e5;
+    --black:#000;
+    --white:#fff;
+    --gray:#777;
+    --lightgray:#f3f3f3;
     --maxw:1100px;
   }
 
-  *{box-sizing:border-box;margin:0;padding:0}
+  *{box-sizing:border-box;margin:0;padding:0;}
   body{
-    font-family:Inter,system-ui;
+    font-family:'Space Grotesk',sans-serif;
     background:var(--white);
     color:var(--black);
     line-height:1.5;
-    padding:40px;
   }
 
   .container{
     max-width:var(--maxw);
     margin:auto;
+    padding:40px 24px;
+  }
+
+  /* Fade-in Animation */
+  .fade{
+    opacity:0;
+    transform:translateY(20px);
+    animation:fadein 0.9s forwards;
+  }
+  @keyframes fadein{
+    to{opacity:1;transform:translateY(0);}
   }
 
   header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:60px;
+    margin-bottom:80px;
   }
 
   nav a{
-    color:var(--black);
     text-decoration:none;
-    margin-left:20px;
+    color:var(--black);
+    margin-left:24px;
     font-weight:500;
   }
 
   /* HERO */
   .hero{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:80px;
-    gap:50px;
+    padding:120px 0;
   }
-
-  .dp{
-    width:200px;
-    height:200px;
-    border-radius:50%;
-    overflow:hidden;
-    border:3px solid var(--black);
-  }
-  .dp img{width:100%;height:100%;object-fit:cover;}
-
-  h1{
-    font-size:36px;
-    margin-bottom:10px;
-    font-weight:800;
-  }
-
-  .sub{
-    font-size:18px;
-    color:#555;
-    margin-bottom:18px;
-  }
-
-  .hero p{
-    max-width:500px;
-    color:#333;
-  }
-
-  /* SECTION HEADERS */
-  .section-title{
-    font-size:26px;
+  .hero h1{
+    font-size:52px;
     font-weight:700;
-    border-bottom:1px solid var(--black);
-    padding-bottom:8px;
-    margin-bottom:20px;
-    margin-top:60px;
+    max-width:800px;
+  }
+  .hero p{
+    font-size:20px;
+    color:#222;
+    max-width:620px;
+    margin-top:18px;
+  }
+
+  /* SECTION TITLE */
+  .section-title{
+    font-size:32px;
+    font-weight:700;
+    margin:80px 0 30px 0;
+    border-bottom:2px solid var(--black);
+    display:inline-block;
+    padding-bottom:6px;
   }
 
   /* SERVICES */
-  .services-grid{
+  .services{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:25px;
+    gap:30px;
   }
-
   .service-card{
-    padding:20px;
-    border:1px solid var(--border);
-    border-radius:12px;
-    background:var(--light);
-  }
-
-  .service-card h3{
-    font-size:18px;
-    margin-bottom:8px;
-  }
-
-  /* PROJECT CARDS */
-  .projects{
-    display:grid;
-    grid-template-columns:1fr;
-    gap:18px;
-  }
-
-  .project-card{
-    border:1px solid var(--black);
-    border-radius:12px;
-    padding:20px;
-    display:flex;
-    gap:20px;
-    text-decoration:none;
-    color:inherit;
+    padding:24px;
+    border:1px solid #000;
+    border-radius:14px;
+    background:#fff;
     transition:0.2s ease;
   }
-
-  .project-card:hover{
-    background:#000;
-    color:#fff;
+  .service-card:hover{
+    transform:translateY(-6px);
+  }
+  .service-card h3{
+    margin-bottom:10px;
+    font-size:20px;
   }
 
-  .project-thumb{
-    width:80px;
-    height:80px;
-    border-radius:10px;
-    overflow:hidden;
+  /* PROJECTS */
+  .project-section-black{
+    background:#000;
+    color:#fff;
+    padding:80px 24px;
+  }
+  .project-section-white{
     background:#fff;
-    border:1px solid var(--black);
-    padding:10px;
+    color:#000;
+    padding:80px 24px;
+  }
+  .project{
+    max-width:var(--maxw);
+    margin:auto;
+    display:flex;
+    gap:40px;
+    align-items:center;
+    padding:40px 0;
+  }
+  .project-thumb{
+    width:200px;
+    height:200px;
+    border-radius:12px;
+    padding:20px;
+    background:#fff;
     display:flex;
     align-items:center;
     justify-content:center;
+    border:2px solid #000;
   }
-
   .project-thumb img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
+    width:100%;height:100%;object-fit:contain;
+  }
+  .project-text h2{
+    font-size:30px;
+    margin-bottom:10px;
+  }
+  .project-text small{
+    color:#bbb;
+  }
+  .project:hover .project-text{
+    opacity:0.8;
   }
 
-  .project-card .desc small{
-    color:#777;
-  }
-
-  .project-card:hover small{
-    color:#ddd;
-  }
-
-  /* FOOTER */
+  /* CONTACT */
   footer{
     text-align:center;
-    margin-top:80px;
+    margin-top:100px;
+    padding:40px 0;
+    color:#444;
     font-size:14px;
-    color:#555;
   }
 </style>
 </head>
 
+
 <body>
 
-<div class="container">
+<div class="container fade">
 
   <!-- HEADER -->
   <header>
-    <div style="font-weight:800;font-size:20px;">Seenuri Works</div>
+    <div style="font-weight:700;font-size:22px;">Seenuri Works</div>
     <nav>
       <a href="#services">Services</a>
       <a href="#projects">Projects</a>
@@ -184,101 +174,108 @@
   </header>
 
   <!-- HERO -->
-  <section class="hero">
-    <div class="dp">
-      <img src="dp.jpg">
-    </div>
-
-    <div>
-      <h1>Marketing Generalist + Designer + Brand Builder</h1>
-      <div class="sub">Where strategy meets design.</div>
-
-      <p>
-        I help early-stage brands grow through a blend of clear positioning, practical marketing systems,
-        and clean, human-centered design.  
-        Inspired by strategists like Richard Huntington and designers like Alan Cooper, I believe in
-        building brands that are meaningful, useful, and grounded in real-world impact.
-      </p>
-    </div>
+  <section class="hero fade">
+    <h1>Marketing Generalist. Designer. Brand Builder.</h1>
+    <p>
+      I build brands, funnels, and digital experiences where strategy meets design.  
+      My work blends clarity-driven marketing with clean, human-centered interfaces —  
+      shaped by the strategic focus of Richard Huntington and the design philosophy of Alan Cooper.
+    </p>
   </section>
 
   <!-- SERVICES -->
-  <div id="services" class="section-title">Services</div>
+  <div id="services" class="section-title fade">Services</div>
 
-  <div class="services-grid">
-
-    <div class="service-card">
+  <div class="services">
+    <div class="service-card fade">
       <h3>Marketing Strategy</h3>
-      <p>Brand positioning, funnel design, GTM planning, messaging frameworks.</p>
+      <p>Positioning, funnels, GTM systems, conversion strategy.</p>
     </div>
-
-    <div class="service-card">
+    <div class="service-card fade">
       <h3>Brand Identity</h3>
-      <p>Logo creation, visual identity systems, tone & messaging alignment.</p>
+      <p>Logo, voice, identity systems, brand structure.</p>
     </div>
-
-    <div class="service-card">
+    <div class="service-card fade">
       <h3>Digital Growth</h3>
-      <p>SEO, local SEO, keyword planning, analytics-driven execution.</p>
+      <p>SEO, local SEO, keyword research, analytics.</p>
     </div>
-
-    <div class="service-card">
-      <h3>UI Design</h3>
-      <p>Clean, minimal web layouts with human-centered workflows.</p>
+    <div class="service-card fade">
+      <h3>UI / Web Design</h3>
+      <p>Minimal, clear, user-centered web experiences.</p>
     </div>
-
   </div>
 
-  <!-- PROJECTS -->
-  <div id="projects" class="section-title">Projects</div>
+</div>
 
-  <div class="projects">
 
-    <!-- ZAPWASH -->
-    <a href="zapwash.html" class="project-card">
+<!-- PROJECTS -->
+<div id="projects"></div>
+
+<!-- PROJECT 1 — BLACK -->
+<section class="project-section-black fade">
+  <a href="zapwash.html" style="text-decoration:none;color:inherit;">
+    <div class="project">
+
       <div class="project-thumb">
         <img src="logo-zapwash.png">
       </div>
-      <div class="desc">
-        <h3>Zapwash — Hyperlocal Laundry Aggregator</h3>
-        <small>Branding, SEO, web design, full-funnel strategy</small>
-      </div>
-    </a>
 
-    <!-- CHINKULU -->
-    <a href="chinkulu.html" class="project-card">
-      <div class="project-thumb">
+      <div class="project-text">
+        <h2>Zapwash — Hyperlocal Laundry Aggregator</h2>
+        <small>Branding · SEO · Website · Funnel · Strategy</small>
+      </div>
+
+    </div>
+  </a>
+</section>
+
+<!-- PROJECT 2 — WHITE -->
+<section class="project-section-white fade">
+  <a href="chinkulu.html" style="text-decoration:none;color:inherit;">
+    <div class="project">
+
+      <div class="project-thumb" style="border-color:#000;background:#fff;">
         <img src="logo-chinkulu.png">
       </div>
-      <div class="desc">
-        <h3>Chinkulu — Handcrafted Fashion Brand</h3>
-        <small>Brand identity, funnel creation, storytelling</small>
-      </div>
-    </a>
 
-    <!-- VINTHAPADALU -->
-    <a href="vinthapadalu.html" class="project-card">
+      <div class="project-text">
+        <h2>Chinkulu — Handcrafted Fashion Label</h2>
+        <small>Branding · Narrative · Funnel · Strategy</small>
+      </div>
+
+    </div>
+  </a>
+</section>
+
+<!-- PROJECT 3 — BLACK -->
+<section class="project-section-black fade">
+  <a href="vinthapadalu.html" style="text-decoration:none;color:inherit;">
+    <div class="project">
+
       <div class="project-thumb">
         <img src="logo-vinthapadalu.png">
       </div>
-      <div class="desc">
-        <h3>Vinthapadalu — Telugu Literature Community</h3>
-        <small>Branding, cultural positioning, content strategy</small>
+
+      <div class="project-text">
+        <h2>Vinthapadalu — Telugu Literature Community</h2>
+        <small>Brand Identity · Cultural Positioning · Content</small>
       </div>
-    </a>
 
-  </div>
+    </div>
+  </a>
+</section>
 
-  <!-- CONTACT -->
-  <div id="contact" class="section-title">Contact</div>
 
+<!-- CONTACT -->
+<section id="contact" class="container fade">
+  <div class="section-title">Contact</div>
   <p>Email: <b>stseenuri@outlook.com</b></p>
   <p>Based in Hyderabad • Available for freelance & collaborations</p>
+</section>
 
-  <footer>
-    © Seenuri Works — Designed & Built by Shivateja Seenuri
-  </footer>
+<footer>
+  © Seenuri Works — Designed & Built by Shivateja Seenuri
+</footer>
 
-</div>
 </body>
 </html>
