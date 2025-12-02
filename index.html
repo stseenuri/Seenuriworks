@@ -1,173 +1,284 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Seenuri Works — Shivateja</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
   :root{
-    --bg:#0b0f12; --card:#0f1720; --muted:#9aa4ac; --accent:#b2d12e;
-    --glass:rgba(255,255,255,0.03); --maxw:1100px;
+    --black:#000000;
+    --white:#ffffff;
+    --gray:#d1d1d1;
+    --light:#f6f6f6;
+    --border:#e5e5e5;
+    --maxw:1100px;
   }
-  *{box-sizing:border-box} html,body{height:100%}
+
+  *{box-sizing:border-box;margin:0;padding:0}
   body{
-    margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Arial;
-    background:linear-gradient(180deg,var(--bg),#071018 30%); color:#e6eef6;
+    font-family:Inter,system-ui;
+    background:var(--white);
+    color:var(--black);
+    line-height:1.5;
+    padding:40px;
   }
-  .wrap{max-width:var(--maxw); margin:48px auto; padding:32px;}
-  header{display:flex; gap:20px; align-items:center; justify-content:space-between;}
-  .brand{display:flex; gap:16px; align-items:center;}
-  .logo-small{width:56px; height:56px; border-radius:12px; overflow:hidden; background:var(--glass); display:flex; align-items:center; justify-content:center;}
-  .logo-small img{width:100%; height:100%; object-fit:cover}
-  nav.muted{display:flex; gap:16px; align-items:center; color:var(--muted)}
-  .hero{display:grid; grid-template-columns:220px 1fr; gap:28px; align-items:center; margin-top:28px;
-        background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); padding:28px; border-radius:14px;}
-  .dp{width:180px; height:180px; border-radius:50%; overflow:hidden; margin:auto; border:4px solid rgba(178,209,46,0.12)}
-  .dp img{width:100%; height:100%; object-fit:cover}
-  .hero h1{margin:0 0 8px 0; font-size:28px}
-  .lead{margin:0; color:var(--muted)}
-  .cta-row{margin-top:18px; display:flex; gap:12px; align-items:center}
-  .sections{display:grid; grid-template-columns:1fr 320px; gap:24px; margin-top:30px}
-  .card{background:var(--card); padding:18px; border-radius:12px; color:#d9e6f0}
-  .muted{color:var(--muted); font-size:14px}
-  /* services grid */
-  .services{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px; margin-top:12px}
-  .service-item{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); padding:10px 12px; border-radius:10px; display:flex; gap:10px; align-items:center; box-shadow:0 6px 18px rgba(0,0,0,0.35)}
-  .service-item strong{font-size:14px}
-  /* projects */
-  .projects{display:grid; gap:12px; margin-top:12px}
-  .proj-card{display:flex; gap:12px; align-items:center; padding:12px; border-radius:10px; background:linear-gradient(180deg,#081018,#071018); box-shadow:0 6px 18px rgba(0,0,0,0.35)}
-  .proj-thumb{width:86px; height:86px; background:#0a0d10; border-radius:8px; display:flex; align-items:center; justify-content:center; overflow:hidden}
-  .proj-thumb img{width:100%; height:100%; object-fit:contain}
-  .proj-meta{display:flex; flex-direction:column; gap:6px}
-  .proj-meta small{color:var(--muted); font-size:13px}
-  footer{margin-top:32px; text-align:center; color:var(--muted); font-size:13px}
-  @media (max-width:880px){ .hero{grid-template-columns:1fr; text-align:center} .sections{grid-template-columns:1fr} header{flex-direction:column; align-items:flex-start} .proj-card{flex-direction:row} }
+
+  .container{
+    max-width:var(--maxw);
+    margin:auto;
+  }
+
+  header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:60px;
+  }
+
+  nav a{
+    color:var(--black);
+    text-decoration:none;
+    margin-left:20px;
+    font-weight:500;
+  }
+
+  /* HERO */
+  .hero{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:80px;
+    gap:50px;
+  }
+
+  .dp{
+    width:200px;
+    height:200px;
+    border-radius:50%;
+    overflow:hidden;
+    border:3px solid var(--black);
+  }
+  .dp img{width:100%;height:100%;object-fit:cover;}
+
+  h1{
+    font-size:36px;
+    margin-bottom:10px;
+    font-weight:800;
+  }
+
+  .sub{
+    font-size:18px;
+    color:#555;
+    margin-bottom:18px;
+  }
+
+  .hero p{
+    max-width:500px;
+    color:#333;
+  }
+
+  /* SECTION HEADERS */
+  .section-title{
+    font-size:26px;
+    font-weight:700;
+    border-bottom:1px solid var(--black);
+    padding-bottom:8px;
+    margin-bottom:20px;
+    margin-top:60px;
+  }
+
+  /* SERVICES */
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:25px;
+  }
+
+  .service-card{
+    padding:20px;
+    border:1px solid var(--border);
+    border-radius:12px;
+    background:var(--light);
+  }
+
+  .service-card h3{
+    font-size:18px;
+    margin-bottom:8px;
+  }
+
+  /* PROJECT CARDS */
+  .projects{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+
+  .project-card{
+    border:1px solid var(--black);
+    border-radius:12px;
+    padding:20px;
+    display:flex;
+    gap:20px;
+    text-decoration:none;
+    color:inherit;
+    transition:0.2s ease;
+  }
+
+  .project-card:hover{
+    background:#000;
+    color:#fff;
+  }
+
+  .project-thumb{
+    width:80px;
+    height:80px;
+    border-radius:10px;
+    overflow:hidden;
+    background:#fff;
+    border:1px solid var(--black);
+    padding:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .project-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+  }
+
+  .project-card .desc small{
+    color:#777;
+  }
+
+  .project-card:hover small{
+    color:#ddd;
+  }
+
+  /* FOOTER */
+  footer{
+    text-align:center;
+    margin-top:80px;
+    font-size:14px;
+    color:#555;
+  }
 </style>
 </head>
+
 <body>
-<div class="wrap">
+
+<div class="container">
+
+  <!-- HEADER -->
   <header>
-    <div class="brand">
-      <div class="logo-small"><img src="logo-chinkulu.png" alt="Seenuri Works logo" onerror="this.style.display='none'"></div>
-      <div>
-        <div style="font-weight:700">Seenuri Works</div>
-        <div class="muted" style="font-size:13px">Marketer • Designer • Creative</div>
-      </div>
-    </div>
-    <nav class="muted">
-      <a href="#work" style="color:inherit; text-decoration:none">Work</a>
-      <a href="#services" style="color:inherit; text-decoration:none">Services</a>
-      <a href="#contact" style="color:inherit; text-decoration:none">Contact</a>
-      <a href="mailto:contact@thezapwash.com" style="background:var(--accent); padding:8px 12px; border-radius:8px; color:#06110a; font-weight:600; text-decoration:none">Hire me</a>
+    <div style="font-weight:800;font-size:20px;">Seenuri Works</div>
+    <nav>
+      <a href="#services">Services</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
     </nav>
   </header>
 
-  <section class="hero" aria-labelledby="hero-heading">
-    <div>
-      <div class="dp"><img src="dp.jpg" alt="Shivateja DP" onerror="this.style.display='none'"></div>
-      <!-- removed logo row from hero as requested -->
+  <!-- HERO -->
+  <section class="hero">
+    <div class="dp">
+      <img src="dp.jpg">
     </div>
 
     <div>
-      <h1 id="hero-heading">Hi, I’m <strong>Shivateja</strong> — Marketer & Designer</h1>
-      <p class="lead">I design growth-focused brand experiences and build conversion-first digital products. I combine consumer psychology, data-driven strategy and elegant UI to help brands win attention and revenue.</p>
+      <h1>Marketing Generalist + Designer + Brand Builder</h1>
+      <div class="sub">Where strategy meets design.</div>
 
-      <div class="cta-row">
-        <a href="#projects" style="padding:10px 14px; border-radius:9px; background:transparent; border:1px solid rgba(255,255,255,0.06); color:inherit; text-decoration:none">View projects →</a>
-        <a href="#contact" style="padding:10px 14px; border-radius:9px; background:var(--accent); color:#06110a; text-decoration:none; font-weight:600">Let's work</a>
-      </div>
-
-      <div style="margin-top:18px" class="muted">LinkedIn • GitHub • Email</div>
+      <p>
+        I help early-stage brands grow through a blend of clear positioning, practical marketing systems,
+        and clean, human-centered design.  
+        Inspired by strategists like Richard Huntington and designers like Alan Cooper, I believe in
+        building brands that are meaningful, useful, and grounded in real-world impact.
+      </p>
     </div>
   </section>
 
-  <div class="sections">
-    <div>
-      <div id="work" class="card">
-        <h3 style="margin-top:0">Selected projects</h3>
-        <p class="muted">Below are three brands / projects I’ve worked on — click any and tell me the backstory and I’ll add your copy.</p>
+  <!-- SERVICES -->
+  <div id="services" class="section-title">Services</div>
 
-        <!-- Projects (using your logos as thumbnails) -->
-        <div class="projects" id="projects">
-          <!-- Project: Zapwash -->
-         <a href="zapwash.html" style="text-decoration:none; color:inherit;">
-  <div class="proj-card">
-    <div class="proj-thumb" style="background:#ffffff; padding:6px;">
-      <img src="logo-zapwash.png" alt="Zapwash logo">
-    </div>
-    <div>
-      <strong>Zapwash — Laundry Operations & Aggregator</strong>
-      <div class="muted" style="font-size:13px">
-        Click to read the full story →
-      </div>
-    </div>
-  </div>
-</a>
+  <div class="services-grid">
 
-
-          <!-- Project: Chinkulu (logo-chinkulu.png) -->
-         <a href="chinkulu.html" style="text-decoration:none; color:inherit;">
-  <div class="proj-card">
-    <div class="proj-thumb" style="background:#ffffff; padding:6px;">
-      <img src="logo-chinkulu.png" alt="Chinkulu logo">
-    </div>
-    <div>
-      <strong>Chinkulu — Handcrafted Fashion Brand</strong>
-      <div class="muted" style="font-size:13px">
-        Click to read the full story →
-      </div>
-    </div>
-  </div>
-</a>
-
-
-          <!-- Project: Vinthapadalu (logo-vinthapadalu.png) -->
-          <a href="vinthapadalu.html" style="text-decoration:none; color:inherit;">
-  <div class="proj-card">
-    <div class="proj-thumb" style="background:#ffffff; padding:6px;">
-      <img src="logo-vinthapadalu.png" alt="Vinthapadalu logo">
-    </div>
-    <div>
-      <strong>Vinthapadalu — Telugu Literature Community</strong>
-      <div class="muted" style="font-size:13px">
-        Click to read the full story →
-      </div>
-    </div>
-  </div>
-</a>
-
-
-      <div class="card" id="services" style="margin-top:18px">
-        <h4 style="margin:0 0 8px 0">Services — Online & Offline</h4>
-        <p class="muted">I offer both digital and offline growth services tailored to your brand:</p>
-
-        <div class="services">
-          <div class="service-item"><div>🔍</div><div><strong>Online SEO</strong><div class="muted" style="font-size:12px">Technical SEO, content strategy</div></div></div>
-          <div class="service-item"><div>📄</div><div><strong>Offline SEO</strong><div class="muted" style="font-size:12px">Local listings, offline presence</div></div></div>
-          <div class="service-item"><div>📱</div><div><strong>Social Media Strategy</strong><div class="muted" style="font-size:12px">Campaigns, content calendar</div></div></div>
-          <div class="service-item"><div>🎨</div><div><strong>UI Designing</strong><div class="muted" style="font-size:12px">Prototypes & pixel-perfect UI</div></div></div>
-          <div class="service-item"><div>✏️</div><div><strong>Logo Designing</strong><div class="muted" style="font-size:12px">Identity & brand marks</div></div></div>
-          <div class="service-item"><div>📈</div><div><strong>Marketing Strategy</strong><div class="muted" style="font-size:12px">Funnel & GTM planning</div></div></div>
-        </div>
-      </div>
+    <div class="service-card">
+      <h3>Marketing Strategy</h3>
+      <p>Brand positioning, funnel design, GTM planning, messaging frameworks.</p>
     </div>
 
-    <aside>
-      <div class="card">
-        <h4 style="margin:0 0 8px 0">Contact</h4>
-        <p class="muted">Interested in working together? Send a note and I will reply within 24–48 hours.</p>
-        <a id="contact" href="mailto:contact@thezapwash.com" style="display:inline-block; margin-top:10px; padding:10px 12px; border-radius:9px; background:var(--accent); color:#06110a; text-decoration:none; font-weight:700">Email me</a>
-      </div>
+    <div class="service-card">
+      <h3>Brand Identity</h3>
+      <p>Logo creation, visual identity systems, tone & messaging alignment.</p>
+    </div>
 
-      <div class="card" style="margin-top:16px; text-align:center">
-        <div class="muted" style="font-size:13px">Available for freelance & full-time</div>
-      </div>
-    </aside>
+    <div class="service-card">
+      <h3>Digital Growth</h3>
+      <p>SEO, local SEO, keyword planning, analytics-driven execution.</p>
+    </div>
+
+    <div class="service-card">
+      <h3>UI Design</h3>
+      <p>Clean, minimal web layouts with human-centered workflows.</p>
+    </div>
+
   </div>
 
-  <footer>© Seenuri Works — Shivateja • Built with care</footer>
+  <!-- PROJECTS -->
+  <div id="projects" class="section-title">Projects</div>
+
+  <div class="projects">
+
+    <!-- ZAPWASH -->
+    <a href="zapwash.html" class="project-card">
+      <div class="project-thumb">
+        <img src="logo-zapwash.png">
+      </div>
+      <div class="desc">
+        <h3>Zapwash — Hyperlocal Laundry Aggregator</h3>
+        <small>Branding, SEO, web design, full-funnel strategy</small>
+      </div>
+    </a>
+
+    <!-- CHINKULU -->
+    <a href="chinkulu.html" class="project-card">
+      <div class="project-thumb">
+        <img src="logo-chinkulu.png">
+      </div>
+      <div class="desc">
+        <h3>Chinkulu — Handcrafted Fashion Brand</h3>
+        <small>Brand identity, funnel creation, storytelling</small>
+      </div>
+    </a>
+
+    <!-- VINTHAPADALU -->
+    <a href="vinthapadalu.html" class="project-card">
+      <div class="project-thumb">
+        <img src="logo-vinthapadalu.png">
+      </div>
+      <div class="desc">
+        <h3>Vinthapadalu — Telugu Literature Community</h3>
+        <small>Branding, cultural positioning, content strategy</small>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- CONTACT -->
+  <div id="contact" class="section-title">Contact</div>
+
+  <p>Email: <b>contact@thezapwash.com</b></p>
+  <p>Based in Hyderabad • Available for freelance & collaborations</p>
+
+  <footer>
+    © Seenuri Works — Designed & Built by Shivateja Seenuri
+  </footer>
+
 </div>
 </body>
 </html>
