@@ -4,26 +4,37 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Seenuri Works — Shivateja</title>
+<title>Seenuri Works — Shivateja | Marketing & Brand Design</title>
+<meta name="description" content="Marketing strategist and brand designer helping businesses grow with clarity-driven strategy and human-centered design.">
 
-<!-- FONT -->
+<!-- FONTS -->
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
   :root{
-    --black:#000;
-    --white:#fff;
-    --gray:#777;
-    --lightgray:#f3f3f3;
+    --black:#0a0a0a;
+    --white:#fafafa;
+    --gray:#6b6b6b;
+    --accent:#ff4d00;
+    --accent-glow:rgba(255,77,0,0.15);
     --maxw:1100px;
   }
 
   *{box-sizing:border-box;margin:0;padding:0;}
+  
+  html{scroll-behavior:smooth;}
+  
   body{
     font-family:'Space Grotesk',sans-serif;
     background:var(--white);
     color:var(--black);
-    line-height:1.5;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  ::selection{
+    background:var(--accent);
+    color:#fff;
   }
 
   .container{
@@ -32,250 +43,649 @@
     padding:40px 24px;
   }
 
-  /* Fade-in Animation */
+  /* CURSOR GLOW EFFECT */
+  .cursor-glow{
+    position:fixed;
+    width:400px;
+    height:400px;
+    background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);
+    pointer-events:none;
+    z-index:0;
+    transform:translate(-50%,-50%);
+    transition:opacity 0.3s;
+    opacity:0;
+  }
+  body:hover .cursor-glow{opacity:1;}
+
+  /* STAGGERED FADE-IN */
   .fade{
     opacity:0;
-    transform:translateY(20px);
-    animation:fadein 0.9s forwards;
+    transform:translateY(40px);
+    animation:fadein 0.8s ease-out forwards;
   }
+  .fade:nth-child(1){animation-delay:0.1s;}
+  .fade:nth-child(2){animation-delay:0.2s;}
+  .fade:nth-child(3){animation-delay:0.3s;}
+  .fade:nth-child(4){animation-delay:0.4s;}
+  .fade:nth-child(5){animation-delay:0.5s;}
+  .fade:nth-child(6){animation-delay:0.6s;}
+
   @keyframes fadein{
     to{opacity:1;transform:translateY(0);}
   }
 
+  /* HEADER */
   header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:80px;
+    margin-bottom:40px;
+    position:sticky;
+    top:0;
+    background:rgba(250,250,250,0.9);
+    backdrop-filter:blur(10px);
+    padding:20px 24px;
+    margin:-40px -24px 40px -24px;
+    z-index:100;
+  }
+
+  .logo{
+    font-weight:700;
+    font-size:22px;
+    letter-spacing:-0.5px;
+  }
+  .logo span{
+    color:var(--accent);
   }
 
   nav a{
     text-decoration:none;
     color:var(--black);
-    margin-left:24px;
+    margin-left:32px;
     font-weight:500;
+    position:relative;
+    transition:color 0.2s;
   }
+  nav a::after{
+    content:'';
+    position:absolute;
+    bottom:-4px;
+    left:0;
+    width:0;
+    height:2px;
+    background:var(--accent);
+    transition:width 0.3s;
+  }
+  nav a:hover{color:var(--accent);}
+  nav a:hover::after{width:100%;}
 
   /* HERO */
   .hero{
-    padding:120px 0;
+    padding:100px 0 140px 0;
+    position:relative;
   }
+
+  .hero-label{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--black);
+    color:#fff;
+    padding:8px 16px;
+    border-radius:50px;
+    font-size:13px;
+    font-weight:500;
+    margin-bottom:24px;
+    letter-spacing:0.5px;
+  }
+  .hero-label .dot{
+    width:8px;height:8px;
+    background:#00ff88;
+    border-radius:50%;
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:0.4;}
+  }
+
   .hero h1{
-    font-size:52px;
+    font-size:clamp(42px,6vw,68px);
     font-weight:700;
-    max-width:800px;
+    max-width:900px;
+    line-height:1.1;
+    letter-spacing:-2px;
   }
+  .hero h1 .highlight{
+    background:linear-gradient(120deg,var(--accent) 0%,#ff8c00 100%);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+  }
+
   .hero p{
     font-size:20px;
-    color:#222;
-    max-width:620px;
-    margin-top:18px;
+    color:var(--gray);
+    max-width:600px;
+    margin-top:24px;
+    line-height:1.7;
+  }
+
+  .hero-cta{
+    display:flex;
+    gap:16px;
+    margin-top:40px;
+    flex-wrap:wrap;
+  }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:16px 32px;
+    border-radius:50px;
+    font-weight:600;
+    font-size:15px;
+    text-decoration:none;
+    transition:all 0.3s ease;
+    cursor:pointer;
+  }
+  .btn-primary{
+    background:var(--black);
+    color:#fff;
+    border:2px solid var(--black);
+  }
+  .btn-primary:hover{
+    background:var(--accent);
+    border-color:var(--accent);
+    transform:translateY(-3px);
+    box-shadow:0 10px 30px rgba(255,77,0,0.3);
+  }
+  .btn-secondary{
+    background:transparent;
+    color:var(--black);
+    border:2px solid #ddd;
+  }
+  .btn-secondary:hover{
+    border-color:var(--black);
+    transform:translateY(-3px);
+  }
+
+  /* STATS */
+  .stats{
+    display:flex;
+    gap:60px;
+    margin-top:80px;
+    padding-top:40px;
+    border-top:1px solid #eee;
+  }
+  .stat h3{
+    font-size:42px;
+    font-weight:700;
+    color:var(--accent);
+  }
+  .stat p{
+    font-size:14px;
+    color:var(--gray);
+    margin-top:4px;
   }
 
   /* SECTION TITLE */
+  .section-header{
+    margin:100px 0 50px 0;
+  }
+  .section-label{
+    font-size:13px;
+    font-weight:600;
+    color:var(--accent);
+    letter-spacing:2px;
+    text-transform:uppercase;
+    margin-bottom:12px;
+  }
   .section-title{
-    font-size:32px;
+    font-size:clamp(32px,4vw,48px);
     font-weight:700;
-    margin:80px 0 30px 0;
-    border-bottom:2px solid var(--black);
-    display:inline-block;
-    padding-bottom:6px;
+    letter-spacing:-1px;
   }
 
   /* SERVICES */
   .services{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:30px;
+    gap:24px;
   }
+  @media(max-width:700px){
+    .services{grid-template-columns:1fr;}
+  }
+
   .service-card{
-    padding:24px;
-    border:1px solid #000;
-    border-radius:14px;
+    padding:36px;
+    border:1px solid #e0e0e0;
+    border-radius:20px;
     background:#fff;
-    transition:0.2s ease;
+    transition:all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+    position:relative;
+    overflow:hidden;
+  }
+  .service-card::before{
+    content:'';
+    position:absolute;
+    top:0;left:0;
+    width:100%;height:4px;
+    background:linear-gradient(90deg,var(--accent),#ff8c00);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform 0.4s;
   }
   .service-card:hover{
-    transform:translateY(-6px);
+    transform:translateY(-8px);
+    box-shadow:0 20px 40px rgba(0,0,0,0.08);
+    border-color:transparent;
   }
+  .service-card:hover::before{
+    transform:scaleX(1);
+  }
+
+  .service-icon{
+    width:56px;height:56px;
+    background:var(--accent-glow);
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:20px;
+    font-size:24px;
+  }
+
   .service-card h3{
-    margin-bottom:10px;
-    font-size:20px;
+    margin-bottom:12px;
+    font-size:22px;
+    font-weight:600;
+  }
+  .service-card p{
+    color:var(--gray);
+    font-size:15px;
+    line-height:1.6;
   }
 
   /* PROJECTS */
+  .projects-wrapper{
+    margin-top:100px;
+  }
+
+  .project-section{
+    padding:100px 24px;
+    transition:background 0.5s;
+  }
   .project-section-black{
-    background:#000;
+    background:var(--black);
     color:#fff;
-    padding:80px 24px;
   }
   .project-section-white{
     background:#fff;
-    color:#000;
-    padding:80px 24px;
+    color:var(--black);
   }
+
   .project{
     max-width:var(--maxw);
     margin:auto;
     display:flex;
-    gap:40px;
+    gap:50px;
     align-items:center;
-    padding:40px 0;
+    text-decoration:none;
+    color:inherit;
   }
+  @media(max-width:700px){
+    .project{flex-direction:column;text-align:center;}
+  }
+
   .project-thumb{
-    width:200px;
-    height:200px;
-    border-radius:12px;
-    padding:20px;
+    width:180px;
+    height:180px;
+    min-width:180px;
+    border-radius:24px;
+    padding:24px;
     background:#fff;
     display:flex;
     align-items:center;
     justify-content:center;
-    border:2px solid #000;
+    border:2px solid transparent;
+    transition:all 0.4s;
+    box-shadow:0 10px 40px rgba(0,0,0,0.1);
+  }
+  .project:hover .project-thumb{
+    transform:scale(1.05) rotate(-2deg);
+    box-shadow:0 20px 60px rgba(255,77,0,0.2);
+    border-color:var(--accent);
   }
   .project-thumb img{
     width:100%;height:100%;object-fit:contain;
   }
+
   .project-text h2{
-    font-size:30px;
-    margin-bottom:10px;
+    font-size:clamp(26px,3vw,36px);
+    margin-bottom:12px;
+    font-weight:700;
+    transition:color 0.3s;
   }
-  .project-text small{
-    color:#bbb;
+  .project:hover .project-text h2{
+    color:var(--accent);
   }
-  .project:hover .project-text{
-    opacity:0.8;
+
+  .project-tags{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:16px;
+  }
+  .tag{
+    padding:6px 14px;
+    background:rgba(255,255,255,0.1);
+    border-radius:50px;
+    font-size:13px;
+    font-weight:500;
+  }
+  .project-section-white .tag{
+    background:rgba(0,0,0,0.05);
+  }
+
+  .project-arrow{
+    margin-left:auto;
+    width:60px;height:60px;
+    border:2px solid currentColor;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    opacity:0.3;
+    transition:all 0.3s;
+  }
+  .project:hover .project-arrow{
+    opacity:1;
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+    transform:translateX(10px);
+  }
+
+  /* TESTIMONIAL */
+  .testimonial-section{
+    background:linear-gradient(135deg,#f8f8f8 0%,#fff 100%);
+    padding:100px 24px;
+    text-align:center;
+  }
+  .testimonial-quote{
+    font-size:clamp(24px,3vw,32px);
+    font-weight:500;
+    max-width:800px;
+    margin:0 auto 30px auto;
+    line-height:1.5;
+    color:var(--black);
+  }
+  .testimonial-author{
+    font-size:16px;
+    color:var(--gray);
   }
 
   /* CONTACT */
+  .contact-section{
+    background:var(--black);
+    color:#fff;
+    padding:120px 24px;
+    text-align:center;
+  }
+  .contact-section h2{
+    font-size:clamp(36px,5vw,56px);
+    font-weight:700;
+    margin-bottom:20px;
+    letter-spacing:-1px;
+  }
+  .contact-section p{
+    color:#888;
+    font-size:18px;
+    margin-bottom:40px;
+  }
+  .contact-email{
+    font-size:clamp(20px,3vw,28px);
+    color:var(--accent);
+    text-decoration:none;
+    font-weight:600;
+    transition:all 0.3s;
+  }
+  .contact-email:hover{
+    text-shadow:0 0 30px var(--accent);
+  }
+  .contact-meta{
+    margin-top:50px;
+    color:#555;
+    font-size:14px;
+  }
+
+  /* FOOTER */
   footer{
     text-align:center;
-    margin-top:100px;
-    padding:40px 0;
-    color:#444;
-    font-size:14px;
+    padding:30px;
+    color:#888;
+    font-size:13px;
+    background:#050505;
+  }
+
+  /* SCROLL REVEAL */
+  .reveal{
+    opacity:0;
+    transform:translateY(60px);
+    transition:all 0.8s cubic-bezier(0.5,0,0,1);
+  }
+  .reveal.active{
+    opacity:1;
+    transform:translateY(0);
   }
 </style>
 </head>
 
-
 <body>
 
-<div class="container fade">
+<!-- CURSOR GLOW -->
+<div class="cursor-glow" id="glow"></div>
+
+<div class="container">
 
   <!-- HEADER -->
-  <header>
-    <div style="font-weight:700;font-size:22px;">Seenuri Works</div>
+  <header class="fade">
+    <div class="logo">Seenuri<span>.</span></div>
     <nav>
       <a href="#services">Services</a>
-      <a href="#projects">Projects</a>
+      <a href="#projects">Work</a>
       <a href="#contact">Contact</a>
     </nav>
   </header>
 
   <!-- HERO -->
-  <section class="hero fade">
-    <h1>Marketing Generalist. Designer. Brand Builder.</h1>
-    <p>
-      I build brands, funnels, and digital experiences where strategy meets design.  
-      My work blends clarity-driven marketing with clean, human-centered interfaces —  
-      shaped by the strategic focus of Richard Huntington and the design philosophy of Alan Cooper.
+  <section class="hero">
+    <div class="hero-label fade">
+      <span class="dot"></span>
+      Available for Projects
+    </div>
+    <h1 class="fade">
+      I turn ideas into<br>
+      <span class="highlight">brands that convert.</span>
+    </h1>
+    <p class="fade">
+      Marketing strategist and designer crafting clarity-driven brand experiences. 
+      I blend strategic thinking with minimal design to help businesses 
+      stand out and scale.
     </p>
+    <div class="hero-cta fade">
+      <a href="#contact" class="btn btn-primary">
+        Let's Talk →
+      </a>
+      <a href="#projects" class="btn btn-secondary">
+        View Work
+      </a>
+    </div>
+
+    <div class="stats fade">
+      <div class="stat">
+        <h3>3+</h3>
+        <p>Brands Built</p>
+      </div>
+      <div class="stat">
+        <h3>100%</h3>
+        <p>Client Retention</p>
+      </div>
+      <div class="stat">
+        <h3>∞</h3>
+        <p>Curiosity</p>
+      </div>
+    </div>
   </section>
 
   <!-- SERVICES -->
-  <div id="services" class="section-title fade">Services</div>
+  <section id="services">
+    <div class="section-header fade">
+      <p class="section-label">What I Do</p>
+      <h2 class="section-title">Services that move the needle.</h2>
+    </div>
 
-  <div class="services">
-    <div class="service-card fade">
-      <h3>Marketing Strategy</h3>
-      <p>Positioning, funnels, GTM systems, conversion strategy.</p>
+    <div class="services">
+      <div class="service-card reveal">
+        <div class="service-icon">🎯</div>
+        <h3>Marketing Strategy</h3>
+        <p>Positioning, funnels, GTM systems & conversion architecture that turns visitors into customers.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">✦</div>
+        <h3>Brand Identity</h3>
+        <p>Logo systems, voice guidelines & visual identity that makes your brand unmistakable.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">📈</div>
+        <h3>Digital Growth</h3>
+        <p>SEO, local search optimization & analytics setup to fuel organic, sustainable growth.</p>
+      </div>
+      <div class="service-card reveal">
+        <div class="service-icon">◻️</div>
+        <h3>Web Design</h3>
+        <p>Minimal, conversion-focused websites that feel premium and load lightning fast.</p>
+      </div>
     </div>
-    <div class="service-card fade">
-      <h3>Brand Identity</h3>
-      <p>Logo, voice, identity systems, brand structure.</p>
-    </div>
-    <div class="service-card fade">
-      <h3>Digital Growth</h3>
-      <p>SEO, local SEO, keyword research, analytics.</p>
-    </div>
-    <div class="service-card fade">
-      <h3>UI / Web Design</h3>
-      <p>Minimal, clear, user-centered web experiences.</p>
-    </div>
-  </div>
+  </section>
 
 </div>
 
-
 <!-- PROJECTS -->
-<div id="projects"></div>
+<section id="projects" class="projects-wrapper">
 
-<!-- PROJECT 1 — BLACK -->
-<section class="project-section-black fade">
-  <a href="zapwash.html" style="text-decoration:none;color:inherit;">
-    <div class="project">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-label">Selected Work</p>
+      <h2 class="section-title">Projects I'm proud of.</h2>
+    </div>
+  </div>
 
+  <!-- PROJECT 1 -->
+  <div class="project-section project-section-black reveal">
+    <a href="zapwash.html" class="project">
       <div class="project-thumb">
-        <img src="logo-zapwash.png">
+        <img src="logo-zapwash.png" alt="Zapwash">
       </div>
-
       <div class="project-text">
-        <h2>Zapwash — Hyperlocal Laundry Aggregator</h2>
-        <small>Branding · SEO · Website · Funnel · Strategy</small>
+        <h2>Zapwash</h2>
+        <p style="color:#888;margin-bottom:8px;">Hyperlocal laundry aggregator revolutionizing how Hyderabad does laundry.</p>
+        <div class="project-tags">
+          <span class="tag">Branding</span>
+          <span class="tag">SEO</span>
+          <span class="tag">Website</span>
+          <span class="tag">Funnel</span>
+        </div>
       </div>
+      <div class="project-arrow">→</div>
+    </a>
+  </div>
 
-    </div>
-  </a>
-</section>
-
-<!-- PROJECT 2 — WHITE -->
-<section class="project-section-white fade">
-  <a href="chinkulu.html" style="text-decoration:none;color:inherit;">
-    <div class="project">
-
-      <div class="project-thumb" style="border-color:#000;background:#fff;">
-        <img src="logo-chinkulu.png">
-      </div>
-
-      <div class="project-text">
-        <h2>Chinkulu — Handcrafted Fashion Label</h2>
-        <small>Branding · Narrative · Funnel · Strategy</small>
-      </div>
-
-    </div>
-  </a>
-</section>
-
-<!-- PROJECT 3 — BLACK -->
-<section class="project-section-black fade">
-  <a href="vinthapadalu.html" style="text-decoration:none;color:inherit;">
-    <div class="project">
-
+  <!-- PROJECT 2 -->
+  <div class="project-section project-section-white reveal">
+    <a href="chinkulu.html" class="project">
       <div class="project-thumb">
-        <img src="logo-vinthapadalu.png">
+        <img src="logo-chinkulu.png" alt="Chinkulu">
       </div>
-
       <div class="project-text">
-        <h2>Vinthapadalu — Telugu Literature Community</h2>
-        <small>Brand Identity · Cultural Positioning · Content</small>
+        <h2>Chinkulu</h2>
+        <p style="color:#666;margin-bottom:8px;">Handcrafted fashion label blending tradition with contemporary aesthetics.</p>
+        <div class="project-tags">
+          <span class="tag">Branding</span>
+          <span class="tag">Narrative</span>
+          <span class="tag">Strategy</span>
+        </div>
       </div>
+      <div class="project-arrow">→</div>
+    </a>
+  </div>
 
-    </div>
-  </a>
+  <!-- PROJECT 3 -->
+  <div class="project-section project-section-black reveal">
+    <a href="vinthapadalu.html" class="project">
+      <div class="project-thumb">
+        <img src="logo-vinthapadalu.png" alt="Vinthapadalu">
+      </div>
+      <div class="project-text">
+        <h2>Vinthapadalu</h2>
+        <p style="color:#888;margin-bottom:8px;">Telugu literature community celebrating regional storytelling & culture.</p>
+        <div class="project-tags">
+          <span class="tag">Brand Identity</span>
+          <span class="tag">Cultural Positioning</span>
+          <span class="tag">Content</span>
+        </div>
+      </div>
+      <div class="project-arrow">→</div>
+    </a>
+  </div>
+
 </section>
 
+<!-- TESTIMONIAL -->
+<section class="testimonial-section reveal">
+  <p class="testimonial-quote">
+    "Great marketing isn't about being everywhere.<br>
+    It's about being <em>unforgettable</em> somewhere."
+  </p>
+  <p class="testimonial-author">— My philosophy</p>
+</section>
 
 <!-- CONTACT -->
-<section id="contact" class="container fade">
-  <div class="section-title">Contact</div>
-  <p>Email: <b>stseenuri@outlook.com</b></p>
-  <p>Based in Hyderabad • Available for freelance & collaborations</p>
+<section id="contact" class="contact-section reveal">
+  <h2>Let's build something<br>remarkable together.</h2>
+  <p>Have a project in mind? I'd love to hear about it.</p>
+  <a href="mailto:stseenuri@outlook.com" class="contact-email">stseenuri@outlook.com</a>
+  <p class="contact-meta">Based in Hyderabad • Open for freelance & collaborations</p>
 </section>
 
 <footer>
-  © Seenuri Works — Designed & Built by Shivateja Seenuri
+  © 2025 Seenuri Works — Designed & Built by Shivateja Seenuri
 </footer>
+
+<script>
+// Cursor glow effect
+const glow = document.getElementById('glow');
+document.addEventListener('mousemove', (e) => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const revealOnScroll = () => {
+  reveals.forEach(el => {
+    const top = el.getBoundingClientRect().top;
+    if (top < window.innerHeight - 100) {
+      el.classList.add('active');
+    }
+  });
+};
+window.addEventListener('scroll', revealOnScroll);
+revealOnScroll();
+</script>
 
 </body>
 </html>
