@@ -2,113 +2,1024 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Vinthapadalu — Case Study</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vinthapadalu — Case Study | Seenuri Works</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-body{
+:root{
+  --black:#0a0a0a;
+  --white:#f8f8f8;
+  --gray:#888;
+  --accent:#ff4d00;
+  --maxw:1000px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{
   font-family:'Space Grotesk',sans-serif;
-  background:#fff;
-  color:#000;
-  padding:40px;
-  line-height:1.6;
-}
-.container{max-width:900px;margin:auto;}
-a{color:#000;text-decoration:none;}
-.back{margin-bottom:20px;display:inline-block;font-size:14px;}
-
-.logo{
-  width:180px;
-  border:2px solid #000;
-  padding:20px;
-  background:#fff;
-  border-radius:14px;
-  margin-bottom:40px;
+  background:var(--white);
+  color:var(--black);
+  line-height:1.7;
+  overflow-x:hidden;
+  cursor:none;
 }
 
-h1{font-size:42px;font-weight:700;margin-bottom:20px;}
-h2{font-size:26px;margin-top:50px;margin-bottom:10px;font-weight:600;}
-p{margin-bottom:18px;font-size:18px;color:#222;}
-
-ul li{
-  margin-bottom:8px;
-  font-size:18px;
+::selection{
+  background:var(--accent);
+  color:#fff;
 }
 
-.tools{
+/* LOADER */
+.loader{
+  position:fixed;
+  inset:0;
+  background:var(--black);
+  z-index:10000;
   display:flex;
-  gap:12px;
-  margin-top:14px;
-  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
 }
-.tool{
-  padding:6px 14px;
-  border:1px solid #000;
-  border-radius:8px;
-  font-size:14px;
-  background:#fff;
+.loader-text{
+  font-size:clamp(28px,5vw,56px);
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-2px;
+  overflow:hidden;
+}
+.loader-text span{
+  display:inline-block;
+  transform:translateY(100%);
+  animation:loaderUp 0.6s cubic-bezier(0.7,0,0.3,1) forwards;
+}
+.loader-text span:nth-child(1){animation-delay:0.05s;}
+.loader-text span:nth-child(2){animation-delay:0.1s;}
+.loader-text span:nth-child(3){animation-delay:0.15s;}
+.loader-text span:nth-child(4){animation-delay:0.2s;}
+.loader-text span:nth-child(5){animation-delay:0.25s;}
+.loader-text span:nth-child(6){animation-delay:0.3s;}
+.loader-text span:nth-child(7){animation-delay:0.35s;}
+.loader-text span:nth-child(8){animation-delay:0.4s;}
+.loader-text span:nth-child(9){animation-delay:0.45s;}
+.loader-text span:nth-child(10){animation-delay:0.5s;}
+.loader-text span:nth-child(11){animation-delay:0.55s;}
+.loader-text span:nth-child(12){animation-delay:0.6s;}
+@keyframes loaderUp{
+  to{transform:translateY(0);}
+}
+.loader.done{
+  transform:translateY(-100%);
+  transition:transform 1s cubic-bezier(0.7,0,0.3,1) 0.8s;
 }
 
-.fade{
-  opacity:0;transform:translateY(20px);
-  animation:fade 0.7s forwards;
+/* CURSOR */
+.cursor{
+  position:fixed;
+  width:16px;
+  height:16px;
+  border:1.5px solid var(--black);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9999;
+  transition:transform 0.2s, width 0.3s, height 0.3s, background 0.3s;
 }
-@keyframes fade{to{opacity:1;transform:translateY(0);}}
+.cursor.active{
+  width:60px;
+  height:60px;
+  background:var(--accent);
+  border-color:var(--accent);
+}
+
+/* NOISE */
+.noise{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9998;
+  opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* PROGRESS */
+.progress{
+  position:fixed;
+  top:0;
+  left:0;
+  width:0%;
+  height:3px;
+  background:var(--accent);
+  z-index:1000;
+  transition:width 0.1s;
+}
+
+/* BACK BUTTON */
+.back-btn{
+  position:fixed;
+  top:30px;
+  left:50px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:13px;
+  font-weight:500;
+  text-decoration:none;
+  z-index:100;
+  mix-blend-mode:difference;
+  color:#fff;
+}
+.back-btn .arrow{
+  width:40px;
+  height:40px;
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all 0.4s cubic-bezier(0.7,0,0.3,1);
+}
+.back-btn:hover .arrow{
+  background:#fff;
+  color:var(--black);
+  transform:translateX(-5px);
+}
+
+/* HERO SECTION */
+.hero{
+  min-height:100vh;
+  background:var(--black);
+  color:#fff;
+  display:flex;
+  align-items:flex-end;
+  padding:100px 80px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-bg{
+  position:absolute;
+  top:50%;
+  right:8%;
+  transform:translateY(-50%);
+  width:450px;
+  height:450px;
+  opacity:0.06;
+  pointer-events:none;
+}
+.hero-bg img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+/* Floating Telugu letters */
+.floating-letter{
+  position:absolute;
+  font-size:clamp(80px,15vw,200px);
+  font-weight:700;
+  color:rgba(255,255,255,0.03);
+  pointer-events:none;
+  user-select:none;
+}
+.floating-letter:nth-child(1){top:10%;left:5%;}
+.floating-letter:nth-child(2){top:20%;right:15%;}
+.floating-letter:nth-child(3){bottom:30%;left:15%;}
+
+.hero-content{
+  max-width:800px;
+  position:relative;
+  z-index:1;
+}
+
+.hero-label{
+  font-size:11px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:30px;
+  overflow:hidden;
+}
+.hero-label span{
+  display:inline-block;
+  transform:translateY(100%);
+  animation:slideUp 0.8s cubic-bezier(0.7,0,0.3,1) forwards;
+  animation-delay:2s;
+}
+@keyframes slideUp{
+  to{transform:translateY(0);}
+}
+
+.hero h1{
+  font-size:clamp(42px,9vw,110px);
+  font-weight:700;
+  letter-spacing:-3px;
+  line-height:0.9;
+  margin-bottom:30px;
+}
+.hero h1 .line{
+  display:block;
+  overflow:hidden;
+}
+.hero h1 .line span{
+  display:inline-block;
+  transform:translateY(110%);
+  animation:titleUp 1s cubic-bezier(0.7,0,0.3,1) forwards;
+}
+.hero h1 .line:nth-child(1) span{animation-delay:2.2s;}
+.hero h1 .line:nth-child(2) span{animation-delay:2.3s;}
+@keyframes titleUp{
+  to{transform:translateY(0);}
+}
+.hero h1 .outline{
+  -webkit-text-stroke:1.5px #fff;
+  -webkit-text-fill-color:transparent;
+}
+
+.hero-desc{
+  font-size:18px;
+  color:var(--gray);
+  max-width:480px;
+  line-height:1.8;
+  overflow:hidden;
+  margin-bottom:50px;
+}
+.hero-desc span{
+  display:inline-block;
+  transform:translateY(100%);
+  animation:slideUp 0.8s cubic-bezier(0.7,0,0.3,1) forwards;
+  animation-delay:2.5s;
+}
+
+.hero-meta{
+  display:flex;
+  gap:50px;
+  padding-top:30px;
+  border-top:1px solid rgba(255,255,255,0.1);
+}
+.hero-meta-item{
+  overflow:hidden;
+}
+.hero-meta-item span{
+  display:block;
+  transform:translateY(100%);
+  animation:slideUp 0.8s cubic-bezier(0.7,0,0.3,1) forwards;
+}
+.hero-meta-item:nth-child(1) span{animation-delay:2.7s;}
+.hero-meta-item:nth-child(2) span{animation-delay:2.8s;}
+.hero-meta-item:nth-child(3) span{animation-delay:2.9s;}
+.hero-meta-label{
+  font-size:11px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--gray);
+  margin-bottom:8px;
+}
+.hero-meta-value{
+  font-size:16px;
+  font-weight:500;
+}
+
+.scroll-indicator{
+  position:absolute;
+  bottom:50px;
+  right:80px;
+  writing-mode:vertical-rl;
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--gray);
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+.scroll-indicator .line{
+  width:1px;
+  height:80px;
+  background:rgba(255,255,255,0.2);
+  position:relative;
+  overflow:hidden;
+}
+.scroll-indicator .line::after{
+  content:'';
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:var(--accent);
+  animation:scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine{
+  0%{transform:translateY(-100%);}
+  50%{transform:translateY(0);}
+  100%{transform:translateY(100%);}
+}
+
+/* MANIFESTO SECTION */
+.manifesto{
+  padding:200px 80px;
+  background:var(--white);
+  position:relative;
+  overflow:hidden;
+}
+.manifesto-bg{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:clamp(200px,40vw,500px);
+  font-weight:700;
+  color:rgba(0,0,0,0.02);
+  white-space:nowrap;
+  pointer-events:none;
+}
+.manifesto-content{
+  max-width:900px;
+  margin:auto;
+  position:relative;
+  z-index:1;
+}
+.manifesto-text{
+  font-size:clamp(32px,5vw,56px);
+  font-weight:600;
+  letter-spacing:-1px;
+  line-height:1.25;
+}
+.manifesto-text .word{
+  display:inline-block;
+  overflow:hidden;
+  margin-right:14px;
+}
+.manifesto-text .word span{
+  display:inline-block;
+  transform:translateY(100%);
+  transition:transform 0.8s cubic-bezier(0.7,0,0.3,1);
+}
+.manifesto-text.in-view .word span{
+  transform:translateY(0);
+}
+.manifesto-text .word:nth-child(1) span{transition-delay:0s;}
+.manifesto-text .word:nth-child(2) span{transition-delay:0.03s;}
+.manifesto-text .word:nth-child(3) span{transition-delay:0.06s;}
+.manifesto-text .word:nth-child(4) span{transition-delay:0.09s;}
+.manifesto-text .word:nth-child(5) span{transition-delay:0.12s;}
+.manifesto-text .word:nth-child(6) span{transition-delay:0.15s;}
+.manifesto-text .word:nth-child(7) span{transition-delay:0.18s;}
+.manifesto-text .word:nth-child(8) span{transition-delay:0.21s;}
+.manifesto-text .word:nth-child(9) span{transition-delay:0.24s;}
+.manifesto-text .word:nth-child(10) span{transition-delay:0.27s;}
+.manifesto-text .word:nth-child(11) span{transition-delay:0.30s;}
+.manifesto-text .word:nth-child(12) span{transition-delay:0.33s;}
+.manifesto-text .word:nth-child(13) span{transition-delay:0.36s;}
+.manifesto-text .word:nth-child(14) span{transition-delay:0.39s;}
+.manifesto-text .highlight{
+  color:var(--accent);
+}
+
+/* CONTENT SECTIONS */
+.content{
+  max-width:var(--maxw);
+  margin:auto;
+  padding:0 80px;
+}
+
+.section{
+  padding:120px 0;
+  border-bottom:1px solid #eee;
+}
+.section:last-of-type{
+  border-bottom:none;
+}
+
+.section-grid{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:80px;
+  align-items:start;
+}
+
+.section-label{
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--accent);
+  position:sticky;
+  top:100px;
+}
+
+.section-content h2{
+  font-size:clamp(32px,4vw,48px);
+  font-weight:700;
+  letter-spacing:-1px;
+  margin-bottom:30px;
+  line-height:1.1;
+}
+.section-content h2 .line{
+  display:block;
+  overflow:hidden;
+}
+.section-content h2 .line span{
+  display:inline-block;
+  transform:translateY(100%);
+  transition:transform 0.8s cubic-bezier(0.7,0,0.3,1);
+}
+.section-content h2.in-view .line span{
+  transform:translateY(0);
+}
+.section-content h2 .line:nth-child(2) span{transition-delay:0.1s;}
+
+.section-content p{
+  font-size:18px;
+  color:#555;
+  line-height:1.9;
+  max-width:600px;
+}
+
+/* ROLE LIST */
+.role-list{
+  list-style:none;
+  margin-top:30px;
+}
+.role-item{
+  padding:20px 0;
+  border-bottom:1px solid #eee;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:18px;
+  transition:all 0.4s;
+  cursor:default;
+}
+.role-item:hover{
+  padding-left:20px;
+  color:var(--accent);
+}
+.role-item .num{
+  font-size:13px;
+  color:var(--gray);
+  font-weight:500;
+}
+.role-item:hover .num{
+  color:var(--accent);
+}
+
+/* TOOLS */
+.tools-grid{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  margin-top:30px;
+}
+.tool-item{
+  padding:16px 28px;
+  border:1px solid #e0e0e0;
+  border-radius:100px;
+  font-size:15px;
+  font-weight:500;
+  transition:all 0.4s cubic-bezier(0.7,0,0.3,1);
+  cursor:default;
+}
+.tool-item:hover{
+  background:var(--black);
+  color:#fff;
+  border-color:var(--black);
+  transform:translateY(-4px);
+}
+
+/* VISION SECTION */
+.vision-section{
+  background:var(--black);
+  color:#fff;
+  padding:180px 80px;
+  position:relative;
+  overflow:hidden;
+}
+.vision-grid{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:100px;
+  align-items:center;
+}
+.vision-label{
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:20px;
+}
+.vision-title{
+  font-size:clamp(40px,6vw,72px);
+  font-weight:700;
+  letter-spacing:-2px;
+  line-height:1;
+  margin-bottom:30px;
+}
+.vision-text{
+  font-size:18px;
+  color:var(--gray);
+  line-height:1.9;
+}
+.vision-visual{
+  position:relative;
+}
+.vision-card{
+  padding:40px;
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:20px;
+  margin-bottom:20px;
+  transition:all 0.4s;
+  background:rgba(255,255,255,0.02);
+}
+.vision-card:hover{
+  border-color:var(--accent);
+  transform:translateX(10px);
+}
+.vision-card-title{
+  font-size:20px;
+  font-weight:600;
+  margin-bottom:8px;
+}
+.vision-card-desc{
+  font-size:15px;
+  color:var(--gray);
+}
+
+/* OUTCOME */
+.outcome-section{
+  padding:150px 80px;
+  background:var(--white);
+  text-align:center;
+}
+.outcome-label{
+  font-size:11px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:30px;
+}
+.outcome-title{
+  font-size:clamp(36px,6vw,64px);
+  font-weight:700;
+  letter-spacing:-2px;
+  max-width:800px;
+  margin:0 auto 30px auto;
+  line-height:1.1;
+}
+.outcome-desc{
+  font-size:18px;
+  color:var(--gray);
+  max-width:600px;
+  margin:auto;
+  line-height:1.8;
+}
+
+/* NEXT PROJECT */
+.next-project{
+  background:var(--black);
+  padding:150px 80px;
+  text-align:center;
+  position:relative;
+}
+.next-label{
+  font-size:11px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--gray);
+  margin-bottom:30px;
+}
+.next-title{
+  font-size:clamp(48px,10vw,120px);
+  font-weight:700;
+  letter-spacing:-4px;
+  transition:color 0.3s;
+  color:#fff;
+}
+.next-project:hover .next-title{
+  color:var(--accent);
+}
+.next-project a{
+  text-decoration:none;
+  color:inherit;
+  display:block;
+}
+.next-arrow{
+  margin-top:40px;
+  font-size:32px;
+  color:#fff;
+  opacity:0.3;
+  transition:all 0.4s;
+}
+.next-project:hover .next-arrow{
+  opacity:1;
+  transform:translateY(10px);
+}
+
+/* CTA */
+.cta-section{
+  padding:200px 80px;
+  text-align:center;
+  background:var(--white);
+}
+.cta-section h2{
+  font-size:clamp(36px,6vw,72px);
+  font-weight:700;
+  letter-spacing:-2px;
+  margin-bottom:20px;
+}
+.cta-section h2 a{
+  color:var(--black);
+  text-decoration:none;
+  position:relative;
+}
+.cta-section h2 a::after{
+  content:'';
+  position:absolute;
+  bottom:-5px;
+  left:0;
+  width:100%;
+  height:6px;
+  background:var(--accent);
+  transform:scaleX(0);
+  transform-origin:right;
+  transition:transform 0.6s cubic-bezier(0.7,0,0.3,1);
+}
+.cta-section h2 a:hover{
+  color:var(--accent);
+}
+.cta-section h2 a:hover::after{
+  transform:scaleX(1);
+  transform-origin:left;
+}
+.cta-meta{
+  font-size:16px;
+  color:var(--gray);
+  margin-top:20px;
+}
+
+/* FOOTER */
+footer{
+  padding:30px 80px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-top:1px solid #eee;
+  font-size:13px;
+  color:var(--gray);
+}
+
+/* REVEAL */
+.reveal{
+  opacity:0;
+  transform:translateY(60px);
+  transition:all 1s cubic-bezier(0.7,0,0.3,1);
+}
+.reveal.in-view{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero{padding:80px 24px;}
+  .hero-meta{flex-direction:column;gap:20px;}
+  .scroll-indicator{display:none;}
+  .back-btn{left:24px;top:20px;}
+  .manifesto{padding:100px 24px;}
+  .content{padding:0 24px;}
+  .section{padding:80px 0;}
+  .section-grid{grid-template-columns:1fr;gap:30px;}
+  .section-label{position:static;}
+  .vision-section{padding:100px 24px;}
+  .vision-grid{grid-template-columns:1fr;gap:50px;}
+  .outcome-section{padding:100px 24px;}
+  .next-project{padding:100px 24px;}
+  .cta-section{padding:120px 24px;}
+  footer{padding:30px 24px;flex-direction:column;gap:16px;}
+  .floating-letter{display:none;}
+}
 </style>
 </head>
 
 <body>
-<div class="container fade">
 
-<a href="index.html" class="back">← Back to Portfolio</a>
-
-<div class="logo">
-  <img src="logo-vinthapadalu.png" style="width:100%;">
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader-text">
+    <span>V</span><span>i</span><span>n</span><span>t</span><span>h</span><span>a</span><span>p</span><span>a</span><span>d</span><span>a</span><span>l</span><span>u</span>
+  </div>
 </div>
 
-<h1>Vinthapadalu — Telugu Literature Community</h1>
+<!-- NOISE -->
+<div class="noise"></div>
 
-<p>
-Vinthapadalu is a modern Telugu literature identity designed to revive forgotten poems, authors,
-and storytelling traditions — but framed in a clean, modern visual language.
-</p>
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
 
-<h2>Overview</h2>
-<p>
-The goal was to make Telugu literature feel alive, contemporary, and emotionally engaging.
-Vinthapadalu needed an identity that honored the past while speaking today's design language.
-</p>
+<!-- PROGRESS -->
+<div class="progress" id="progress"></div>
 
-<h2>Challenge</h2>
-<p>
-Regional literature lacks structured digital representation.
-Most audiences consume short-form content — so the challenge was to modernize storytelling
-without losing cultural depth.
-</p>
+<!-- BACK BUTTON -->
+<a href="index.html" class="back-btn">
+  <span class="arrow">←</span>
+  <span>Back</span>
+</a>
 
-<h2>My Role</h2>
-<ul>
-  <li>Logo & identity design</li>
-  <li>Brand positioning & strategy</li>
-  <li>Content voice and narrative direction</li>
-  <li>Visual structure & page themes</li>
-</ul>
+<!-- HERO -->
+<section class="hero">
+  <!-- Floating Telugu-inspired elements -->
+  <div class="floating-letter">వి</div>
+  <div class="floating-letter">ప</div>
+  <div class="floating-letter">లు</div>
+  
+  <div class="hero-bg">
+    <img src="logo-vinthapadalu.png" alt="">
+  </div>
+  
+  <div class="hero-content">
+    <div class="hero-label"><span>Case Study</span></div>
+    <h1>
+      <span class="line"><span>Vintha</span></span>
+      <span class="line"><span class="outline">padalu.</span></span>
+    </h1>
+    
+    <p class="hero-desc">
+      <span>Reviving Telugu literature. Making the forgotten, unforgettable.</span>
+    </p>
+    
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-label"><span>Type</span></div>
+        <div class="hero-meta-value"><span>Literature Community</span></div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label"><span>Focus</span></div>
+        <div class="hero-meta-value"><span>Cultural Revival</span></div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label"><span>Role</span></div>
+        <div class="hero-meta-value"><span>Brand & Content</span></div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="scroll-indicator">
+    <div class="line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
 
-<h2>Outcome</h2>
-<p>
-Vinthapadalu became a gateway for Telugu literature —
-organized, modern, visually consistent, and emotionally authentic.
-It bridges culture with contemporary design.
-</p>
+<!-- MANIFESTO -->
+<section class="manifesto">
+  <div class="manifesto-bg">విం</div>
+  <div class="manifesto-content">
+    <p class="manifesto-text">
+      <span class="word"><span>Stories</span></span>
+      <span class="word"><span>that</span></span>
+      <span class="word"><span>shaped</span></span>
+      <span class="word"><span>generations</span></span>
+      <span class="word"><span>deserve</span></span>
+      <span class="word"><span>more</span></span>
+      <span class="word"><span>than</span></span>
+      <span class="word"><span class="highlight">dusty</span></span>
+      <span class="word"><span class="highlight">shelves.</span></span>
+      <span class="word"><span>They</span></span>
+      <span class="word"><span>deserve</span></span>
+      <span class="word"><span class="highlight">screens.</span></span>
+    </p>
+  </div>
+</section>
 
-<h2>Tools Used</h2>
-<div class="tools">
-  <div class="tool">Canva</div>
-  <div class="tool">SEMrush</div>
-  <div class="tool">Ubersuggest</div>
-  <div class="tool">GA4</div>
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Overview</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>Old words.</span></span>
+          <span class="line"><span>New life.</span></span>
+        </h2>
+        <p class="reveal">
+          Make Telugu literature feel alive, contemporary, emotionally engaging. 
+          An identity that honors the past while speaking today's visual language. 
+          Culture, modernized.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHALLENGE -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Challenge</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>Rich heritage.</span></span>
+          <span class="line"><span>Poor visibility.</span></span>
+        </h2>
+        <p class="reveal">
+          Regional literature lacks structured digital representation. 
+          Audiences consume short-form content. 
+          The challenge: modernize storytelling without losing cultural depth.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROACH -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Approach</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>Design as</span></span>
+          <span class="line"><span>translation.</span></span>
+        </h2>
+        <p class="reveal">
+          Treat design as a bridge between eras. 
+          Take timeless content and present it through a lens that 
+          a digital-native audience understands and respects.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCOPE -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Scope</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>What I did.</span></span>
+        </h2>
+        <ul class="role-list reveal">
+          <li class="role-item"><span>Logo & identity design</span><span class="num">01</span></li>
+          <li class="role-item"><span>Brand positioning & strategy</span><span class="num">02</span></li>
+          <li class="role-item"><span>Content voice & narrative direction</span><span class="num">03</span></li>
+          <li class="role-item"><span>Visual structure & page themes</span><span class="num">04</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Stack</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>Tools used.</span></span>
+        </h2>
+        <div class="tools-grid reveal">
+          <span class="tool-item">Canva</span>
+          <span class="tool-item">SEMrush</span>
+          <span class="tool-item">Ubersuggest</span>
+          <span class="tool-item">GA4</span>
+          <span class="tool-item">Notion</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </div>
 
-</div>
+<!-- VISION -->
+<section class="vision-section">
+  <div class="vision-grid">
+    <div class="vision-content reveal">
+      <div class="vision-label">Vision</div>
+      <h2 class="vision-title">A gateway, not a museum.</h2>
+      <p class="vision-text">
+        Vinthapadalu isn't about preservation for its own sake. 
+        It's about making literature accessible, shareable, alive. 
+        A place where new generations discover old voices.
+      </p>
+    </div>
+    <div class="vision-visual reveal">
+      <div class="vision-card">
+        <div class="vision-card-title">Organized</div>
+        <div class="vision-card-desc">Structured content that's easy to explore and discover.</div>
+      </div>
+      <div class="vision-card">
+        <div class="vision-card-title">Modern</div>
+        <div class="vision-card-desc">Contemporary design that respects tradition.</div>
+      </div>
+      <div class="vision-card">
+        <div class="vision-card-title">Authentic</div>
+        <div class="vision-card-desc">True to the emotional core of Telugu storytelling.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTCOME -->
+<section class="outcome-section">
+  <div class="outcome-label reveal">Outcome</div>
+  <h2 class="outcome-title reveal">Culture meets contemporary.</h2>
+  <p class="outcome-desc reveal">
+    Vinthapadalu became a bridge — organized, modern, visually consistent, 
+    and emotionally authentic. A brand that makes regional literature feel 
+    relevant again.
+  </p>
+</section>
+
+<!-- NEXT PROJECT -->
+<section class="next-project">
+  <a href="zapwash.html">
+    <div class="next-label">Next Project</div>
+    <div class="next-title">Zapwash</div>
+    <div class="next-arrow">↓</div>
+  </a>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2><a href="mailto:stseenuri@outlook.com">Let's work together.</a></h2>
+  <p class="cta-meta">Have a cultural project in mind?</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 Seenuri Works</span>
+  <span>Hyderabad, India</span>
+</footer>
+
+<script>
+// LOADER
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('done');
+  }, 1600);
+});
+
+// CURSOR
+const cursor = document.getElementById('cursor');
+let cursorX = 0, cursorY = 0;
+let targetX = 0, targetY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  targetX = e.clientX;
+  targetY = e.clientY;
+});
+
+function animateCursor() {
+  cursorX += (targetX - cursorX) * 0.12;
+  cursorY += (targetY - cursorY) * 0.12;
+  cursor.style.left = cursorX + 'px';
+  cursor.style.top = cursorY + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// Cursor hover
+const hoverElements = document.querySelectorAll('a, .tool-item, .role-item, .vision-card');
+hoverElements.forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+});
+
+// PROGRESS BAR
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const scrollPercent = (scrollTop / docHeight) * 100;
+  progress.style.width = scrollPercent + '%';
+});
+
+// REVEAL ON SCROLL
+const reveals = document.querySelectorAll('.reveal, .reveal-title, .manifesto-text');
+const revealOnScroll = () => {
+  reveals.forEach(el => {
+    const top = el.getBoundingClientRect().top;
+    if (top < window.innerHeight - 100) {
+      el.classList.add('in-view');
+    }
+  });
+};
+window.addEventListener('scroll', revealOnScroll);
+revealOnScroll();
+
+// PARALLAX HERO BG
+const heroBg = document.querySelector('.hero-bg');
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  if (scrollY < window.innerHeight) {
+    heroBg.style.transform = `translateY(calc(-50% + ${scrollY * 0.3}px))`;
+  }
+});
+
+// FLOATING LETTERS PARALLAX
+const floatingLetters = document.querySelectorAll('.floating-letter');
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  floatingLetters.forEach((letter, i) => {
+    const speed = 0.1 + (i * 0.05);
+    letter.style.transform = `translateY(${scrollY * speed}px)`;
+  });
+});
+</script>
+
 </body>
 </html>
