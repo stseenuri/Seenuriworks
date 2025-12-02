@@ -9,22 +9,20 @@
 <style>
 :root{
   --black:#0a0a0a;
-  --white:#fafafa;
-  --gray:#6b6b6b;
+  --white:#f8f8f8;
+  --gray:#888;
   --accent:#ff4d00;
-  --accent-glow:rgba(255,77,0,0.15);
-  --maxw:900px;
+  --maxw:1000px;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;}
-
-body{
+html,body{
   font-family:'Space Grotesk',sans-serif;
   background:var(--white);
   color:var(--black);
   line-height:1.7;
   overflow-x:hidden;
+  cursor:none;
 }
 
 ::selection{
@@ -32,326 +30,796 @@ body{
   color:#fff;
 }
 
-.container{
-  max-width:var(--maxw);
-  margin:auto;
-  padding:60px 24px;
-}
-
-/* BACK LINK */
-.back{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  font-size:14px;
-  font-weight:500;
-  color:var(--gray);
-  text-decoration:none;
-  margin-bottom:50px;
-  transition:color 0.2s;
-}
-.back:hover{color:var(--accent);}
-
-/* LOGO */
-.logo-wrap{
-  width:160px;
-  height:160px;
-  border-radius:24px;
-  padding:24px;
-  background:#fff;
-  border:2px solid #e0e0e0;
+/* LOADER */
+.loader{
+  position:fixed;
+  inset:0;
+  background:var(--black);
+  z-index:10000;
   display:flex;
   align-items:center;
   justify-content:center;
-  margin-bottom:40px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.06);
-  transition:all 0.3s;
 }
-.logo-wrap:hover{
+.loader-text{
+  font-size:clamp(32px,6vw,64px);
+  font-weight:700;
+  color:#fff;
+  letter-spacing:-2px;
+  overflow:hidden;
+}
+.loader-text span{
+  display:inline-block;
+  transform:translateY(100%);
+  animation:loaderUp 0.6s cubic-bezier(0.7,0,0.3,1) forwards;
+}
+.loader-text span:nth-child(1){animation-delay:0.1s;}
+.loader-text span:nth-child(2){animation-delay:0.15s;}
+.loader-text span:nth-child(3){animation-delay:0.2s;}
+.loader-text span:nth-child(4){animation-delay:0.25s;}
+.loader-text span:nth-child(5){animation-delay:0.3s;}
+.loader-text span:nth-child(6){animation-delay:0.35s;}
+.loader-text span:nth-child(7){animation-delay:0.4s;}
+@keyframes loaderUp{
+  to{transform:translateY(0);}
+}
+.loader.done{
+  transform:translateY(-100%);
+  transition:transform 1s cubic-bezier(0.7,0,0.3,1) 0.6s;
+}
+
+/* CURSOR */
+.cursor{
+  position:fixed;
+  width:16px;
+  height:16px;
+  border:1.5px solid var(--black);
+  border-radius:50%;
+  pointer-events:none;
+  z-index:9999;
+  transition:transform 0.2s, width 0.3s, height 0.3s, background 0.3s;
+}
+.cursor.active{
+  width:60px;
+  height:60px;
+  background:var(--accent);
   border-color:var(--accent);
-  box-shadow:0 20px 50px rgba(255,77,0,0.1);
+  mix-blend-mode:normal;
 }
-.logo-wrap img{
+
+/* NOISE */
+.noise{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9998;
+  opacity:0.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* PROGRESS */
+.progress{
+  position:fixed;
+  top:0;
+  left:0;
+  width:0%;
+  height:3px;
+  background:var(--accent);
+  z-index:1000;
+  transition:width 0.1s;
+}
+
+/* BACK BUTTON */
+.back-btn{
+  position:fixed;
+  top:30px;
+  left:50px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:13px;
+  font-weight:500;
+  color:var(--black);
+  text-decoration:none;
+  z-index:100;
+  mix-blend-mode:difference;
+  color:#fff;
+}
+.back-btn .arrow{
+  width:40px;
+  height:40px;
+  border:1px solid rgba(255,255,255,0.3);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all 0.4s cubic-bezier(0.7,0,0.3,1);
+}
+.back-btn:hover .arrow{
+  background:#fff;
+  color:var(--black);
+  transform:translateX(-5px);
+}
+
+/* HERO SECTION */
+.hero{
+  min-height:100vh;
+  background:var(--black);
+  color:#fff;
+  display:flex;
+  align-items:flex-end;
+  padding:100px 80px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-bg{
+  position:absolute;
+  top:50%;
+  right:10%;
+  transform:translateY(-50%);
+  width:400px;
+  height:400px;
+  opacity:0.08;
+  pointer-events:none;
+}
+.hero-bg img{
   width:100%;
   height:100%;
   object-fit:contain;
 }
 
-/* HERO */
-.case-hero h1{
-  font-size:clamp(36px,5vw,48px);
-  font-weight:700;
-  letter-spacing:-1px;
-  margin-bottom:12px;
+.hero-content{
+  max-width:800px;
+  position:relative;
+  z-index:1;
 }
-.case-hero .subtitle{
-  font-size:18px;
-  color:var(--gray);
+
+.hero-label{
+  font-size:11px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin-bottom:30px;
+  overflow:hidden;
+}
+.hero-label span{
+  display:inline-block;
+  transform:translateY(100%);
+  animation:slideUp 0.8s cubic-bezier(0.7,0,0.3,1) forwards;
+  animation-delay:1.8s;
+}
+@keyframes slideUp{
+  to{transform:translateY(0);}
+}
+
+.hero h1{
+  font-size:clamp(48px,10vw,120px);
+  font-weight:700;
+  letter-spacing:-4px;
+  line-height:0.9;
   margin-bottom:30px;
 }
-.case-hero .intro{
-  font-size:18px;
-  color:#333;
-  max-width:720px;
-  line-height:1.8;
+.hero h1 .line{
+  display:block;
+  overflow:hidden;
+}
+.hero h1 .line span{
+  display:inline-block;
+  transform:translateY(110%);
+  animation:titleUp 1s cubic-bezier(0.7,0,0.3,1) forwards;
+}
+.hero h1 .line:nth-child(1) span{animation-delay:2s;}
+.hero h1 .line:nth-child(2) span{animation-delay:2.1s;}
+@keyframes titleUp{
+  to{transform:translateY(0);}
+}
+.hero h1 .outline{
+  -webkit-text-stroke:1.5px #fff;
+  -webkit-text-fill-color:transparent;
 }
 
-/* STATS */
-.stats{
+.hero-meta{
   display:flex;
-  gap:40px;
-  margin:50px 0;
-  padding:30px 0;
-  border-top:1px solid #eee;
-  border-bottom:1px solid #eee;
+  gap:50px;
+  margin-top:50px;
+  padding-top:30px;
+  border-top:1px solid rgba(255,255,255,0.1);
 }
-.stat h3{
-  font-size:36px;
-  font-weight:700;
-  color:var(--accent);
+.hero-meta-item{
+  overflow:hidden;
 }
-.stat p{
-  font-size:14px;
-  color:var(--gray);
-  margin-top:4px;
+.hero-meta-item span{
+  display:block;
+  transform:translateY(100%);
+  animation:slideUp 0.8s cubic-bezier(0.7,0,0.3,1) forwards;
 }
-
-/* SECTIONS */
-.section{
-  margin-top:60px;
-}
-.section-label{
-  font-size:12px;
-  font-weight:600;
-  color:var(--accent);
+.hero-meta-item:nth-child(1) span{animation-delay:2.3s;}
+.hero-meta-item:nth-child(2) span{animation-delay:2.4s;}
+.hero-meta-item:nth-child(3) span{animation-delay:2.5s;}
+.hero-meta-label{
+  font-size:11px;
   letter-spacing:2px;
   text-transform:uppercase;
-  margin-bottom:14px;
+  color:var(--gray);
+  margin-bottom:8px;
 }
-.section h2{
-  font-size:28px;
-  font-weight:700;
-  margin-bottom:16px;
-  letter-spacing:-0.5px;
-}
-.section p{
-  font-size:17px;
-  color:#444;
-  line-height:1.8;
+.hero-meta-value{
+  font-size:16px;
+  font-weight:500;
 }
 
-/* LIST */
+.scroll-indicator{
+  position:absolute;
+  bottom:50px;
+  right:80px;
+  writing-mode:vertical-rl;
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--gray);
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+.scroll-indicator .line{
+  width:1px;
+  height:80px;
+  background:rgba(255,255,255,0.2);
+  position:relative;
+  overflow:hidden;
+}
+.scroll-indicator .line::after{
+  content:'';
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:var(--accent);
+  animation:scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine{
+  0%{transform:translateY(-100%);}
+  50%{transform:translateY(0);}
+  100%{transform:translateY(100%);}
+}
+
+/* STATS SECTION */
+.stats-section{
+  padding:150px 80px;
+  background:var(--white);
+}
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:60px;
+  max-width:var(--maxw);
+  margin:auto;
+}
+.stat-item{
+  text-align:center;
+}
+.stat-num{
+  font-size:clamp(56px,8vw,100px);
+  font-weight:700;
+  letter-spacing:-3px;
+  line-height:1;
+  background:linear-gradient(135deg,var(--accent) 0%,#ff8c00 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.stat-label{
+  font-size:14px;
+  color:var(--gray);
+  margin-top:12px;
+  letter-spacing:1px;
+}
+
+/* CONTENT SECTIONS */
+.content{
+  max-width:var(--maxw);
+  margin:auto;
+  padding:0 80px;
+}
+
+.section{
+  padding:120px 0;
+  border-bottom:1px solid #eee;
+}
+.section:last-of-type{
+  border-bottom:none;
+}
+
+.section-grid{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:80px;
+  align-items:start;
+}
+
+.section-label{
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--accent);
+  position:sticky;
+  top:100px;
+}
+
+.section-content h2{
+  font-size:clamp(32px,4vw,48px);
+  font-weight:700;
+  letter-spacing:-1px;
+  margin-bottom:30px;
+  line-height:1.1;
+}
+.section-content h2 .line{
+  display:block;
+  overflow:hidden;
+}
+.section-content h2 .line span{
+  display:inline-block;
+  transform:translateY(100%);
+  transition:transform 0.8s cubic-bezier(0.7,0,0.3,1);
+}
+.section-content h2.in-view .line span{
+  transform:translateY(0);
+}
+.section-content h2 .line:nth-child(2) span{transition-delay:0.1s;}
+
+.section-content p{
+  font-size:18px;
+  color:#555;
+  line-height:1.9;
+  max-width:600px;
+}
+
+/* ROLE LIST */
 .role-list{
   list-style:none;
-  margin-top:16px;
+  margin-top:30px;
 }
-.role-list li{
-  font-size:17px;
-  color:#333;
-  padding:12px 0;
+.role-item{
+  padding:20px 0;
   border-bottom:1px solid #eee;
   display:flex;
   align-items:center;
-  gap:12px;
+  justify-content:space-between;
+  font-size:18px;
+  transition:all 0.4s;
+  cursor:default;
 }
-.role-list li::before{
-  content:'';
-  width:8px;
-  height:8px;
-  background:var(--accent);
-  border-radius:50%;
-  flex-shrink:0;
+.role-item:hover{
+  padding-left:20px;
+  color:var(--accent);
+}
+.role-item .num{
+  font-size:13px;
+  color:var(--gray);
+  font-weight:500;
+}
+.role-item:hover .num{
+  color:var(--accent);
 }
 
 /* TOOLS */
-.tools{
+.tools-grid{
   display:flex;
-  gap:12px;
-  margin-top:20px;
+  gap:16px;
   flex-wrap:wrap;
+  margin-top:30px;
 }
-.tool{
-  padding:10px 18px;
+.tool-item{
+  padding:16px 28px;
   border:1px solid #e0e0e0;
-  border-radius:50px;
-  font-size:14px;
+  border-radius:100px;
+  font-size:15px;
   font-weight:500;
-  background:#fff;
-  transition:all 0.2s;
+  transition:all 0.4s cubic-bezier(0.7,0,0.3,1);
+  cursor:default;
 }
-.tool:hover{
-  border-color:var(--accent);
-  background:var(--accent-glow);
+.tool-item:hover{
+  background:var(--black);
+  color:#fff;
+  border-color:var(--black);
+  transform:translateY(-4px);
+}
+
+/* NEXT PROJECT */
+.next-project{
+  background:var(--black);
+  color:#fff;
+  padding:150px 80px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.next-label{
+  font-size:11px;
+  letter-spacing:4px;
+  text-transform:uppercase;
+  color:var(--gray);
+  margin-bottom:30px;
+}
+.next-title{
+  font-size:clamp(48px,10vw,120px);
+  font-weight:700;
+  letter-spacing:-4px;
+  transition:color 0.3s;
+}
+.next-project:hover .next-title{
+  color:var(--accent);
+}
+.next-project a{
+  text-decoration:none;
+  color:inherit;
+  display:block;
+}
+.next-arrow{
+  margin-top:40px;
+  font-size:32px;
+  opacity:0.3;
+  transition:all 0.4s;
+}
+.next-project:hover .next-arrow{
+  opacity:1;
+  transform:translateY(10px);
 }
 
 /* CTA */
 .cta-section{
-  margin-top:80px;
-  padding:50px;
-  background:var(--black);
-  border-radius:20px;
+  padding:200px 80px;
   text-align:center;
+  background:var(--white);
 }
-.cta-section h3{
-  color:#fff;
-  font-size:24px;
-  margin-bottom:10px;
+.cta-section h2{
+  font-size:clamp(36px,6vw,72px);
+  font-weight:700;
+  letter-spacing:-2px;
+  margin-bottom:20px;
 }
-.cta-section p{
-  color:#888;
-  margin-bottom:24px;
-}
-.cta-btn{
-  display:inline-block;
-  padding:14px 32px;
-  background:var(--accent);
-  color:#fff;
-  border-radius:50px;
-  font-weight:600;
+.cta-section h2 a{
+  color:var(--black);
   text-decoration:none;
-  transition:all 0.3s;
+  position:relative;
 }
-.cta-btn:hover{
-  transform:translateY(-3px);
-  box-shadow:0 10px 30px rgba(255,77,0,0.4);
+.cta-section h2 a::after{
+  content:'';
+  position:absolute;
+  bottom:-5px;
+  left:0;
+  width:100%;
+  height:6px;
+  background:var(--accent);
+  transform:scaleX(0);
+  transform-origin:right;
+  transition:transform 0.6s cubic-bezier(0.7,0,0.3,1);
+}
+.cta-section h2 a:hover{
+  color:var(--accent);
+}
+.cta-section h2 a:hover::after{
+  transform:scaleX(1);
+  transform-origin:left;
+}
+.cta-meta{
+  font-size:16px;
+  color:var(--gray);
+  margin-top:20px;
 }
 
-/* FADE */
-.fade{
-  opacity:0;
-  transform:translateY(30px);
-  animation:fadein 0.8s ease-out forwards;
-}
-@keyframes fadein{
-  to{opacity:1;transform:translateY(0);}
+/* FOOTER */
+footer{
+  padding:30px 80px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-top:1px solid #eee;
+  font-size:13px;
+  color:var(--gray);
 }
 
 /* REVEAL */
 .reveal{
   opacity:0;
-  transform:translateY(40px);
-  transition:all 0.7s ease-out;
+  transform:translateY(60px);
+  transition:all 1s cubic-bezier(0.7,0,0.3,1);
 }
-.reveal.active{
+.reveal.in-view{
   opacity:1;
   transform:translateY(0);
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero{padding:80px 24px;}
+  .hero-meta{flex-direction:column;gap:20px;}
+  .scroll-indicator{display:none;}
+  .back-btn{left:24px;top:20px;}
+  .stats-section{padding:80px 24px;}
+  .stats-grid{grid-template-columns:1fr;gap:40px;}
+  .content{padding:0 24px;}
+  .section{padding:80px 0;}
+  .section-grid{grid-template-columns:1fr;gap:30px;}
+  .section-label{position:static;}
+  .next-project{padding:100px 24px;}
+  .cta-section{padding:120px 24px;}
+  footer{padding:30px 24px;flex-direction:column;gap:16px;}
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="loader-text">
+    <span>Z</span><span>a</span><span>p</span><span>w</span><span>a</span><span>s</span><span>h</span>
+  </div>
+</div>
 
-  <a href="index.html" class="back fade">← Back</a>
+<!-- NOISE -->
+<div class="noise"></div>
 
-  <div class="fade">
-    <div class="logo-wrap">
-      <img src="logo-zapwash.png" alt="Zapwash">
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+
+<!-- PROGRESS -->
+<div class="progress" id="progress"></div>
+
+<!-- BACK BUTTON -->
+<a href="index.html" class="back-btn">
+  <span class="arrow">←</span>
+  <span>Back</span>
+</a>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="logo-zapwash.png" alt="">
+  </div>
+  
+  <div class="hero-content">
+    <div class="hero-label"><span>Case Study</span></div>
+    <h1>
+      <span class="line"><span>Zap</span></span>
+      <span class="line"><span class="outline">wash.</span></span>
+    </h1>
+    
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-label"><span>Type</span></div>
+        <div class="hero-meta-value"><span>Hyperlocal Laundry</span></div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label"><span>Location</span></div>
+        <div class="hero-meta-value"><span>Hyderabad</span></div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label"><span>Role</span></div>
+        <div class="hero-meta-value"><span>End-to-end</span></div>
+      </div>
     </div>
   </div>
-
-  <div class="case-hero fade">
-    <h1>Zapwash</h1>
-    <p class="subtitle">Hyperlocal Laundry Aggregator · Hyderabad</p>
-    <p class="intro">
-      A community-driven laundry brand built with local dhobis. 
-      Traditional service, modern systems. 
-      End-to-end ownership — strategy, brand, website, SEO, ads, operations.
-    </p>
+  
+  <div class="scroll-indicator">
+    <div class="line"></div>
+    <span>Scroll</span>
   </div>
+</section>
 
-  <div class="stats fade">
-    <div class="stat">
-      <h3>600+</h3>
-      <p>Recurring customers</p>
+<!-- STATS -->
+<section class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-item reveal">
+      <div class="stat-num">600+</div>
+      <div class="stat-label">Recurring customers</div>
     </div>
-    <div class="stat">
-      <h3>100%</h3>
-      <p>Digital acquisition</p>
+    <div class="stat-item reveal">
+      <div class="stat-num">100%</div>
+      <div class="stat-label">Digital acquisition</div>
     </div>
-    <div class="stat">
-      <h3>1</h3>
-      <p>Person operation</p>
+    <div class="stat-item reveal">
+      <div class="stat-num">1</div>
+      <div class="stat-label">Person operation</div>
     </div>
   </div>
+</section>
 
-  <div class="section reveal">
-    <p class="section-label">Challenge</p>
-    <h2>The problem</h2>
-    <p>
-      Local laundry services depend on walk-ins and word of mouth. 
-      No consistent branding. No online presence. No system for leads. 
-      The goal was to turn a traditional service into a scalable hyperlocal brand.
-    </p>
-  </div>
+<!-- CONTENT -->
+<div class="content">
 
-  <div class="section reveal">
-    <p class="section-label">Approach</p>
-    <h2>The model</h2>
-    <p>
-      Local trust meets digital systems. 
-      Dhobis get steady leads. Customers get structured pickups, clear pricing, easy booking. 
-      One platform connecting both.
-    </p>
-  </div>
-
-  <div class="section reveal">
-    <p class="section-label">Scope</p>
-    <h2>What I did</h2>
-    <ul class="role-list">
-      <li>Brand strategy & positioning</li>
-      <li>Logo & identity system</li>
-      <li>Website design & development</li>
-      <li>Local + organic SEO</li>
-      <li>Paid ads & funnel setup</li>
-      <li>GA4 tracking & analytics</li>
-      <li>Service flow & customer journey</li>
-    </ul>
-  </div>
-
-  <div class="section reveal">
-    <p class="section-label">Result</p>
-    <h2>Outcome</h2>
-    <p>
-      Zapwash now serves 600+ recurring customers — entirely through digital channels. 
-      A complete blueprint exists for scaling across more localities.
-    </p>
-  </div>
-
-  <div class="section reveal">
-    <p class="section-label">Stack</p>
-    <h2>Tools used</h2>
-    <div class="tools">
-      <span class="tool">Canva</span>
-      <span class="tool">SEMrush</span>
-      <span class="tool">Ubersuggest</span>
-      <span class="tool">GA4</span>
-      <span class="tool">Google Ads</span>
-      <span class="tool">Search Console</span>
+  <!-- OVERVIEW -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Overview</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>Traditional service.</span></span>
+          <span class="line"><span>Modern systems.</span></span>
+        </h2>
+        <p class="reveal">
+          A community-driven laundry brand built with local dhobis. 
+          End-to-end ownership — strategy, brand, website, SEO, ads, operations.
+          One platform connecting service providers with customers.
+        </p>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div class="cta-section reveal">
-    <h3>Have a similar project?</h3>
-    <p>Let's build something together.</p>
-    <a href="mailto:stseenuri@outlook.com" class="cta-btn">Get in touch →</a>
-  </div>
+  <!-- CHALLENGE -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Challenge</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>No presence.</span></span>
+          <span class="line"><span>No system.</span></span>
+        </h2>
+        <p class="reveal">
+          Local laundry services depend on walk-ins and word of mouth. 
+          No consistent branding. No online visibility. No lead generation system. 
+          The goal was to turn a traditional service into a scalable hyperlocal brand.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- APPROACH -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Approach</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>Local trust meets</span></span>
+          <span class="line"><span>digital reach.</span></span>
+        </h2>
+        <p class="reveal">
+          Dhobis get steady leads. Customers get structured pickups, clear pricing, easy booking. 
+          Simple model. Clear value for both sides.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCOPE -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Scope</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>What I did.</span></span>
+        </h2>
+        <ul class="role-list reveal">
+          <li class="role-item"><span>Brand strategy & positioning</span><span class="num">01</span></li>
+          <li class="role-item"><span>Logo & identity system</span><span class="num">02</span></li>
+          <li class="role-item"><span>Website design & development</span><span class="num">03</span></li>
+          <li class="role-item"><span>Local + organic SEO</span><span class="num">04</span></li>
+          <li class="role-item"><span>Paid ads & funnel setup</span><span class="num">05</span></li>
+          <li class="role-item"><span>GA4 tracking & analytics</span><span class="num">06</span></li>
+          <li class="role-item"><span>Service flow & customer journey</span><span class="num">07</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="section">
+    <div class="section-grid">
+      <div class="section-label">Stack</div>
+      <div class="section-content">
+        <h2 class="reveal-title">
+          <span class="line"><span>Tools used.</span></span>
+        </h2>
+        <div class="tools-grid reveal">
+          <span class="tool-item">Canva</span>
+          <span class="tool-item">SEMrush</span>
+          <span class="tool-item">Ubersuggest</span>
+          <span class="tool-item">GA4</span>
+          <span class="tool-item">Google Ads</span>
+          <span class="tool-item">Search Console</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
 </div>
 
+<!-- NEXT PROJECT -->
+<section class="next-project" id="nextProject">
+  <a href="chinkulu.html">
+    <div class="next-label">Next Project</div>
+    <div class="next-title">Chinkulu</div>
+    <div class="next-arrow">↓</div>
+  </a>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2><a href="mailto:stseenuri@outlook.com">Let's work together.</a></h2>
+  <p class="cta-meta">Have a similar project in mind?</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>© 2025 Seenuri Works</span>
+  <span>Hyderabad, India</span>
+</footer>
+
 <script>
-const reveals = document.querySelectorAll('.reveal');
+// LOADER
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('done');
+  }, 1400);
+});
+
+// CURSOR
+const cursor = document.getElementById('cursor');
+let cursorX = 0, cursorY = 0;
+let targetX = 0, targetY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  targetX = e.clientX;
+  targetY = e.clientY;
+});
+
+function animateCursor() {
+  cursorX += (targetX - cursorX) * 0.12;
+  cursorY += (targetY - cursorY) * 0.12;
+  cursor.style.left = cursorX + 'px';
+  cursor.style.top = cursorY + 'px';
+  requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// Cursor hover
+const hoverElements = document.querySelectorAll('a, .tool-item, .role-item');
+hoverElements.forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+});
+
+// PROGRESS BAR
+const progress = document.getElementById('progress');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const scrollPercent = (scrollTop / docHeight) * 100;
+  progress.style.width = scrollPercent + '%';
+});
+
+// REVEAL ON SCROLL
+const reveals = document.querySelectorAll('.reveal, .reveal-title');
 const revealOnScroll = () => {
   reveals.forEach(el => {
     const top = el.getBoundingClientRect().top;
-    if (top < window.innerHeight - 80) {
-      el.classList.add('active');
+    if (top < window.innerHeight - 100) {
+      el.classList.add('in-view');
     }
   });
 };
 window.addEventListener('scroll', revealOnScroll);
 revealOnScroll();
+
+// SMOOTH SCROLL
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+
+// PARALLAX HERO BG
+const heroBg = document.querySelector('.hero-bg');
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  if (scrollY < window.innerHeight) {
+    heroBg.style.transform = `translateY(calc(-50% + ${scrollY * 0.3}px))`;
+  }
+});
 </script>
 
 </body>
