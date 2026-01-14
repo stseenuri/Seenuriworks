@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHIVATEJA | EXPERIMENTAL PORTFOLIO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SHIVATEJA | MOBILE OPTIMIZED</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
             --c-white: #ffffff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
             background: var(--c-dark); 
@@ -24,14 +24,17 @@
             overflow: hidden; 
             height: 100vh;
             width: 100vw;
+            /* Prevent rubber-banding on mobile */
+            overscroll-behavior: none;
         }
 
         /* --- CANVAS LAYER --- */
         #webgl {
             position: fixed;
             top: 0; left: 0;
-            width: 100vw; height: 100vh;
+            width: 100%; height: 100%;
             z-index: 0;
+            display: block;
         }
 
         /* --- UI LAYER --- */
@@ -40,11 +43,11 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: 10;
-            pointer-events: none; /* Let clicks pass to 3D */
+            pointer-events: none;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 40px;
+            padding: 30px; /* Reduced padding for mobile */
             mix-blend-mode: exclusion;
         }
 
@@ -52,20 +55,20 @@
         header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
         }
 
         .brand {
             font-family: 'Syncopate', sans-serif;
             font-weight: 700;
-            font-size: 24px;
+            font-size: clamp(16px, 4vw, 24px); /* Responsive font */
             letter-spacing: 2px;
             pointer-events: auto;
         }
 
         .meta-data {
             text-align: right;
-            font-size: 12px;
+            font-size: 10px;
             opacity: 0.7;
             letter-spacing: 1px;
             line-height: 1.5;
@@ -78,19 +81,20 @@
             transform: translate(-50%, -50%);
             text-align: center;
             width: 100%;
+            padding: 0 20px;
         }
 
         .hero-glitch {
             font-family: 'Syncopate', sans-serif;
-            font-size: 8vw;
+            /* Clamp ensures it fits mobile width without breaking */
+            font-size: clamp(32px, 9vw, 120px); 
             font-weight: 700;
             text-transform: uppercase;
-            line-height: 0.85;
+            line-height: 1;
             position: relative;
             color: transparent;
             -webkit-text-stroke: 1px rgba(255,255,255,0.2);
             pointer-events: auto;
-            transition: all 0.5s;
         }
         
         .hero-glitch::before {
@@ -99,7 +103,7 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             color: #fff;
-            clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); /* Hidden initially */
+            clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
             animation: textReveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards 1s;
         }
 
@@ -108,9 +112,9 @@
         }
 
         .sub-hero {
-            margin-top: 20px;
-            font-size: 18px;
-            letter-spacing: 6px;
+            margin-top: 15px;
+            font-size: clamp(12px, 3vw, 18px);
+            letter-spacing: 3px;
             text-transform: uppercase;
             opacity: 0;
             animation: fadeIn 1s ease forwards 2.5s;
@@ -122,35 +126,39 @@
             justify-content: space-between;
             align-items: flex-end;
             pointer-events: auto;
+            width: 100%;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-direction: column;
         }
 
         .nav-link {
             display: block;
-            font-size: 14px;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            position: relative;
-            padding-left: 20px;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding: 10px 0; /* Larger touch target */
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
             transition: color 0.3s;
         }
-
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 50%;
-            width: 6px; height: 6px;
-            background: var(--c-accent);
-            border-radius: 50%;
-            transform: scale(0);
-            transition: transform 0.3s;
+        
+        .nav-link.active, .nav-link:hover {
+            color: var(--c-accent);
         }
 
-        .nav-link:hover { color: var(--c-accent); }
-        .nav-link:hover::before { transform: scale(1); }
+        .system-status {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
 
         .progress-bar {
-            width: 200px;
+            width: 100px; /* Smaller for mobile */
             height: 2px;
             background: rgba(255,255,255,0.1);
             position: relative;
@@ -168,29 +176,17 @@
 
         @keyframes load { to { width: 100%; } }
 
-        /* --- CUSTOM CURSOR --- */
-        #cursor {
-            position: fixed;
-            top: 0; left: 0;
-            width: 40px; height: 40px;
-            border: 1px solid rgba(255,255,255,0.5);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s, background 0.3s;
-            mix-blend-mode: difference;
-        }
-        
-        #cursor-dot {
-            position: fixed;
-            top: 0; left: 0;
-            width: 4px; height: 4px;
-            background: var(--c-accent);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
+        /* --- MOBILE SPECIFIC TWEAKS --- */
+        @media (max-width: 768px) {
+            #ui-layer { padding: 20px; }
+            footer {
+                flex-direction: row; /* Keep row but adjust sizing */
+                align-items: flex-end;
+            }
+            .hero-glitch { -webkit-text-stroke: 0.5px rgba(255,255,255,0.2); }
+            
+            /* Hide custom cursor on touch devices to prevent ghost touches */
+            #cursor, #cursor-dot { display: none !important; }
         }
 
         /* --- LOADING OVERLAY --- */
@@ -205,25 +201,14 @@
             color: var(--c-accent);
             font-family: 'Syncopate';
             font-weight: 700;
-            font-size: 40px;
+            font-size: clamp(20px, 5vw, 40px);
             transition: opacity 1s ease;
         }
-
-        .glitch-effect {
-            animation: glitch 1s linear infinite;
-        }
-
-        @keyframes glitch {
-            2%, 64% { transform: translate(2px,0) skew(0deg); }
-            4%, 60% { transform: translate(-2px,0) skew(0deg); }
-            62% { transform: translate(0,0) skew(5deg); }
-        }
-
     </style>
 </head>
 <body>
 
-    <div id="loader"><span class="glitch-effect">INITIALIZING SYSTEM...</span></div>
+    <div id="loader">INITIALIZING...</div>
 
     <div id="cursor"></div>
     <div id="cursor-dot"></div>
@@ -234,26 +219,25 @@
         <header>
             <div class="brand">SEENURI.DEV</div>
             <div class="meta-data">
-                LOC: HYDERABAD<br>
-                LAT: 17.3850° N<br>
-                SYS: ONLINE
+                HYD // IND<br>
+                ONLINE
             </div>
         </header>
 
         <div class="hero-container">
             <div class="hero-glitch" data-text="SHIVATEJA">SHIVATEJA</div>
-            <div class="hero-glitch" data-text="VALABOJU" style="font-size: 4vw; -webkit-text-stroke: 0px; opacity: 0.6;">VALABOJU</div>
-            <div class="sub-hero">Creative Technologist // RPA Architect</div>
+            <div class="hero-glitch" data-text="VALABOJU" style="font-size: clamp(20px, 5vw, 60px); -webkit-text-stroke: 0px; opacity: 0.6;">VALABOJU</div>
+            <div class="sub-hero">Creative Technologist</div>
         </div>
 
         <footer>
             <div class="nav-links">
-                <a href="#" class="nav-link" data-hover="PROJECTS">01. Selected Works</a>
-                <a href="#" class="nav-link" data-hover="ABOUT">02. Profile</a>
-                <a href="#" class="nav-link" data-hover="CONTACT">03. Comms</a>
+                <a href="#" class="nav-link">01. Works</a>
+                <a href="#" class="nav-link">02. About</a>
+                <a href="mailto:spandanavalaboju06@gmail.com" class="nav-link">03. Contact</a>
             </div>
             <div class="system-status">
-                <div style="font-size:10px; margin-bottom:5px; opacity:0.5;">RENDER CAPACITY</div>
+                <div style="font-size:9px; margin-bottom:5px; opacity:0.5;">GPU ONLINE</div>
                 <div class="progress-bar"><div class="progress-fill"></div></div>
             </div>
         </footer>
@@ -261,22 +245,17 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
     <script>
-        /**
-         * ------------------------------------------------------------------
-         * CORE ARCHITECTURE: 
-         * 1. PARTICLE SYSTEM (Geometry manipulation)
-         * 2. POST-PROCESSING (Custom Shaders)
-         * 3. INTERACTION (Raycasting + Physics)
-         * ------------------------------------------------------------------
-         */
+        // DETECT MOBILE
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
         const CONFIG = {
-            particleCount: 6000,
-            particleSize: 0.02,
-            hoverRadius: 2.5,
-            colorA: new THREE.Color('#00f3ff'), // Cyber Cyan
-            colorB: new THREE.Color('#ff0055')  // Neon Pink
+            // Lower particle count on mobile for performance (2500 vs 6000)
+            particleCount: isMobile ? 2500 : 6000, 
+            particleSize: isMobile ? 0.04 : 0.02, // Bigger particles on mobile
+            colorA: new THREE.Color('#00f3ff'), 
+            colorB: new THREE.Color('#ff0055')
         };
 
         class App {
@@ -288,27 +267,26 @@
 
                 this.initThree();
                 this.initParticles();
-                this.initPostProcessing(); // The "Color Grading" Magic
                 this.addEvents();
                 this.animate();
                 
-                // Remove Loader
                 setTimeout(() => {
                     document.getElementById('loader').style.opacity = '0';
                     setTimeout(() => document.getElementById('loader').remove(), 1000);
-                }, 1500);
+                }, 1000);
             }
 
             initThree() {
                 this.scene = new THREE.Scene();
-                this.scene.fog = new THREE.FogExp2(0x050505, 0.03); // Depth fog
+                this.scene.fog = new THREE.FogExp2(0x050505, 0.02);
 
                 this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 100);
-                this.camera.position.set(0, 0, 8);
+                // Move camera further back on mobile to see more
+                this.camera.position.set(0, 0, isMobile ? 12 : 8);
 
                 this.renderer = new THREE.WebGLRenderer({
                     canvas: this.canvas,
-                    antialias: false, // False because we use post-processing antialiasing
+                    antialias: true,
                     powerPreference: "high-performance"
                 });
                 this.renderer.setSize(this.width, this.height);
@@ -321,21 +299,12 @@
             }
 
             initParticles() {
-                /**
-                 * INNOVATION: 
-                 * Instead of standard points, we use FBO (Frame Buffer Object) simulation logic
-                 * simplified into a Vertex Shader for performance.
-                 */
-                
                 const geometry = new THREE.BufferGeometry();
                 const positions = new Float32Array(CONFIG.particleCount * 3);
                 const randoms = new Float32Array(CONFIG.particleCount * 3);
                 
-                // Form a Sphere shape initially
                 for(let i = 0; i < CONFIG.particleCount; i++) {
                     const i3 = i * 3;
-                    
-                    // Spherical distribution
                     const r = 4 * Math.cbrt(Math.random());
                     const theta = Math.random() * 2 * Math.PI;
                     const phi = Math.acos(2 * Math.random() - 1);
@@ -344,7 +313,6 @@
                     positions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
                     positions[i3 + 2] = r * Math.cos(phi);
 
-                    // Random noise values for animation
                     randoms[i3] = Math.random();
                     randoms[i3 + 1] = Math.random();
                     randoms[i3 + 2] = Math.random();
@@ -353,7 +321,6 @@
                 geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
                 geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 3));
 
-                // CUSTOM SHADER MATERIAL
                 this.particleMaterial = new THREE.ShaderMaterial({
                     uniforms: {
                         uTime: { value: 0 },
@@ -368,9 +335,8 @@
                         uniform float uPixelRatio;
                         attribute vec3 aRandom;
                         varying vec3 vColor;
-                        varying float vDist;
-
-                        // Simplex Noise Function
+                        
+                        // Simplex Noise (Compressed for brevity)
                         vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
                         vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
                         vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
@@ -419,43 +385,37 @@
                             vec3 pos = position;
                             float time = uTime * 0.2;
 
-                            // Add organic movement noise
-                            pos.x += snoise(vec3(pos.x, pos.y, time)) * 0.3;
-                            pos.y += snoise(vec3(pos.y, pos.z, time)) * 0.3;
-                            pos.z += snoise(vec3(pos.z, pos.x, time)) * 0.3;
+                            // Gentle noise movement
+                            pos.x += snoise(vec3(pos.x, pos.y, time)) * 0.4;
+                            pos.y += snoise(vec3(pos.y, pos.z, time)) * 0.4;
+                            pos.z += snoise(vec3(pos.z, pos.x, time)) * 0.4;
 
-                            // Mouse Interaction (Repulsion)
-                            float dist = distance(pos.xy, uMouse.xy * 5.0);
-                            vDist = dist;
-                            if(dist < 3.0) {
-                                vec3 dir = normalize(pos - vec3(uMouse.xy * 5.0, 0.0));
-                                pos += dir * (3.0 - dist) * 0.5;
+                            // Mouse Repulsion Logic
+                            float dist = distance(pos.xy, uMouse.xy * 6.0);
+                            
+                            // On mobile, the "repulsion" is stronger so you can see it under your finger
+                            if(dist < 4.0) {
+                                vec3 dir = normalize(pos - vec3(uMouse.xy * 6.0, 0.0));
+                                pos += dir * (4.0 - dist) * 0.8;
                             }
 
                             vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
                             gl_Position = projectionMatrix * mvPosition;
-                            gl_PointSize = (10.0 * uPixelRatio) * (1.0 / -mvPosition.z);
                             
-                            // Color Variation based on depth
+                            // Responsive Point Size
+                            gl_PointSize = (12.0 * uPixelRatio) * (1.0 / -mvPosition.z);
+                            
+                            // Cyberpunk Gradient
                             vColor = mix(vec3(0.0, 0.95, 1.0), vec3(1.0, 0.0, 0.33), position.z * 0.2 + 0.5);
                         }
                     `,
                     fragmentShader: `
                         varying vec3 vColor;
-                        varying float vDist;
-
                         void main() {
-                            // Circular particle shape
                             float strength = distance(gl_PointCoord, vec2(0.5));
                             strength = 1.0 - step(0.5, strength);
-                            
                             if(strength < 0.5) discard;
-
-                            // Add glow based on mouse distance
-                            vec3 finalColor = vColor;
-                            finalColor += vec3(1.0) * (1.0 - smoothstep(0.0, 2.0, vDist)) * 0.5;
-
-                            gl_FragColor = vec4(finalColor, 1.0);
+                            gl_FragColor = vec4(vColor, 1.0);
                         }
                     `,
                     transparent: true,
@@ -467,84 +427,41 @@
                 this.scene.add(this.particles);
             }
 
-            initPostProcessing() {
-                /**
-                 * CUSTOM RENDER TARGET
-                 * We are creating a simple effect composer manually to save lines of code
-                 * but keeping the high-end look.
-                 */
-                // For this single-file constraint, we will stick to standard rendering but
-                // use a fullscreen plane with a shader for the "Film Look" (Grain + Chromatic Aberration).
-                
-                const postPlane = new THREE.PlaneGeometry(2, 2);
-                const postMaterial = new THREE.ShaderMaterial({
-                    uniforms: {
-                        tDiffuse: { value: null }, // The scene render
-                        uTime: { value: 0 },
-                        uGrainStrength: { value: 0.15 } // FILM GRAIN
-                    },
-                    vertexShader: `
-                        varying vec2 vUv;
-                        void main() {
-                            vUv = uv;
-                            gl_Position = vec4(position, 1.0);
-                        }
-                    `,
-                    fragmentShader: `
-                        uniform sampler2D tDiffuse;
-                        uniform float uTime;
-                        uniform float uGrainStrength;
-                        varying vec2 vUv;
-
-                        // Random noise generator
-                        float random(vec2 p) {
-                            vec2 k1 = vec2(
-                                23.14069263277926, // e^pi (Gelfond's constant)
-                                2.665144142690225 // 2^sqrt(2) (Gelfond–Schneider constant)
-                            );
-                            return fract(cos(dot(p, k1)) * 12345.6789);
-                        }
-
-                        void main() {
-                            vec2 uv = vUv;
-                            
-                            // 1. CHROMATIC ABERRATION (RGB Shift)
-                            // We offset the Red and Blue channels slightly
-                            float distFromCenter = distance(uv, vec2(0.5));
-                            vec2 offset = vec2(0.005 * distFromCenter, 0.0);
-                            
-                            float r = texture2D(tDiffuse, uv + offset).r;
-                            float g = texture2D(tDiffuse, uv).g;
-                            float b = texture2D(tDiffuse, uv - offset).b;
-                            
-                            vec4 color = vec4(r, g, b, 1.0);
-
-                            // 2. FILM GRAIN
-                            vec2 seed = uv * (uTime + 1.0);
-                            float noise = (random(seed) - 0.5) * uGrainStrength;
-                            color.rgb += noise;
-
-                            // 3. VIGNETTE
-                            float vignette = 1.0 - smoothstep(0.5, 1.5, distFromCenter);
-                            color.rgb *= vignette;
-
-                            gl_FragColor = color;
-                        }
-                    `,
-                    transparent: true
-                });
-                
-                // We actually need a RenderTarget to capture the scene first
-                this.renderTarget = new THREE.WebGLRenderTarget(this.width, this.height);
-                this.postScene = new THREE.Scene();
-                this.postCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-                this.postQuad = new THREE.Mesh(postPlane, postMaterial);
-                this.postScene.add(this.postQuad);
-            }
-
             addEvents() {
                 window.addEventListener('resize', this.onResize.bind(this));
-                window.addEventListener('mousemove', this.onMouseMove.bind(this));
+                
+                // MOUSE EVENTS (Desktop)
+                window.addEventListener('mousemove', (e) => {
+                    if(isMobile) return;
+                    this.updateMouse(e.clientX, e.clientY);
+                    
+                    // Custom Cursor Logic
+                    const cursor = document.getElementById('cursor');
+                    const cursorDot = document.getElementById('cursor-dot');
+                    if(cursor) {
+                        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
+                        gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.0 });
+                    }
+                });
+
+                // TOUCH EVENTS (Mobile)
+                window.addEventListener('touchmove', (e) => {
+                    if (e.touches.length > 0) {
+                        this.updateMouse(e.touches[0].clientX, e.touches[0].clientY);
+                    }
+                }, { passive: true });
+                
+                window.addEventListener('touchstart', (e) => {
+                    if (e.touches.length > 0) {
+                        this.updateMouse(e.touches[0].clientX, e.touches[0].clientY);
+                    }
+                }, { passive: true });
+            }
+
+            updateMouse(x, y) {
+                // Normalize to -1 to 1 range
+                this.targetMouse.x = (x / this.width) * 2 - 1;
+                this.targetMouse.y = -(y / this.height) * 2 + 1;
             }
 
             onResize() {
@@ -553,35 +470,7 @@
                 this.camera.aspect = this.width / this.height;
                 this.camera.updateProjectionMatrix();
                 this.renderer.setSize(this.width, this.height);
-                this.renderTarget.setSize(this.width, this.height);
                 this.particleMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
-            }
-
-            onMouseMove(e) {
-                // Normalize mouse -1 to 1
-                this.targetMouse.x = (e.clientX / this.width) * 2 - 1;
-                this.targetMouse.y = -(e.clientY / this.height) * 2 + 1;
-                
-                // Cursor Element Movement
-                const cursor = document.getElementById('cursor');
-                const cursorDot = document.getElementById('cursor-dot');
-                
-                gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
-                gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.0 });
-                
-                // Magnetic Button Logic
-                const hovers = document.querySelectorAll('.nav-link, .brand');
-                hovers.forEach(link => {
-                    const rect = link.getBoundingClientRect();
-                    const dist = Math.hypot(e.clientX - (rect.left + rect.width/2), e.clientY - (rect.top + rect.height/2));
-                    
-                    if(dist < 50) {
-                        cursor.style.transform = `translate(-50%, -50%) scale(2)`;
-                        cursor.style.mixBlendMode = 'difference';
-                    } else {
-                        cursor.style.transform = `translate(-50%, -50%) scale(1)`;
-                    }
-                });
             }
 
             animate() {
@@ -589,36 +478,23 @@
                 
                 const time = this.clock.getElapsedTime();
                 
-                // Smooth Mouse Interpolation for Camera
-                this.mouse.x += (this.targetMouse.x - this.mouse.x) * 0.05;
-                this.mouse.y += (this.targetMouse.y - this.mouse.y) * 0.05;
+                // Smooth Mouse Interpolation
+                this.mouse.x += (this.targetMouse.x - this.mouse.x) * 0.1;
+                this.mouse.y += (this.targetMouse.y - this.mouse.y) * 0.1;
 
-                // Rotate Particles slowly
                 this.particles.rotation.y = time * 0.05;
+                
+                // Tilting effect based on mouse/touch position
                 this.particles.rotation.x = this.mouse.y * 0.2;
                 this.particles.rotation.z = this.mouse.x * 0.2;
 
-                // Update Shader Uniforms
                 this.particleMaterial.uniforms.uTime.value = time;
                 this.particleMaterial.uniforms.uMouse.value.set(this.mouse.x, this.mouse.y, 0);
 
-                // --- PIPELINE RENDER ---
-                
-                // 1. Render Scene to Buffer (Not Screen)
-                this.renderer.setRenderTarget(this.renderTarget);
                 this.renderer.render(this.scene, this.camera);
-                this.renderer.setRenderTarget(null);
-
-                // 2. Pass Buffer to Post-Processing Shader
-                this.postQuad.material.uniforms.tDiffuse.value = this.renderTarget.texture;
-                this.postQuad.material.uniforms.uTime.value = time;
-                
-                // 3. Render Final Post-Process Scene to Screen
-                this.renderer.render(this.postScene, this.postCamera);
             }
         }
 
-        // TEXT SCRAMBLE EFFECT
         class TextScramble {
             constructor(el) {
                 this.el = el;
@@ -673,17 +549,10 @@
             }
         }
 
-        // INITIALIZATION
         window.addEventListener('DOMContentLoaded', () => {
             const app = new App();
             
-            // Trigger Scramble Effect
-            const phrases = [
-                'CREATIVE DEVELOPER',
-                'RPA SPECIALIST',
-                'UI/UX DESIGNER',
-                'DIGITAL ARTIST'
-            ];
+            const phrases = ['RPA ARCHITECT', 'WEB DEVELOPER', 'UI DESIGNER', 'DIGITAL CREATOR'];
             const el = document.querySelector('.sub-hero');
             const fx = new TextScramble(el);
             
@@ -695,10 +564,8 @@
                 counter = (counter + 1) % phrases.length;
             };
             
-            // Start text cycle after initial load
             setTimeout(next, 3000);
         });
-
     </script>
 </body>
 </html>
