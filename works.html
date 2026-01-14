@@ -2,431 +2,570 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Work | Portfolio</title>
-    <meta name="description" content="Portfolio of work including Zapwash, Farm Mutton, Chinkulu, and Vinthapadalu.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SHIVATEJA | MOBILE OPTIMIZED</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         :root {
-            --white: #FFFFFF;
-            --black: #000000;
-            --gray-50: #FAFAFA;
-            --gray-100: #F5F5F5;
-            --gray-200: #E5E5E5;
-            --gray-400: #A3A3A3;
-            --gray-600: #525252;
-            --accent: #FF6B00; /* Maintained accent from previous design */
+            --c-accent: #00f3ff;
+            --c-dark: #050505;
+            --c-white: #ffffff;
         }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--white);
-            color: var(--black);
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background: var(--c-dark); 
+            color: var(--c-white); 
+            font-family: 'Rajdhani', sans-serif; 
+            overflow: hidden; 
+            height: 100vh;
+            width: 100vw;
+            /* Prevent rubber-banding on mobile */
+            overscroll-behavior: none;
+        }
+
+        /* --- CANVAS LAYER --- */
+        #webgl {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            display: block;
+        }
+
+        /* --- UI LAYER --- */
+        #ui-layer {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 10;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px; /* Reduced padding for mobile */
+            mix-blend-mode: exclusion;
+        }
+
+        /* --- HEADER --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .brand {
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            font-size: clamp(16px, 4vw, 24px); /* Responsive font */
+            letter-spacing: 2px;
+            pointer-events: auto;
+        }
+
+        .meta-data {
+            text-align: right;
+            font-size: 10px;
+            opacity: 0.7;
+            letter-spacing: 1px;
             line-height: 1.5;
         }
 
-        /* NAVIGATION */
-        .nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            background: var(--white);
-            border-bottom: 1px solid var(--black);
+        /* --- CENTER HERO --- */
+        .hero-container {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 100%;
+            padding: 0 20px;
         }
 
-        .nav-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
+        .hero-glitch {
+            font-family: 'Syncopate', sans-serif;
+            /* Clamp ensures it fits mobile width without breaking */
+            font-size: clamp(32px, 9vw, 120px); 
+            font-weight: 700;
+            text-transform: uppercase;
+            line-height: 1;
+            position: relative;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+            pointer-events: auto;
+        }
+        
+        .hero-glitch::before {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            color: #fff;
+            clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+            animation: textReveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards 1s;
+        }
+
+        @keyframes textReveal {
+            to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+        }
+
+        .sub-hero {
+            margin-top: 15px;
+            font-size: clamp(12px, 3vw, 18px);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards 2.5s;
+        }
+
+        /* --- FOOTER UI --- */
+        footer {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            height: 60px;
-        }
-
-        .logo-text {
-            font-weight: 700;
-            font-size: 1.25rem;
-            text-decoration: none;
-            color: var(--black);
-            text-transform: uppercase;
-            letter-spacing: -0.03em;
+            align-items: flex-end;
+            pointer-events: auto;
+            width: 100%;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            flex-direction: column;
         }
 
         .nav-link {
-            color: var(--black);
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 600;
+            display: block;
+            font-size: 12px;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding: 10px 0; /* Larger touch target */
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .nav-link.active, .nav-link:hover {
+            color: var(--c-accent);
         }
 
-        .nav-link.active {
-            text-decoration: underline;
-            text-underline-offset: 4px;
-        }
-
-        /* HERO SECTION */
-        .work-hero {
-            padding: 120px 2rem 4rem;
-            background: var(--gray-50);
-            border-bottom: 1px solid var(--black);
-            text-align: center;
-        }
-
-        .hero-title {
-            font-size: clamp(2.5rem, 6vw, 4rem);
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            margin-bottom: 1rem;
-            line-height: 1.1;
-        }
-
-        .hero-subtitle {
-            font-size: 1.125rem;
-            color: var(--gray-600);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* PORTFOLIO GRID */
-        .portfolio-section {
-            padding: 5rem 2rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            margin-bottom: 3rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--black);
+        .system-status {
+            text-align: right;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: flex-end;
         }
 
-        .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-transform: uppercase;
+        .progress-bar {
+            width: 100px; /* Smaller for mobile */
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* CARD STYLES */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-            margin-bottom: 5rem;
+        .progress-fill {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--c-accent);
+            animation: load 2s ease-in-out forwards;
         }
 
+        @keyframes load { to { width: 100%; } }
+
+        /* --- MOBILE SPECIFIC TWEAKS --- */
         @media (max-width: 768px) {
-            .projects-grid {
-                grid-template-columns: 1fr;
+            #ui-layer { padding: 20px; }
+            footer {
+                flex-direction: row; /* Keep row but adjust sizing */
+                align-items: flex-end;
             }
+            .hero-glitch { -webkit-text-stroke: 0.5px rgba(255,255,255,0.2); }
+            
+            /* Hide custom cursor on touch devices to prevent ghost touches */
+            #cursor, #cursor-dot { display: none !important; }
         }
 
-        .project-card {
-            background: var(--white);
-            border: 2px solid var(--black);
+        /* --- LOADING OVERLAY --- */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 100;
             display: flex;
-            flex-direction: column;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .project-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 8px 8px 0px var(--black);
-        }
-
-        .card-header {
-            padding: 2rem;
-            background: var(--gray-50);
-            border-bottom: 2px solid var(--black);
-            height: 200px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-        }
-
-        .project-logo {
-            max-width: 180px;
-            max-height: 120px;
-            object-fit: contain;
-            /* In case images aren't loaded, this style handles text fallback */
+            align-items: center;
+            color: var(--c-accent);
+            font-family: 'Syncopate';
             font-weight: 700;
-            font-size: 1.5rem; 
-        }
-
-        .card-body {
-            padding: 2rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .project-name {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        .project-desc {
-            color: var(--gray-600);
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-        }
-
-        .work-scope {
-            margin-bottom: 1.5rem;
-        }
-
-        .scope-label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: var(--gray-400);
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-
-        .scope-list {
-            list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .scope-item {
-            font-size: 0.875rem;
-            font-weight: 600;
-            padding-right: 0.5rem;
-        }
-        
-        /* Add bullet between items */
-        .scope-item:not(:last-child)::after {
-            content: "•";
-            color: var(--accent);
-            margin-left: 0.5rem;
-        }
-
-        .tech-stack {
-            margin-top: auto;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .tech-tag {
-            font-size: 0.75rem;
-            font-weight: 600;
-            background: var(--black);
-            color: var(--white);
-            padding: 0.25rem 0.75rem;
-            border-radius: 2px;
-        }
-
-        /* Branding Grid (Smaller cards for branding-only projects) */
-        .branding-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2rem;
-        }
-        
-        @media (max-width: 768px) {
-            .branding-grid { grid-template-columns: 1fr; }
-        }
-
-        /* FOOTER */
-        .footer {
-            padding: 4rem 2rem;
-            background: var(--black);
-            color: var(--white);
-            text-align: center;
-        }
-
-        .footer p {
-            color: var(--gray-400);
-            font-size: 0.875rem;
+            font-size: clamp(20px, 5vw, 40px);
+            transition: opacity 1s ease;
         }
     </style>
 </head>
 <body>
 
-    <nav class="nav">
-        <div class="nav-inner">
-            <a href="#" class="logo-text">Portfolio.</a>
+    <div id="loader">INITIALIZING...</div>
+
+    <div id="cursor"></div>
+    <div id="cursor-dot"></div>
+
+    <canvas id="webgl"></canvas>
+
+    <div id="ui-layer">
+        <header>
+            <div class="brand">SEENURI.DEV</div>
+            <div class="meta-data">
+                HYD // IND<br>
+                ONLINE
+            </div>
+        </header>
+
+        <div class="hero-container">
+            <div class="hero-glitch" data-text="SHIVATEJA">SHIVATEJA</div>
+            <div class="hero-glitch" data-text="VALABOJU" style="font-size: clamp(20px, 5vw, 60px); -webkit-text-stroke: 0px; opacity: 0.6;">VALABOJU</div>
+            <div class="sub-hero">Creative Technologist</div>
+        </div>
+
+        <footer>
             <div class="nav-links">
-                <a href="#" class="nav-link">Home</a>
-                <a href="#" class="nav-link active">Works</a>
-                <a href="#" class="nav-link">Contact</a>
+                <a href="#" class="nav-link">01. Works</a>
+                <a href="#" class="nav-link">02. About</a>
+                <a href="mailto:spandanavalaboju06@gmail.com" class="nav-link">03. Contact</a>
             </div>
-        </div>
-    </nav>
-
-    <header class="work-hero">
-        <div class="container">
-            <h1 class="hero-title">Selected Works</h1>
-            <p class="hero-subtitle">A collection of web development, analytics, branding, and digital growth strategies.</p>
-        </div>
-    </header>
-
-    <main class="portfolio-section">
-        <div class="container">
-            
-            <div class="section-header">
-                <h2 class="section-title">Growth & Development</h2>
-                <span>End-to-end execution</span>
+            <div class="system-status">
+                <div style="font-size:9px; margin-bottom:5px; opacity:0.5;">GPU ONLINE</div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
             </div>
+        </footer>
+    </div>
 
-            <div class="projects-grid">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <script>
+        // DETECT MOBILE
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        const CONFIG = {
+            // Lower particle count on mobile for performance (2500 vs 6000)
+            particleCount: isMobile ? 2500 : 6000, 
+            particleSize: isMobile ? 0.04 : 0.02, // Bigger particles on mobile
+            colorA: new THREE.Color('#00f3ff'), 
+            colorB: new THREE.Color('#ff0055')
+        };
+
+        class App {
+            constructor() {
+                this.canvas = document.querySelector('#webgl');
+                this.width = window.innerWidth;
+                this.height = window.innerHeight;
+                this.pixelRatio = Math.min(window.devicePixelRatio, 2);
+
+                this.initThree();
+                this.initParticles();
+                this.addEvents();
+                this.animate();
                 
-                <article class="project-card">
-                    <div class="card-header">
-                        <img src="logo-zapwash.png" alt="The Zapwash Logo" class="project-logo">
-                    </div>
-                    <div class="card-body">
-                        <h3 class="project-name">The Zapwash</h3>
-                        <p class="project-desc">A Hyderabad-based local laundry service focusing on tech professionals and convenient pickup.</p>
+                setTimeout(() => {
+                    document.getElementById('loader').style.opacity = '0';
+                    setTimeout(() => document.getElementById('loader').remove(), 1000);
+                }, 1000);
+            }
+
+            initThree() {
+                this.scene = new THREE.Scene();
+                this.scene.fog = new THREE.FogExp2(0x050505, 0.02);
+
+                this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 100);
+                // Move camera further back on mobile to see more
+                this.camera.position.set(0, 0, isMobile ? 12 : 8);
+
+                this.renderer = new THREE.WebGLRenderer({
+                    canvas: this.canvas,
+                    antialias: true,
+                    powerPreference: "high-performance"
+                });
+                this.renderer.setSize(this.width, this.height);
+                this.renderer.setPixelRatio(this.pixelRatio);
+                this.renderer.setClearColor(0x050505);
+
+                this.clock = new THREE.Clock();
+                this.mouse = new THREE.Vector2(0, 0);
+                this.targetMouse = new THREE.Vector2(0, 0);
+            }
+
+            initParticles() {
+                const geometry = new THREE.BufferGeometry();
+                const positions = new Float32Array(CONFIG.particleCount * 3);
+                const randoms = new Float32Array(CONFIG.particleCount * 3);
+                
+                for(let i = 0; i < CONFIG.particleCount; i++) {
+                    const i3 = i * 3;
+                    const r = 4 * Math.cbrt(Math.random());
+                    const theta = Math.random() * 2 * Math.PI;
+                    const phi = Math.acos(2 * Math.random() - 1);
+                    
+                    positions[i3] = r * Math.sin(phi) * Math.cos(theta);
+                    positions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+                    positions[i3 + 2] = r * Math.cos(phi);
+
+                    randoms[i3] = Math.random();
+                    randoms[i3 + 1] = Math.random();
+                    randoms[i3 + 2] = Math.random();
+                }
+
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 3));
+
+                this.particleMaterial = new THREE.ShaderMaterial({
+                    uniforms: {
+                        uTime: { value: 0 },
+                        uMouse: { value: new THREE.Vector3(0, 0, 0) },
+                        uPixelRatio: { value: this.pixelRatio },
+                        uColorA: { value: CONFIG.colorA },
+                        uColorB: { value: CONFIG.colorB }
+                    },
+                    vertexShader: `
+                        uniform float uTime;
+                        uniform vec3 uMouse;
+                        uniform float uPixelRatio;
+                        attribute vec3 aRandom;
+                        varying vec3 vColor;
                         
-                        <div class="work-scope">
-                            <span class="scope-label">My Role</span>
-                            <ul class="scope-list">
-                                <li class="scope-item">Logo & Branding</li>
-                                <li class="scope-item">UI & Web Design</li>
-                                <li class="scope-item">SEO & Keyword Research</li>
-                                <li class="scope-item">Tag Management (GTM)</li>
-                                <li class="scope-item">Analytics & Indexing</li>
-                            </ul>
-                        </div>
+                        // Simplex Noise (Compressed for brevity)
+                        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                        vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                        vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+                        vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+                        float snoise(vec3 v) {
+                            const vec2 C = vec2(1.0/6.0, 1.0/3.0);
+                            const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+                            vec3 i  = floor(v + dot(v, C.yyy) );
+                            vec3 x0 = v - i + dot(i, C.xxx) ;
+                            vec3 g = step(x0.yzx, x0.xyz);
+                            vec3 l = 1.0 - g;
+                            vec3 i1 = min( g.xyz, l.zxy );
+                            vec3 i2 = max( g.xyz, l.zxy );
+                            vec3 x1 = x0 - i1 + C.xxx;
+                            vec3 x2 = x0 - i2 + C.yyy;
+                            vec3 x3 = x0 - D.yyy;
+                            i = mod289(i);
+                            vec4 p = permute( permute( permute( i.z + vec4(0.0, i1.z, i2.z, 1.0 )) + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
+                            float n_ = 0.142857142857;
+                            vec3  ns = n_ * D.wyz - D.xzx;
+                            vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+                            vec4 x_ = floor(j * ns.z);
+                            vec4 y_ = floor(j - 7.0 * x_ );
+                            vec4 x = x_ *ns.x + ns.yyyy;
+                            vec4 y = y_ *ns.x + ns.yyyy;
+                            vec4 h = 1.0 - abs(x) - abs(y);
+                            vec4 b0 = vec4( x.xy, y.xy );
+                            vec4 b1 = vec4( x.zw, y.zw );
+                            vec4 s0 = floor(b0)*2.0 + 1.0;
+                            vec4 s1 = floor(b1)*2.0 + 1.0;
+                            vec4 sh = -step(h, vec4(0.0));
+                            vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
+                            vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+                            vec3 p0 = vec3(a0.xy,h.x);
+                            vec3 p1 = vec3(a0.zw,h.y);
+                            vec3 p2 = vec3(a1.xy,h.z);
+                            vec3 p3 = vec3(a1.zw,h.w);
+                            vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+                            p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+                            vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+                            m = m * m;
+                            return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
+                        }
 
-                        <div class="tech-stack">
-                            <span class="tech-tag">Figma</span>
-                            <span class="tech-tag">Canva</span>
-                            <span class="tech-tag">Semrush</span>
-                            <span class="tech-tag">GA4</span>
-                            <span class="tech-tag">GitHub</span>
-                        </div>
-                    </div>
-                </article>
+                        void main() {
+                            vec3 pos = position;
+                            float time = uTime * 0.2;
 
-                <article class="project-card">
-                    <div class="card-header">
-                        <img src="fm.webp" alt="Farm Mutton Logo" class="project-logo">
-                    </div>
-                    <div class="card-body">
-                        <h3 class="project-name">Farm Mutton</h3>
-                        <p class="project-desc">Premium grass-fed mutton delivery service ensuring high-quality, organic meat supply.</p>
-                        
-                        <div class="work-scope">
-                            <span class="scope-label">My Role</span>
-                            <ul class="scope-list">
-                                <li class="scope-item">Logo & UI Design</li>
-                                <li class="scope-item">Full Web Development</li>
-                                <li class="scope-item">Technical SEO</li>
-                                <li class="scope-item">Analytics Setup</li>
-                                <li class="scope-item">Keyword Strategy</li>
-                            </ul>
-                        </div>
+                            // Gentle noise movement
+                            pos.x += snoise(vec3(pos.x, pos.y, time)) * 0.4;
+                            pos.y += snoise(vec3(pos.y, pos.z, time)) * 0.4;
+                            pos.z += snoise(vec3(pos.z, pos.x, time)) * 0.4;
 
-                        <div class="tech-stack">
-                            <span class="tech-tag">Figma</span>
-                            <span class="tech-tag">Canva</span>
-                            <span class="tech-tag">Semrush</span>
-                            <span class="tech-tag">GA4</span>
-                            <span class="tech-tag">GitHub</span>
-                        </div>
-                    </div>
-                </article>
+                            // Mouse Repulsion Logic
+                            float dist = distance(pos.xy, uMouse.xy * 6.0);
+                            
+                            // On mobile, the "repulsion" is stronger so you can see it under your finger
+                            if(dist < 4.0) {
+                                vec3 dir = normalize(pos - vec3(uMouse.xy * 6.0, 0.0));
+                                pos += dir * (4.0 - dist) * 0.8;
+                            }
 
-            </div>
+                            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
+                            gl_Position = projectionMatrix * mvPosition;
+                            
+                            // Responsive Point Size
+                            gl_PointSize = (12.0 * uPixelRatio) * (1.0 / -mvPosition.z);
+                            
+                            // Cyberpunk Gradient
+                            vColor = mix(vec3(0.0, 0.95, 1.0), vec3(1.0, 0.0, 0.33), position.z * 0.2 + 0.5);
+                        }
+                    `,
+                    fragmentShader: `
+                        varying vec3 vColor;
+                        void main() {
+                            float strength = distance(gl_PointCoord, vec2(0.5));
+                            strength = 1.0 - step(0.5, strength);
+                            if(strength < 0.5) discard;
+                            gl_FragColor = vec4(vColor, 1.0);
+                        }
+                    `,
+                    transparent: true,
+                    depthWrite: false,
+                    blending: THREE.AdditiveBlending
+                });
 
+                this.particles = new THREE.Points(geometry, this.particleMaterial);
+                this.scene.add(this.particles);
+            }
 
-            <div class="section-header">
-                <h2 class="section-title">Branding & Community</h2>
-                <span>Identity Design</span>
-            </div>
+            addEvents() {
+                window.addEventListener('resize', this.onResize.bind(this));
+                
+                // MOUSE EVENTS (Desktop)
+                window.addEventListener('mousemove', (e) => {
+                    if(isMobile) return;
+                    this.updateMouse(e.clientX, e.clientY);
+                    
+                    // Custom Cursor Logic
+                    const cursor = document.getElementById('cursor');
+                    const cursorDot = document.getElementById('cursor-dot');
+                    if(cursor) {
+                        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
+                        gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.0 });
+                    }
+                });
 
-            <div class="branding-grid">
+                // TOUCH EVENTS (Mobile)
+                window.addEventListener('touchmove', (e) => {
+                    if (e.touches.length > 0) {
+                        this.updateMouse(e.touches[0].clientX, e.touches[0].clientY);
+                    }
+                }, { passive: true });
+                
+                window.addEventListener('touchstart', (e) => {
+                    if (e.touches.length > 0) {
+                        this.updateMouse(e.touches[0].clientX, e.touches[0].clientY);
+                    }
+                }, { passive: true });
+            }
 
-                <article class="project-card">
-                    <div class="card-header">
-                        <img src="logo-chinkulu.png" alt="Chinkulu Logo" class="project-logo">
-                    </div>
-                    <div class="card-body">
-                        <h3 class="project-name">Chinkulu</h3>
-                        <p class="project-desc">Hand-made fashion initiative empowering women from rural Warangal.</p>
-                        
-                        <div class="work-scope">
-                            <span class="scope-label">My Role</span>
-                            <ul class="scope-list">
-                                <li class="scope-item">Logo Creation</li>
-                                <li class="scope-item">Marketing Strategy</li>
-                                <li class="scope-item">Brand Identity</li>
-                            </ul>
-                        </div>
-                        <div class="tech-stack">
-                            <span class="tech-tag">Canva</span>
-                            <span class="tech-tag">Illustrator</span>
-                        </div>
-                    </div>
-                </article>
+            updateMouse(x, y) {
+                // Normalize to -1 to 1 range
+                this.targetMouse.x = (x / this.width) * 2 - 1;
+                this.targetMouse.y = -(y / this.height) * 2 + 1;
+            }
 
-                <article class="project-card">
-                    <div class="card-header">
-                        <img src="logo-vinthapadalu.png" alt="Vinthapadalu Logo" class="project-logo">
-                    </div>
-                    <div class="card-body">
-                        <h3 class="project-name">Vinthapadalu</h3>
-                        <p class="project-desc">A thriving community dedicated to Telugu books and literature enthusiasts.</p>
-                        
-                        <div class="work-scope">
-                            <span class="scope-label">My Role</span>
-                            <ul class="scope-list">
-                                <li class="scope-item">Logo Design</li>
-                                <li class="scope-item">Social Media Management</li>
-                                <li class="scope-item">Community Building</li>
-                            </ul>
-                        </div>
-                        <div class="tech-stack">
-                            <span class="tech-tag">Canva</span>
-                            <span class="tech-tag">Social Media Tools</span>
-                        </div>
-                    </div>
-                </article>
+            onResize() {
+                this.width = window.innerWidth;
+                this.height = window.innerHeight;
+                this.camera.aspect = this.width / this.height;
+                this.camera.updateProjectionMatrix();
+                this.renderer.setSize(this.width, this.height);
+                this.particleMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
+            }
 
-            </div>
+            animate() {
+                requestAnimationFrame(this.animate.bind(this));
+                
+                const time = this.clock.getElapsedTime();
+                
+                // Smooth Mouse Interpolation
+                this.mouse.x += (this.targetMouse.x - this.mouse.x) * 0.1;
+                this.mouse.y += (this.targetMouse.y - this.mouse.y) * 0.1;
 
-        </div>
-    </main>
+                this.particles.rotation.y = time * 0.05;
+                
+                // Tilting effect based on mouse/touch position
+                this.particles.rotation.x = this.mouse.y * 0.2;
+                this.particles.rotation.z = this.mouse.x * 0.2;
 
-    <footer class="footer">
-        <div class="container">
-            <h3>Let's work together.</h3>
-            <p style="margin-top: 1rem;">&copy; 2026 Portfolio. Designed & Developed with passion.</p>
-        </div>
-    </footer>
+                this.particleMaterial.uniforms.uTime.value = time;
+                this.particleMaterial.uniforms.uMouse.value.set(this.mouse.x, this.mouse.y, 0);
 
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+
+        class TextScramble {
+            constructor(el) {
+                this.el = el;
+                this.chars = '!<>-_\\/[]{}—=+*^?#________';
+                this.update = this.update.bind(this);
+            }
+            setText(newText) {
+                const oldText = this.el.innerText;
+                const length = Math.max(oldText.length, newText.length);
+                const promise = new Promise((resolve) => this.resolve = resolve);
+                this.queue = [];
+                for (let i = 0; i < length; i++) {
+                    const from = oldText[i] || '';
+                    const to = newText[i] || '';
+                    const start = Math.floor(Math.random() * 40);
+                    const end = start + Math.floor(Math.random() * 40);
+                    this.queue.push({ from, to, start, end });
+                }
+                cancelAnimationFrame(this.frameRequest);
+                this.frame = 0;
+                this.update();
+                return promise;
+            }
+            update() {
+                let output = '';
+                let complete = 0;
+                for (let i = 0, n = this.queue.length; i < n; i++) {
+                    let { from, to, start, end, char } = this.queue[i];
+                    if (this.frame >= end) {
+                        complete++;
+                        output += to;
+                    } else if (this.frame >= start) {
+                        if (!char || Math.random() < 0.28) {
+                            char = this.randomChar();
+                            this.queue[i].char = char;
+                        }
+                        output += `<span class="dud">${char}</span>`;
+                    } else {
+                        output += from;
+                    }
+                }
+                this.el.innerHTML = output;
+                if (complete === this.queue.length) {
+                    this.resolve();
+                } else {
+                    this.frameRequest = requestAnimationFrame(this.update);
+                    this.frame++;
+                }
+            }
+            randomChar() {
+                return this.chars[Math.floor(Math.random() * this.chars.length)];
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const app = new App();
+            
+            const phrases = ['RPA ARCHITECT', 'WEB DEVELOPER', 'UI DESIGNER', 'DIGITAL CREATOR'];
+            const el = document.querySelector('.sub-hero');
+            const fx = new TextScramble(el);
+            
+            let counter = 0;
+            const next = () => {
+                fx.setText(phrases[counter]).then(() => {
+                    setTimeout(next, 2000);
+                });
+                counter = (counter + 1) % phrases.length;
+            };
+            
+            setTimeout(next, 3000);
+        });
+    </script>
 </body>
 </html>
