@@ -3,780 +3,446 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shivateja — Digital Experience</title>
+    <title>Seenuri Works — Advanced WebGL</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-dark: #0A0A0A;
-            --bg-light: #F8F8F8;
-            --text-dark: #0A0A0A;
-            --text-light: #F8F8F8;
-            --accent: #FF3366;
-            --accent-blue: #00D9FF;
-            --accent-purple: #9D4EDD;
-            --gradient: linear-gradient(135deg, #FF3366 0%, #9D4EDD 100%);
-            --easing: cubic-bezier(0.23, 1, 0.32, 1);
+            --bg: #050505;
+            --text: #ffffff;
+            --accent: #FF3B30;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: var(--bg-dark);
-            color: var(--text-light);
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        /* CUSTOM CURSOR */
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--accent);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
-        }
-        
-        .cursor-outline {
-            width: 40px;
-            height: 40px;
-            border: 2px solid rgba(255, 51, 102, 0.5);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: all 0.15s ease-out;
-        }
-
-        /* LOADING SCREEN */
-        .loading-screen {
-            position: fixed;
-            inset: 0;
-            background: var(--bg-dark);
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-        }
-
-        .loading-counter {
-            font-size: 8rem;
-            font-weight: 700;
+            background-color: var(--bg);
             font-family: 'Space Grotesk', sans-serif;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            overflow-x: hidden;
+            color: var(--text);
+            overscroll-behavior: none;
         }
 
-        /* NAVIGATION */
-        nav {
+        /* CANVASES */
+        #canvas-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding: 2rem 4vw;
-            z-index: 1000;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* DOM CONTENT (This acts as a "Skeleton" for the WebGL) */
+        main {
+            position: relative;
+            z-index: 10;
+        }
+
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 40px;
             display: flex;
             justify-content: space-between;
+            mix-blend-mode: difference;
+            z-index: 100;
+        }
+
+        .logo { font-size: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+        .menu { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+
+        .section {
+            padding: 10vh 10vw;
+            position: relative;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
             align-items: center;
+        }
+
+        h1 {
+            font-size: 10vw;
+            line-height: 0.85;
+            text-transform: uppercase;
             mix-blend-mode: difference;
         }
 
-        .logo {
-            font-size: 1rem;
-            font-weight: 600;
-            font-family: 'Space Grotesk', sans-serif;
-            color: var(--text-light);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 3rem;
-        }
-
-        .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 500;
-            position: relative;
-            transition: opacity 0.3s;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: var(--text-light);
-            transition: width 0.3s var(--easing);
-        }
-
-        .nav-links a:hover::after {
+        /* THE IMAGE PLACEHOLDERS 
+           (These are invisible but tell WebGL where to render) */
+        .image-wrapper {
             width: 100%;
-        }
-
-        /* HERO - Full Screen Immersive */
-        .hero {
-            height: 100vh;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(255, 51, 102, 0.1) 0%, transparent 50%);
-            animation: pulse 8s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.5); opacity: 0.8; }
-        }
-
-        .hero-content {
-            text-align: center;
-            z-index: 2;
-            padding: 0 5vw;
-        }
-
-        .hero h1 {
-            font-size: clamp(3rem, 12vw, 12rem);
-            font-weight: 700;
-            font-family: 'Space Grotesk', sans-serif;
-            line-height: 0.9;
-            margin-bottom: 2rem;
-        }
-
-        .gradient-text {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1rem, 2vw, 1.5rem);
-            font-weight: 400;
-            opacity: 0.7;
             max-width: 600px;
-            margin: 0 auto 3rem;
+            height: 80vh;
+            margin: 10vh 0;
+            opacity: 0; /* Crucial: We hide DOM, show WebGL */
+            visibility: hidden;
         }
 
-        .scroll-indicator {
-            position: absolute;
-            bottom: 4rem;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            opacity: 0.5;
-            animation: float 2s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(10px); }
-        }
-
-        /* PHILOSOPHY SECTION */
-        .philosophy {
-            min-height: 100vh;
-            padding: 15vh 5vw;
-            background: var(--bg-light);
-            color: var(--text-dark);
-            position: relative;
-        }
-
-        .philosophy-grid {
-            max-width: 1400px;
-            margin: 0 auto;
+        .grid-section {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8rem;
-            align-items: center;
+            gap: 10vw;
+            padding-bottom: 20vh;
         }
 
-        .philosophy h2 {
-            font-size: clamp(3rem, 6vw, 6rem);
-            font-weight: 700;
-            font-family: 'Space Grotesk', sans-serif;
-            line-height: 1.1;
-            margin-bottom: 2rem;
+        .project-info {
+            padding-top: 10vh;
         }
 
-        .philosophy-text {
-            font-size: 1.25rem;
-            line-height: 1.8;
-            opacity: 0.8;
-        }
+        .project-title { font-size: 4vw; margin-bottom: 20px; }
+        .project-meta { font-size: 14px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 3rem;
-        }
-
-        .stat-item {
-            border-left: 3px solid var(--accent);
-            padding-left: 2rem;
-        }
-
-        .stat-number {
-            font-size: 4rem;
-            font-weight: 700;
-            font-family: 'Space Grotesk', sans-serif;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .stat-label {
-            font-size: 1rem;
-            opacity: 0.6;
-            margin-top: 0.5rem;
-        }
-
-        /* WORK SHOWCASE - 3D Cards */
-        .work-showcase {
-            min-height: 100vh;
-            padding: 15vh 5vw;
-            background: var(--bg-dark);
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 8rem;
-        }
-
-        .section-header h2 {
-            font-size: clamp(3rem, 8vw, 8rem);
-            font-weight: 700;
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        .projects-grid {
-            max-width: 1600px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 4rem;
-        }
-
-        .project-card {
-            aspect-ratio: 3/4;
-            border-radius: 24px;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            transition: transform 0.6s var(--easing);
-        }
-
-        .project-card:hover {
-            transform: translateY(-20px);
-        }
-
-        .project-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.6s var(--easing);
-        }
-
-        .project-card:hover .project-image {
-            transform: scale(1.1);
-        }
-
-        .project-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.9) 100%);
-            padding: 3rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            opacity: 0;
-            transition: opacity 0.6s var(--easing);
-        }
-
-        .project-card:hover .project-overlay {
-            opacity: 1;
-        }
-
-        .project-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            font-family: 'Space Grotesk', sans-serif;
-            margin-bottom: 1rem;
-        }
-
-        .project-tags {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .tag {
-            padding: 0.5rem 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 100px;
-            font-size: 0.75rem;
-            backdrop-filter: blur(10px);
-        }
-
-        /* CAPABILITIES */
-        .capabilities {
-            min-height: 100vh;
-            padding: 15vh 5vw;
-            background: var(--bg-light);
-            color: var(--text-dark);
-        }
-
-        .capabilities-grid {
-            max-width: 1400px;
-            margin: 6rem auto 0;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 4rem;
-        }
-
-        .capability-card {
-            padding: 3rem;
-            background: white;
-            border-radius: 24px;
-            border: 1px solid rgba(0,0,0,0.05);
-            transition: all 0.6s var(--easing);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .capability-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--gradient);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.6s var(--easing);
-        }
-
-        .capability-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .capability-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
-        }
-
-        .capability-number {
-            font-size: 4rem;
-            font-weight: 700;
-            font-family: 'Space Grotesk', sans-serif;
-            opacity: 0.1;
-            margin-bottom: 2rem;
-        }
-
-        .capability-title {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .capability-desc {
-            line-height: 1.8;
-            opacity: 0.7;
-        }
-
-        /* CONTACT CTA */
-        .contact-cta {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-dark);
-            padding: 5vw;
-        }
-
-        .cta-content {
-            text-align: center;
-        }
-
-        .cta-title {
-            font-size: clamp(4rem, 12vw, 14rem);
-            font-weight: 700;
-            font-family: 'Space Grotesk', sans-serif;
-            line-height: 0.9;
-            margin-bottom: 4rem;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 2rem 4rem;
-            background: var(--gradient);
-            color: white;
-            text-decoration: none;
-            font-size: 1.25rem;
-            font-weight: 600;
-            border-radius: 100px;
-            transition: all 0.6s var(--easing);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-button::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, #9D4EDD 0%, #FF3366 100%);
-            opacity: 0;
-            transition: opacity 0.6s;
-        }
-
-        .cta-button:hover::before {
-            opacity: 1;
-        }
-
-        .cta-button span {
-            position: relative;
-            z-index: 2;
-        }
-
-        .cta-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 20px 60px rgba(255, 51, 102, 0.4);
-        }
-
-        /* FOOTER */
-        footer {
-            padding: 4rem 5vw;
-            background: var(--bg-dark);
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* RESPONSIVE */
-        @media (max-width: 1024px) {
-            .philosophy-grid,
-            .capabilities-grid {
-                grid-template-columns: 1fr;
-                gap: 4rem;
-            }
-
-            .projects-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+        /* SCROLLBAR HIDE */
+        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="cursor-dot"></div>
-    <div class="cursor-outline"></div>
+    <div id="canvas-container"></div>
 
-    <div class="loading-screen">
-        <div class="loading-counter">0</div>
-    </div>
+    <header>
+        <div class="logo">Seenuri.</div>
+        <div class="menu">Menu</div>
+    </header>
 
-    <nav>
-        <div class="logo">SHIVATEJA</div>
-        <div class="nav-links">
-            <a href="#philosophy">Philosophy</a>
-            <a href="#work">Work</a>
-            <a href="#capabilities">Capabilities</a>
-            <a href="#contact">Contact</a>
-        </div>
-    </nav>
+    <main id="scroll-container">
+        <section class="section hero">
+            <h1>Digital<br>Reality<br>System</h1>
+        </section>
 
-    <section class="hero">
-        <div class="hero-bg"></div>
-        <div class="hero-content">
-            <h1>
-                <span class="gradient-text">Crafting</span><br>
-                Digital<br>
-                Experiences
-            </h1>
-            <p class="hero-subtitle">
-                Where automation meets artistry. Strategy-led design for the modern web.
-            </p>
-        </div>
-        <div class="scroll-indicator">Scroll to explore</div>
-    </section>
+        <section class="section grid-section">
+            <div class="project-info">
+                <div class="project-meta">01 / Zapwash</div>
+                <h2 class="project-title">Hyperlocal<br>Commerce</h2>
+                <p>Advanced Shopify Architecture</p>
+            </div>
+            <img class="image-wrapper" src="https://images.unsplash.com/photo-1605218427335-3a4dd9840f1c?q=80&w=1500&auto=format&fit=crop" data-webgl="true" alt="Zapwash">
+        </section>
 
-    <section class="philosophy" id="philosophy">
-        <div class="philosophy-grid">
-            <div>
-                <h2>Design is<br>invisible<br>infrastructure</h2>
-                <p class="philosophy-text">
-                    I believe great digital experiences aren't just beautiful—they're intelligent systems that solve real problems. My work sits at the intersection of automation, commerce, and brand storytelling.
-                </p>
+        <section class="section grid-section" style="direction: rtl;">
+            <div class="project-info" style="direction: ltr;">
+                <div class="project-meta">02 / Chinkulu</div>
+                <h2 class="project-title">Cultural<br>Heritage</h2>
+                <p>Brand Identity System</p>
             </div>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">5+</div>
-                    <div class="stat-label">Years Building</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">50+</div>
-                    <div class="stat-label">Projects Shipped</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">15+</div>
-                    <div class="stat-label">Brands Scaled</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">∞</div>
-                    <div class="stat-label">Possibilities</div>
-                </div>
-            </div>
-        </div>
-    </section>
+            <img class="image-wrapper" src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?q=80&w=1500&auto=format&fit=crop" data-webgl="true" alt="Chinkulu">
+        </section>
 
-    <section class="work-showcase" id="work">
-        <div class="section-header">
-            <h2><span class="gradient-text">Featured</span> Work</h2>
-        </div>
-        <div class="projects-grid">
-            <div class="project-card">
-                <img src="https://images.unsplash.com/photo-1545173168-9f1947eebb8f?q=80&w=2940" alt="Zapwash" class="project-image">
-                <div class="project-overlay">
-                    <h3 class="project-title">The Zapwash</h3>
-                    <p>Hyperlocal laundry aggregator transforming urban living</p>
-                    <div class="project-tags">
-                        <span class="tag">E-Commerce</span>
-                        <span class="tag">Shopify</span>
-                        <span class="tag">SEO</span>
-                    </div>
-                </div>
+        <section class="section grid-section">
+            <div class="project-info">
+                <div class="project-meta">03 / Vinthapadalu</div>
+                <h2 class="project-title">Literature<br>Revival</h2>
+                <p>Community Platform</p>
             </div>
-            <div class="project-card">
-                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2940" alt="Chinkulu" class="project-image">
-                <div class="project-overlay">
-                    <h3 class="project-title">Chinkulu</h3>
-                    <p>Handcrafted fashion meets digital storytelling</p>
-                    <div class="project-tags">
-                        <span class="tag">Brand Identity</span>
-                        <span class="tag">Strategy</span>
-                        <span class="tag">Web Design</span>
-                    </div>
-                </div>
-            </div>
-            <div class="project-card">
-                <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?q=80&w=2940" alt="Vinthapadalu" class="project-image">
-                <div class="project-overlay">
-                    <h3 class="project-title">Vinthapadalu</h3>
-                    <p>Building community through Telugu literature</p>
-                    <div class="project-tags">
-                        <span class="tag">Community</span>
-                        <span class="tag">Content Strategy</span>
-                        <span class="tag">Cultural Design</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+            <img class="image-wrapper" src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?q=80&w=1500&auto=format&fit=crop" data-webgl="true" alt="Vinthapadalu">
+        </section>
 
-    <section class="capabilities" id="capabilities">
-        <div class="section-header">
-            <h2>What I Do</h2>
-        </div>
-        <div class="capabilities-grid">
-            <div class="capability-card">
-                <div class="capability-number">01</div>
-                <h3 class="capability-title">Automation & RPA</h3>
-                <p class="capability-desc">Building intelligent automation systems with Automation Anywhere and Blue Prism. Migrating legacy processes into modern, scalable infrastructure.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-number">02</div>
-                <h3 class="capability-title">E-Commerce Growth</h3>
-                <p class="capability-desc">Full-stack Shopify development, conversion optimization, and growth strategies that turn browsers into buyers.</p>
-            </div>
-            <div class="capability-card">
-                <div class="capability-number">03</div>
-                <h3 class="capability-title">Digital Strategy</h3>
-                <p class="capability-desc">Data-driven SEO, analytics implementation, and content strategies that build sustainable organic growth.</p>
-            </div>
-        </div>
-    </section>
+        <section class="section hero">
+            <h1>Next<br>Project?</h1>
+        </section>
+    </main>
 
-    <section class="contact-cta" id="contact">
-        <div class="cta-content">
-            <h2 class="cta-title">
-                Let's build<br>
-                something<br>
-                <span class="gradient-text">amazing</span>
-            </h2>
-            <a href="mailto:spandanavalaboju06@gmail.com" class="cta-button">
-                <span>Start a Conversation</span>
-            </a>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-content">
-            <p>© 2026 Shivateja · Seenuri Works</p>
-            <p>Hyderabad / Mumbai</p>
-        </div>
-    </footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script>
-        // SMOOTH SCROLL
-        const lenis = new Lenis({
-            duration: 1.6,
-            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-            smooth: true,
-        });
+        /**
+         * SHADER DEFINITIONS
+         * This is raw GLSL code running on the Graphics Card.
+         * This creates the "Liquid" effect.
+         */
+        const vertexShader = `
+            uniform float uTime;
+            uniform vec2 uHover;
+            uniform float uHoverState;
+            varying vec2 vUv;
 
-        function raf(time) {
-            lenis.raf(time);
-            requestAnimationFrame(raf);
-        }
-        requestAnimationFrame(raf);
+            void main() {
+                vUv = uv;
+                vec3 newPos = position;
 
-        gsap.registerPlugin(ScrollTrigger);
+                // DISTORTION LOGIC
+                float dist = distance(uv, uHover);
+                
+                // Create a wave effect based on mouse distance
+                float wave = sin(dist * 10.0 - uTime * 2.0) * 0.1;
+                
+                // Apply distortion only when hovering
+                newPos.z += wave * uHoverState * 0.5;
 
-        // LOADING ANIMATION
-        let counter = { value: 0 };
-        gsap.to(counter, {
-            value: 100,
-            duration: 2,
-            ease: "power2.out",
-            onUpdate: () => {
-                document.querySelector('.loading-counter').textContent = Math.floor(counter.value);
-            },
-            onComplete: () => {
-                gsap.to('.loading-screen', {
-                    y: '-100%',
-                    duration: 1,
-                    ease: "power4.inOut",
-                    delay: 0.3
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
+            }
+        `;
+
+        const fragmentShader = `
+            uniform sampler2D uTexture;
+            uniform vec2 uImageSize;
+            uniform vec2 uPlaneSize;
+            uniform float uHoverState;
+            varying vec2 vUv;
+
+            // COVER FUNCTION (Mimics CSS background-size: cover)
+            vec2 getCoverUv(vec2 uv, vec2 planeSize, vec2 imageSize) {
+                vec2 ratio = vec2(
+                    min((planeSize.x / planeSize.y) / (imageSize.x / imageSize.y), 1.0),
+                    min((planeSize.y / planeSize.x) / (imageSize.y / imageSize.x), 1.0)
+                );
+                vec2 newUv = vec2(
+                    uv.x * ratio.x + (1.0 - ratio.x) * 0.5,
+                    uv.y * ratio.y + (1.0 - ratio.y) * 0.5
+                );
+                return newUv;
+            }
+
+            void main() {
+                vec2 uv = getCoverUv(vUv, uPlaneSize, uImageSize);
+
+                // RGB SHIFT EFFECT (Chromatic Aberration)
+                float shift = uHoverState * 0.02;
+                float r = texture2D(uTexture, uv + vec2(shift, 0.0)).r;
+                float g = texture2D(uTexture, uv).g;
+                float b = texture2D(uTexture, uv - vec2(shift, 0.0)).b;
+
+                gl_FragColor = vec4(r, g, b, 1.0);
+            }
+        `;
+
+        /**
+         * CLASS: WEBGL MANAGER
+         * Handles the Three.js Scene, Camera, and Renderer
+         */
+        class WebGL {
+            constructor() {
+                this.scene = new THREE.Scene();
+                
+                this.width = window.innerWidth;
+                this.height = window.innerHeight;
+
+                this.container = document.getElementById('canvas-container');
+
+                this.renderer = new THREE.WebGLRenderer({
+                    alpha: true,
+                    antialias: true
+                });
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                this.renderer.setSize(this.width, this.height);
+                this.container.appendChild(this.renderer.domElement);
+
+                // PERSPECTIVE CAMERA SETUP
+                // We calculate FOV to match CSS pixels exactly
+                this.camera = new THREE.PerspectiveCamera(70, this.width / this.height, 100, 2000);
+                this.camera.position.z = 600; 
+                this.camera.fov = 2 * Math.atan((this.height / 2) / 600) * (180 / Math.PI);
+
+                this.images = [];
+                this.currentScroll = 0;
+                
+                // MOUSE TRACKING
+                this.raycaster = new THREE.Raycaster();
+                this.mouse = new THREE.Vector2();
+
+                this.setupResize();
+                this.addObjects();
+                this.setupMouseEvents();
+                this.render();
+            }
+
+            setupResize() {
+                window.addEventListener('resize', () => {
+                    this.width = window.innerWidth;
+                    this.height = window.innerHeight;
+                    this.renderer.setSize(this.width, this.height);
+                    this.camera.aspect = this.width / this.height;
+                    
+                    // Recalculate FOV to keep objects sized correctly
+                    this.camera.fov = 2 * Math.atan((this.height / 2) / 600) * (180 / Math.PI);
+                    this.camera.updateProjectionMatrix();
+
+                    // Update all image planes
+                    this.images.forEach(img => img.updateBounds());
                 });
             }
-        });
 
-        // CUSTOM CURSOR
-        const cursorDot = document.querySelector('.cursor-dot');
-        const cursorOutline = document.querySelector('.cursor-outline');
+            setupMouseEvents() {
+                window.addEventListener('mousemove', (e) => {
+                    // Normalized coordinates for Raycaster
+                    this.mouse.x = (e.clientX / this.width) * 2 - 1;
+                    this.mouse.y = -(e.clientY / this.height) * 2 + 1;
 
-        let mouseX = 0, mouseY = 0;
-        let outlineX = 0, outlineY = 0;
+                    // Raycasting logic
+                    this.raycaster.setFromCamera(this.mouse, this.camera);
+                    const intersects = this.raycaster.intersectObjects(this.scene.children);
 
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            cursorDot.style.left = mouseX + 'px';
-            cursorDot.style.top = mouseY + 'px';
-        });
+                    if(intersects.length > 0) {
+                        let obj = intersects[0].object;
+                        obj.material.uniforms.uHover.value = intersects[0].uv;
+                    }
+                });
+            }
 
-        function animateOutline() {
-            outlineX += (mouseX - outlineX) * 0.15;
-            outlineY += (mouseY - outlineY) * 0.15;
-            cursorOutline.style.left = outlineX + 'px';
-            cursorOutline.style.top = outlineY + 'px';
-            requestAnimationFrame(animateOutline);
+            addObjects() {
+                // Find all images with data-webgl="true"
+                const elements = [...document.querySelectorAll('[data-webgl]')];
+                
+                elements.forEach(el => {
+                    const img = new ImageObject({
+                        element: el,
+                        scene: this.scene,
+                        geometry: new THREE.PlaneBufferGeometry(1, 1, 32, 32) // High segment count for smooth wave distortion
+                    });
+                    this.images.push(img);
+                });
+            }
+
+            updateScroll(scrollY) {
+                this.currentScroll = scrollY;
+                this.images.forEach(img => {
+                    img.update(scrollY, this.raycaster, this.mouse);
+                });
+            }
+
+            render() {
+                this.renderer.render(this.scene, this.camera);
+                requestAnimationFrame(this.render.bind(this));
+            }
         }
-        animateOutline();
 
-        // SCROLL ANIMATIONS
-        gsap.from('.hero h1', {
-            y: 100,
-            opacity: 0,
-            duration: 1.5,
-            ease: "power4.out",
-            delay: 2.5
-        });
+        /**
+         * CLASS: IMAGE OBJECT
+         * Represents a single image in the 3D world
+         */
+        class ImageObject {
+            constructor({ element, scene, geometry }) {
+                this.element = element;
+                this.scene = scene;
+                this.geometry = geometry;
+                
+                this.offset = new THREE.Vector2(0, 0); 
+                this.sizes = new THREE.Vector2(0, 0);
 
-        gsap.from('.hero-subtitle', {
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            ease: "power4.out",
-            delay: 2.8
-        });
+                this.createMesh();
+            }
 
-        // Philosophy section
-        gsap.from('.philosophy h2', {
-            scrollTrigger: {
-                trigger: '.philosophy',
-                start: 'top 60%',
-            },
-            y: 100,
-            opacity: 0,
+            createMesh() {
+                const src = this.element.src;
+                
+                // Load Texture
+                const texture = new THREE.TextureLoader().load(src);
+                texture.minFilter = THREE.LinearFilter;
+                
+                // Create Shader Material
+                this.material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        uTexture: { value: texture },
+                        uImageSize: { value: new THREE.Vector2(0, 0) }, // Will be set on load
+                        uPlaneSize: { value: new THREE.Vector2(0, 0) },
+                        uHover: { value: new THREE.Vector2(0.5, 0.5) },
+                        uHoverState: { value: 0 },
+                        uTime: { value: 0 }
+                    },
+                    vertexShader: vertexShader,
+                    fragmentShader: fragmentShader,
+                    side: THREE.DoubleSide
+                });
+
+                this.mesh = new THREE.Mesh(this.geometry, this.material);
+                this.scene.add(this.mesh);
+
+                // Get natural image dimensions
+                const img = new Image();
+                img.src = src;
+                img.onload = () => {
+                    this.material.uniforms.uImageSize.value.set(img.naturalWidth, img.naturalHeight);
+                    this.updateBounds();
+                };
+            }
+
+            updateBounds() {
+                // Determine where the HTML element is on screen
+                const bounds = this.element.getBoundingClientRect();
+                
+                this.sizes.set(bounds.width, bounds.height);
+                this.material.uniforms.uPlaneSize.value = this.sizes;
+
+                this.mesh.scale.set(this.sizes.x, this.sizes.y, 1);
+
+                // Calculate position relative to center of screen (WebGL coordinates)
+                this.offset.x = bounds.left - window.innerWidth / 2 + bounds.width / 2;
+                this.offset.y = -bounds.top + window.innerHeight / 2 - bounds.height / 2;
+                
+                // Store initial Y for scroll calculations
+                this.y = this.offset.y; 
+                this.x = this.offset.x;
+
+                this.mesh.position.set(this.x, this.y, 0);
+            }
+
+            update(scrollY, raycaster, mouse) {
+                // Update Position based on Scroll
+                // We add scrollY because in WebGL Y goes up, in DOM Y goes down
+                this.mesh.position.y = this.y + scrollY;
+
+                // Update Time Uniform
+                this.material.uniforms.uTime.value += 0.05;
+
+                // Check for Hover Intersections (Manual raycast check per object for state)
+                const intersects = raycaster.intersectObject(this.mesh);
+                if (intersects.length > 0) {
+                    // Smoothly transition hover state to 1
+                    gsap.to(this.material.uniforms.uHoverState, {
+                        value: 1,
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+                } else {
+                    // Smoothly transition hover state to 0
+                    gsap.to(this.material.uniforms.uHoverState, {
+                        value: 0,
+                        duration: 0.5,
+                        ease: "power2.out"
+                    });
+                }
+            }
+        }
+
+        /**
+         * INITIALIZATION
+         * Combining Smooth Scroll (Lenis) with WebGL
+         */
+        
+        // 1. Initialize Lenis Smooth Scroll
+        const lenis = new Lenis({
             duration: 1.2,
-            ease: "power4.out"
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            smooth: true
         });
 
-        gsap.from('.stat-item', {
-            scrollTrigger: {
-                trigger: '.stats-grid',
-                start: 'top 70%',
-            },
-            y: 80,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.2,
-            ease: "power4.out"
-        });
+        // 2. Initialize WebGL World
+        const webgl = new WebGL();
 
-        // Projects
-        gsap.from('.project-card', {
-            scrollTrigger: {
-                trigger: '.projects-grid',
-                start: 'top 60%',
-            },
-            y: 120,
-            opacity: 0,
-            duration: 1.2,
-            stagger: 0.2,
-            ease: "power4.out"
-        });
+        // 3. Animation Loop
+        function raf(time) {
+            lenis.raf(time);
+            
+            // Sync WebGL with Scroll
+            webgl.updateScroll(lenis.scroll);
+            
+            requestAnimationFrame(raf);
+        }
 
-        // Capabilities
-        gsap.from('.capability-card', {
-            scrollTrigger: {
-                trigger: '.capabilities-grid',
-                start: 'top 60%',
-            },
-            y: 100,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.15,
-            ease: "power4.out"
-        });
+        requestAnimationFrame(raf);
+
+        // 4. Initial Trigger to set positions
+        setTimeout(() => {
+            webgl.images.forEach(img => img.updateBounds());
+        }, 100);
+
     </script>
 </body>
 </html>
