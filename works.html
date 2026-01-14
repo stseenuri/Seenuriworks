@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHIVATEJA | MOBILE OPTIMIZED</title>
+    <title>WORKS | SHIVATEJA</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
@@ -11,6 +11,7 @@
     <style>
         :root {
             --c-accent: #00f3ff;
+            --c-secondary: #ff0055;
             --c-dark: #050505;
             --c-white: #ffffff;
         }
@@ -24,17 +25,7 @@
             overflow: hidden; 
             height: 100vh;
             width: 100vw;
-            /* Prevent rubber-banding on mobile */
             overscroll-behavior: none;
-        }
-
-        /* --- CANVAS LAYER --- */
-        #webgl {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-            display: block;
         }
 
         /* --- UI LAYER --- */
@@ -44,150 +35,125 @@
             width: 100%; height: 100%;
             z-index: 10;
             pointer-events: none;
+            padding: 30px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 30px; /* Reduced padding for mobile */
             mix-blend-mode: exclusion;
         }
 
-        /* --- HEADER --- */
         header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
         }
 
         .brand {
             font-family: 'Syncopate', sans-serif;
             font-weight: 700;
-            font-size: clamp(16px, 4vw, 24px); /* Responsive font */
+            font-size: clamp(16px, 4vw, 24px);
             letter-spacing: 2px;
             pointer-events: auto;
+            text-decoration: none;
+            color: white;
         }
 
-        .meta-data {
-            text-align: right;
-            font-size: 10px;
-            opacity: 0.7;
-            letter-spacing: 1px;
-            line-height: 1.5;
-        }
-
-        /* --- CENTER HERO --- */
-        .hero-container {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            width: 100%;
-            padding: 0 20px;
-        }
-
-        .hero-glitch {
+        .page-indicator {
             font-family: 'Syncopate', sans-serif;
-            /* Clamp ensures it fits mobile width without breaking */
-            font-size: clamp(32px, 9vw, 120px); 
+            font-size: 12px;
+            color: var(--c-accent);
+            letter-spacing: 2px;
+            border: 1px solid var(--c-accent);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        /* --- PROJECT TITLES --- */
+        .project-meta-container {
+            position: absolute;
+            bottom: 100px;
+            left: 30px;
+            pointer-events: none;
+            z-index: 12;
+            mix-blend-mode: normal;
+        }
+
+        .project-id {
+            color: var(--c-accent);
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: block;
+            font-family: 'Syncopate', sans-serif;
+        }
+
+        .project-title {
+            font-family: 'Syncopate', sans-serif;
             font-weight: 700;
+            font-size: clamp(40px, 8vw, 80px);
+            line-height: 0.9;
             text-transform: uppercase;
-            line-height: 1;
-            position: relative;
             color: transparent;
-            -webkit-text-stroke: 1px rgba(255,255,255,0.2);
-            pointer-events: auto;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.8);
+            margin-bottom: 20px;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.5s ease;
         }
         
-        .hero-glitch::before {
-            content: attr(data-text);
-            position: absolute;
+        .project-title.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .project-tags {
+            display: flex;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease 0.1s;
+        }
+        .project-title.active + .project-tags {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .tag {
+            font-size: 12px;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 5px 10px;
+            border-radius: 100px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0,0,0,0.5);
+        }
+
+        /* --- CANVAS --- */
+        #webgl {
+            position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            color: #fff;
-            clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-            animation: textReveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards 1s;
+            z-index: 1;
+            cursor: grab;
         }
+        #webgl:active { cursor: grabbing; }
 
-        @keyframes textReveal {
-            to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
-        }
-
-        .sub-hero {
-            margin-top: 15px;
-            font-size: clamp(12px, 3vw, 18px);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            opacity: 0;
-            animation: fadeIn 1s ease forwards 2.5s;
-        }
-
-        /* --- FOOTER UI --- */
-        footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
+        /* --- NAVIGATION --- */
+        .back-btn {
             pointer-events: auto;
-            width: 100%;
-        }
-
-        .nav-links {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .nav-link {
-            display: block;
+            color: white;
+            text-decoration: none;
             font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            padding: 10px 0; /* Larger touch target */
-            color: rgba(255,255,255,0.6);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .nav-link.active, .nav-link:hover {
-            color: var(--c-accent);
-        }
-
-        .system-status {
-            text-align: right;
+            letter-spacing: 2px;
             display: flex;
-            flex-direction: column;
-            align-items: flex-end;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.7;
+            transition: opacity 0.3s;
         }
-
-        .progress-bar {
-            width: 100px; /* Smaller for mobile */
-            height: 2px;
-            background: rgba(255,255,255,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            position: absolute;
-            top: 0; left: 0;
-            height: 100%;
-            width: 0%;
-            background: var(--c-accent);
-            animation: load 2s ease-in-out forwards;
-        }
-
-        @keyframes load { to { width: 100%; } }
-
-        /* --- MOBILE SPECIFIC TWEAKS --- */
-        @media (max-width: 768px) {
-            #ui-layer { padding: 20px; }
-            footer {
-                flex-direction: row; /* Keep row but adjust sizing */
-                align-items: flex-end;
-            }
-            .hero-glitch { -webkit-text-stroke: 0.5px rgba(255,255,255,0.2); }
-            
-            /* Hide custom cursor on touch devices to prevent ghost touches */
-            #cursor, #cursor-dot { display: none !important; }
-        }
+        .back-btn:hover { opacity: 1; }
+        .back-btn::before { content: '←'; font-size: 16px; }
 
         /* --- LOADING OVERLAY --- */
         #loader {
@@ -202,370 +168,306 @@
             font-family: 'Syncopate';
             font-weight: 700;
             font-size: clamp(20px, 5vw, 40px);
-            transition: opacity 1s ease;
+            transition: opacity 0.5s ease;
         }
     </style>
 </head>
 <body>
 
-    <div id="loader">INITIALIZING...</div>
-
-    <div id="cursor"></div>
-    <div id="cursor-dot"></div>
+    <div id="loader">LOADING WORKS...</div>
 
     <canvas id="webgl"></canvas>
 
     <div id="ui-layer">
         <header>
-            <div class="brand">SEENURI.DEV</div>
-            <div class="meta-data">
-                HYD // IND<br>
-                ONLINE
-            </div>
+            <a href="index.html" class="back-btn">Home</a>
+            <div class="page-indicator">SELECTED WORKS</div>
         </header>
 
-        <div class="hero-container">
-            <div class="hero-glitch" data-text="SHIVATEJA">SHIVATEJA</div>
-            <div class="hero-glitch" data-text="VALABOJU" style="font-size: clamp(20px, 5vw, 60px); -webkit-text-stroke: 0px; opacity: 0.6;">VALABOJU</div>
-            <div class="sub-hero">Creative Technologist</div>
+        <div class="project-meta-container">
+            <span class="project-id" id="ui-id">01 / 03</span>
+            <h1 class="project-title active" id="ui-title">THE ZAPWASH</h1>
+            <div class="project-tags" id="ui-tags">
+                <span class="tag">Shopify</span>
+                <span class="tag">Branding</span>
+                <span class="tag">SEO</span>
+            </div>
         </div>
-
-        <footer>
-            <div class="nav-links">
-                <a href="#" class="nav-link">01. Works</a>
-                <a href="#" class="nav-link">02. About</a>
-                <a href="mailto:spandanavalaboju06@gmail.com" class="nav-link">03. Contact</a>
-            </div>
-            <div class="system-status">
-                <div style="font-size:9px; margin-bottom:5px; opacity:0.5;">GPU ONLINE</div>
-                <div class="progress-bar"><div class="progress-fill"></div></div>
-            </div>
-        </footer>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script>
-        // DETECT MOBILE
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        // DATA: YOUR PROJECTS
+        // I'm using placeholder colors/images because I can't load external files without CORS.
+        // In a real site, replace 'color' with 'texture' loading.
+        const PROJECTS = [
+            {
+                title: "THE ZAPWASH",
+                id: "01 / 03",
+                tags: ["Shopify", "Full Stack", "Business"],
+                color: 0x00f3ff, // Cyan
+                img: "https://images.unsplash.com/photo-1517672651691-24622a91b550?q=80&w=1000&auto=format&fit=crop"
+            },
+            {
+                title: "CHINKULU",
+                id: "02 / 03",
+                tags: ["Fashion", "Identity", "Strategy"],
+                color: 0xff0055, // Pink
+                img: "https://images.unsplash.com/photo-1529139574466-a302d2774d75?q=80&w=1000&auto=format&fit=crop"
+            },
+            {
+                title: "VINTHAPADALU",
+                id: "03 / 03",
+                tags: ["Community", "Literature", "Content"],
+                color: 0xffd700, // Gold
+                img: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1000&auto=format&fit=crop"
+            }
+        ];
 
-        const CONFIG = {
-            // Lower particle count on mobile for performance (2500 vs 6000)
-            particleCount: isMobile ? 2500 : 6000, 
-            particleSize: isMobile ? 0.04 : 0.02, // Bigger particles on mobile
-            colorA: new THREE.Color('#00f3ff'), 
-            colorB: new THREE.Color('#ff0055')
-        };
-
-        class App {
+        class WorksApp {
             constructor() {
                 this.canvas = document.querySelector('#webgl');
                 this.width = window.innerWidth;
                 this.height = window.innerHeight;
-                this.pixelRatio = Math.min(window.devicePixelRatio, 2);
-
+                
+                this.scroll = 0;
+                this.scrollTarget = 0;
+                this.currentIdx = 0;
+                
                 this.initThree();
-                this.initParticles();
+                this.initPlanes();
                 this.addEvents();
                 this.animate();
-                
+
+                // Remove Loader
                 setTimeout(() => {
                     document.getElementById('loader').style.opacity = '0';
-                    setTimeout(() => document.getElementById('loader').remove(), 1000);
+                    setTimeout(() => document.getElementById('loader').remove(), 500);
                 }, 1000);
             }
 
             initThree() {
                 this.scene = new THREE.Scene();
-                this.scene.fog = new THREE.FogExp2(0x050505, 0.02);
-
-                this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 100);
-                // Move camera further back on mobile to see more
-                this.camera.position.set(0, 0, isMobile ? 12 : 8);
+                this.camera = new THREE.PerspectiveCamera(70, this.width / this.height, 0.1, 100);
+                this.camera.position.z = 5;
 
                 this.renderer = new THREE.WebGLRenderer({
                     canvas: this.canvas,
-                    antialias: true,
-                    powerPreference: "high-performance"
+                    alpha: true,
+                    antialias: true
                 });
                 this.renderer.setSize(this.width, this.height);
-                this.renderer.setPixelRatio(this.pixelRatio);
-                this.renderer.setClearColor(0x050505);
-
-                this.clock = new THREE.Clock();
-                this.mouse = new THREE.Vector2(0, 0);
-                this.targetMouse = new THREE.Vector2(0, 0);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             }
 
-            initParticles() {
-                const geometry = new THREE.BufferGeometry();
-                const positions = new Float32Array(CONFIG.particleCount * 3);
-                const randoms = new Float32Array(CONFIG.particleCount * 3);
+            initPlanes() {
+                this.group = new THREE.Group();
+                this.scene.add(this.group);
                 
-                for(let i = 0; i < CONFIG.particleCount; i++) {
-                    const i3 = i * 3;
-                    const r = 4 * Math.cbrt(Math.random());
-                    const theta = Math.random() * 2 * Math.PI;
-                    const phi = Math.acos(2 * Math.random() - 1);
-                    
-                    positions[i3] = r * Math.sin(phi) * Math.cos(theta);
-                    positions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-                    positions[i3 + 2] = r * Math.cos(phi);
+                this.planes = [];
+                const geometry = new THREE.PlaneBufferGeometry(3, 4, 32, 32); // High segments for distortion
 
-                    randoms[i3] = Math.random();
-                    randoms[i3 + 1] = Math.random();
-                    randoms[i3 + 2] = Math.random();
-                }
-
-                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-                geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 3));
-
-                this.particleMaterial = new THREE.ShaderMaterial({
+                // SHADER MATERIAL
+                // This creates the "Bending" effect based on scroll speed
+                const materialBase = new THREE.ShaderMaterial({
                     uniforms: {
-                        uTime: { value: 0 },
-                        uMouse: { value: new THREE.Vector3(0, 0, 0) },
-                        uPixelRatio: { value: this.pixelRatio },
-                        uColorA: { value: CONFIG.colorA },
-                        uColorB: { value: CONFIG.colorB }
+                        uTexture: { value: null }, // In real version, load textures here
+                        uColor: { value: new THREE.Color('#fff') },
+                        uSpeed: { value: 0 },
+                        uTime: { value: 0 }
                     },
                     vertexShader: `
+                        uniform float uSpeed;
                         uniform float uTime;
-                        uniform vec3 uMouse;
-                        uniform float uPixelRatio;
-                        attribute vec3 aRandom;
-                        varying vec3 vColor;
+                        varying vec2 vUv;
                         
-                        // Simplex Noise (Compressed for brevity)
-                        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-                        vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-                        vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
-                        vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
-                        float snoise(vec3 v) {
-                            const vec2 C = vec2(1.0/6.0, 1.0/3.0);
-                            const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
-                            vec3 i  = floor(v + dot(v, C.yyy) );
-                            vec3 x0 = v - i + dot(i, C.xxx) ;
-                            vec3 g = step(x0.yzx, x0.xyz);
-                            vec3 l = 1.0 - g;
-                            vec3 i1 = min( g.xyz, l.zxy );
-                            vec3 i2 = max( g.xyz, l.zxy );
-                            vec3 x1 = x0 - i1 + C.xxx;
-                            vec3 x2 = x0 - i2 + C.yyy;
-                            vec3 x3 = x0 - D.yyy;
-                            i = mod289(i);
-                            vec4 p = permute( permute( permute( i.z + vec4(0.0, i1.z, i2.z, 1.0 )) + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
-                            float n_ = 0.142857142857;
-                            vec3  ns = n_ * D.wyz - D.xzx;
-                            vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
-                            vec4 x_ = floor(j * ns.z);
-                            vec4 y_ = floor(j - 7.0 * x_ );
-                            vec4 x = x_ *ns.x + ns.yyyy;
-                            vec4 y = y_ *ns.x + ns.yyyy;
-                            vec4 h = 1.0 - abs(x) - abs(y);
-                            vec4 b0 = vec4( x.xy, y.xy );
-                            vec4 b1 = vec4( x.zw, y.zw );
-                            vec4 s0 = floor(b0)*2.0 + 1.0;
-                            vec4 s1 = floor(b1)*2.0 + 1.0;
-                            vec4 sh = -step(h, vec4(0.0));
-                            vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
-                            vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
-                            vec3 p0 = vec3(a0.xy,h.x);
-                            vec3 p1 = vec3(a0.zw,h.y);
-                            vec3 p2 = vec3(a1.xy,h.z);
-                            vec3 p3 = vec3(a1.zw,h.w);
-                            vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
-                            p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
-                            vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-                            m = m * m;
-                            return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
-                        }
-
                         void main() {
+                            vUv = uv;
                             vec3 pos = position;
-                            float time = uTime * 0.2;
-
-                            // Gentle noise movement
-                            pos.x += snoise(vec3(pos.x, pos.y, time)) * 0.4;
-                            pos.y += snoise(vec3(pos.y, pos.z, time)) * 0.4;
-                            pos.z += snoise(vec3(pos.z, pos.x, time)) * 0.4;
-
-                            // Mouse Repulsion Logic
-                            float dist = distance(pos.xy, uMouse.xy * 6.0);
                             
-                            // On mobile, the "repulsion" is stronger so you can see it under your finger
-                            if(dist < 4.0) {
-                                vec3 dir = normalize(pos - vec3(uMouse.xy * 6.0, 0.0));
-                                pos += dir * (4.0 - dist) * 0.8;
-                            }
+                            // BENDING EFFECT
+                            // The faster you scroll (uSpeed), the more it bends
+                            // Only bend the z-axis based on y-position
+                            
+                            float bend = sin(uv.y * 3.14159) * uSpeed * 0.5;
+                            pos.z += bend;
+                            
+                            // Slight wave
+                            pos.z += sin(pos.x * 2.0 + uTime) * 0.05;
 
-                            vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
-                            gl_Position = projectionMatrix * mvPosition;
-                            
-                            // Responsive Point Size
-                            gl_PointSize = (12.0 * uPixelRatio) * (1.0 / -mvPosition.z);
-                            
-                            // Cyberpunk Gradient
-                            vColor = mix(vec3(0.0, 0.95, 1.0), vec3(1.0, 0.0, 0.33), position.z * 0.2 + 0.5);
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
                         }
                     `,
                     fragmentShader: `
-                        varying vec3 vColor;
+                        uniform vec3 uColor;
+                        uniform sampler2D uTexture;
+                        varying vec2 vUv;
+                        
                         void main() {
-                            float strength = distance(gl_PointCoord, vec2(0.5));
-                            strength = 1.0 - step(0.5, strength);
-                            if(strength < 0.5) discard;
-                            gl_FragColor = vec4(vColor, 1.0);
+                            // Simple color placeholder since we can't do CORS textures easily in single file
+                            // In production, use: texture2D(uTexture, vUv);
+                            
+                            float border = step(0.05, vUv.x) * step(0.05, vUv.y) * step(vUv.x, 0.95) * step(vUv.y, 0.95);
+                            vec3 color = mix(uColor * 0.5, uColor, border);
+                            
+                            // Scanline effect
+                            float scan = sin(vUv.y * 100.0) * 0.1;
+                            
+                            gl_FragColor = vec4(color + scan, 0.8);
                         }
                     `,
                     transparent: true,
-                    depthWrite: false,
-                    blending: THREE.AdditiveBlending
+                    side: THREE.DoubleSide
                 });
 
-                this.particles = new THREE.Points(geometry, this.particleMaterial);
-                this.scene.add(this.particles);
+                // CREATE 3 PLANES (One for each project)
+                PROJECTS.forEach((proj, i) => {
+                    const mat = materialBase.clone();
+                    mat.uniforms.uColor.value = new THREE.Color(proj.color);
+                    
+                    const mesh = new THREE.Mesh(geometry, mat);
+                    
+                    // Space them out horizontally
+                    mesh.position.x = i * 4; 
+                    
+                    this.group.add(mesh);
+                    this.planes.push({ mesh, mat });
+                });
             }
 
             addEvents() {
-                window.addEventListener('resize', this.onResize.bind(this));
+                let isDragging = false;
+                let startX = 0;
                 
-                // MOUSE EVENTS (Desktop)
-                window.addEventListener('mousemove', (e) => {
-                    if(isMobile) return;
-                    this.updateMouse(e.clientX, e.clientY);
+                // TOUCH / MOUSE LOGIC
+                const onStart = (x) => {
+                    isDragging = true;
+                    startX = x;
+                    this.canvas.style.cursor = 'grabbing';
+                };
+                
+                const onMove = (x) => {
+                    if(!isDragging) return;
+                    const diff = (x - startX) * 0.01; // Sensitivity
+                    this.scrollTarget += diff;
+                    startX = x;
+                };
+                
+                const onEnd = () => {
+                    isDragging = false;
+                    this.canvas.style.cursor = 'grab';
                     
-                    // Custom Cursor Logic
-                    const cursor = document.getElementById('cursor');
-                    const cursorDot = document.getElementById('cursor-dot');
-                    if(cursor) {
-                        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
-                        gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.0 });
-                    }
-                });
+                    // SNAP LOGIC (Optional: Snap to nearest project)
+                    // let snap = Math.round(this.scrollTarget / 4) * 4;
+                    // gsap.to(this, { scrollTarget: snap, duration: 0.5 });
+                };
 
-                // TOUCH EVENTS (Mobile)
-                window.addEventListener('touchmove', (e) => {
-                    if (e.touches.length > 0) {
-                        this.updateMouse(e.touches[0].clientX, e.touches[0].clientY);
-                    }
-                }, { passive: true });
+                // Mouse
+                window.addEventListener('mousedown', e => onStart(e.clientX));
+                window.addEventListener('mousemove', e => onMove(e.clientX));
+                window.addEventListener('mouseup', onEnd);
                 
-                window.addEventListener('touchstart', (e) => {
-                    if (e.touches.length > 0) {
-                        this.updateMouse(e.touches[0].clientX, e.touches[0].clientY);
-                    }
-                }, { passive: true });
+                // Touch
+                window.addEventListener('touchstart', e => onStart(e.touches[0].clientX));
+                window.addEventListener('touchmove', e => onMove(e.touches[0].clientX));
+                window.addEventListener('touchend', onEnd);
+                
+                // Resize
+                window.addEventListener('resize', () => {
+                    this.width = window.innerWidth;
+                    this.height = window.innerHeight;
+                    this.camera.aspect = this.width / this.height;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(this.width, this.height);
+                });
             }
 
-            updateMouse(x, y) {
-                // Normalize to -1 to 1 range
-                this.targetMouse.x = (x / this.width) * 2 - 1;
-                this.targetMouse.y = -(y / this.height) * 2 + 1;
+            updateUI() {
+                // Calculate which project is centered
+                // We shift the world left, so negative scroll position relates to positive index
+                // Each plane is 4 units apart.
+                const centerIdx = Math.round(Math.abs(this.scroll) / 4) % PROJECTS.length;
+                
+                // Handle negative scrolling loop logic roughly for UI
+                let safeIdx = Math.abs(Math.round(this.scroll / 4)) % PROJECTS.length;
+                // Reverse index because dragging left moves forward in array
+                if (this.scroll > 0) safeIdx = (PROJECTS.length - safeIdx) % PROJECTS.length;
+
+                if(safeIdx !== this.currentIdx) {
+                    this.currentIdx = safeIdx;
+                    this.changeText(PROJECTS[safeIdx]);
+                }
             }
 
-            onResize() {
-                this.width = window.innerWidth;
-                this.height = window.innerHeight;
-                this.camera.aspect = this.width / this.height;
-                this.camera.updateProjectionMatrix();
-                this.renderer.setSize(this.width, this.height);
-                this.particleMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
+            changeText(data) {
+                const title = document.getElementById('ui-title');
+                const id = document.getElementById('ui-id');
+                const tags = document.getElementById('ui-tags');
+
+                // Animate Out
+                title.classList.remove('active');
+                tags.style.opacity = '0';
+                tags.style.transform = 'translateY(20px)';
+
+                setTimeout(() => {
+                    // Update Content
+                    title.innerText = data.title;
+                    id.innerText = data.id;
+                    
+                    // Update Tags
+                    tags.innerHTML = '';
+                    data.tags.forEach(t => {
+                        const span = document.createElement('span');
+                        span.className = 'tag';
+                        span.innerText = t;
+                        tags.appendChild(span);
+                    });
+
+                    // Animate In
+                    title.classList.add('active');
+                    tags.style.opacity = '1';
+                    tags.style.transform = 'translateY(0)';
+                }, 400);
             }
 
             animate() {
                 requestAnimationFrame(this.animate.bind(this));
-                
-                const time = this.clock.getElapsedTime();
-                
-                // Smooth Mouse Interpolation
-                this.mouse.x += (this.targetMouse.x - this.mouse.x) * 0.1;
-                this.mouse.y += (this.targetMouse.y - this.mouse.y) * 0.1;
 
-                this.particles.rotation.y = time * 0.05;
+                // LERP: Smooth Scroll
+                this.scroll += (this.scrollTarget - this.scroll) * 0.1;
                 
-                // Tilting effect based on mouse/touch position
-                this.particles.rotation.x = this.mouse.y * 0.2;
-                this.particles.rotation.z = this.mouse.x * 0.2;
+                // Calculate Speed for Distortion (difference between target and current)
+                const speed = (this.scrollTarget - this.scroll) * 2.0;
 
-                this.particleMaterial.uniforms.uTime.value = time;
-                this.particleMaterial.uniforms.uMouse.value.set(this.mouse.x, this.mouse.y, 0);
+                // Move Group
+                this.group.position.x = this.scroll * 2; // Speed multiplier
 
+                // Infinite Scroll Logic (Teleport planes)
+                // If a plane moves too far left, move it to the right end of the line
+                this.planes.forEach((obj, i) => {
+                    const worldX = obj.mesh.position.x + this.group.position.x;
+                    const totalWidth = PROJECTS.length * 4;
+                    
+                    if(worldX < -6) {
+                         obj.mesh.position.x += totalWidth;
+                    }
+                    if(worldX > 6 + (totalWidth - 4)) {
+                         obj.mesh.position.x -= totalWidth;
+                    }
+
+                    // Update Uniforms
+                    obj.mat.uniforms.uSpeed.value = speed;
+                    obj.mat.uniforms.uTime.value += 0.05;
+                });
+
+                this.updateUI();
                 this.renderer.render(this.scene, this.camera);
             }
         }
 
-        class TextScramble {
-            constructor(el) {
-                this.el = el;
-                this.chars = '!<>-_\\/[]{}—=+*^?#________';
-                this.update = this.update.bind(this);
-            }
-            setText(newText) {
-                const oldText = this.el.innerText;
-                const length = Math.max(oldText.length, newText.length);
-                const promise = new Promise((resolve) => this.resolve = resolve);
-                this.queue = [];
-                for (let i = 0; i < length; i++) {
-                    const from = oldText[i] || '';
-                    const to = newText[i] || '';
-                    const start = Math.floor(Math.random() * 40);
-                    const end = start + Math.floor(Math.random() * 40);
-                    this.queue.push({ from, to, start, end });
-                }
-                cancelAnimationFrame(this.frameRequest);
-                this.frame = 0;
-                this.update();
-                return promise;
-            }
-            update() {
-                let output = '';
-                let complete = 0;
-                for (let i = 0, n = this.queue.length; i < n; i++) {
-                    let { from, to, start, end, char } = this.queue[i];
-                    if (this.frame >= end) {
-                        complete++;
-                        output += to;
-                    } else if (this.frame >= start) {
-                        if (!char || Math.random() < 0.28) {
-                            char = this.randomChar();
-                            this.queue[i].char = char;
-                        }
-                        output += `<span class="dud">${char}</span>`;
-                    } else {
-                        output += from;
-                    }
-                }
-                this.el.innerHTML = output;
-                if (complete === this.queue.length) {
-                    this.resolve();
-                } else {
-                    this.frameRequest = requestAnimationFrame(this.update);
-                    this.frame++;
-                }
-            }
-            randomChar() {
-                return this.chars[Math.floor(Math.random() * this.chars.length)];
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const app = new App();
-            
-            const phrases = ['RPA ARCHITECT', 'WEB DEVELOPER', 'UI DESIGNER', 'DIGITAL CREATOR'];
-            const el = document.querySelector('.sub-hero');
-            const fx = new TextScramble(el);
-            
-            let counter = 0;
-            const next = () => {
-                fx.setText(phrases[counter]).then(() => {
-                    setTimeout(next, 2000);
-                });
-                counter = (counter + 1) % phrases.length;
-            };
-            
-            setTimeout(next, 3000);
-        });
+        new WorksApp();
     </script>
 </body>
 </html>
