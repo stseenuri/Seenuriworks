@@ -2,420 +2,602 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHIVATEJA | MOBILE OPTIMIZED</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIVATEJA | QUANTUM INTERFACE</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --c-accent: #00f3ff;
-            --c-dark: #050505;
-            --c-white: #ffffff;
+            --c-primary: #00ffff;
+            --c-secondary: #ff00ff;
+            --c-tertiary: #ffff00;
+            --c-void: #000000;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
-            background: var(--c-dark); 
-            color: var(--c-white); 
-            font-family: 'Rajdhani', sans-serif; 
-            overflow: hidden; 
+            background: var(--c-void);
+            color: #fff;
+            font-family: 'Space Mono', monospace;
+            overflow: hidden;
             height: 100vh;
             width: 100vw;
-            /* Prevent rubber-banding on mobile */
-            overscroll-behavior: none;
+            cursor: none;
         }
 
-        /* --- CANVAS LAYER --- */
-        #webgl {
+        /* MULTI-LAYER CANVAS SYSTEM */
+        #canvas-container {
             position: fixed;
+            inset: 0;
+            z-index: 0;
+        }
+
+        #webgl-particles,
+        #webgl-fluid,
+        #webgl-distortion {
+            position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: 0;
-            display: block;
         }
 
-        /* --- UI LAYER --- */
+        /* HOLOGRAPHIC UI LAYER */
         #ui-layer {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            inset: 0;
             z-index: 10;
             pointer-events: none;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 30px; /* Reduced padding for mobile */
-            mix-blend-mode: exclusion;
+            padding: clamp(20px, 4vw, 60px);
         }
 
-        /* --- HEADER --- */
+        /* NEURAL NETWORK HEADER */
         header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
+            pointer-events: auto;
         }
 
         .brand {
-            font-family: 'Syncopate', sans-serif;
-            font-weight: 700;
-            font-size: clamp(16px, 4vw, 24px); /* Responsive font */
-            letter-spacing: 2px;
-            pointer-events: auto;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: clamp(18px, 2.5vw, 32px);
+            letter-spacing: 4px;
+            position: relative;
+            text-shadow: 0 0 20px var(--c-primary);
+            animation: glowPulse 2s ease-in-out infinite;
         }
 
-        .meta-data {
+        @keyframes glowPulse {
+            0%, 100% { text-shadow: 0 0 20px var(--c-primary), 0 0 40px var(--c-primary); }
+            50% { text-shadow: 0 0 30px var(--c-primary), 0 0 60px var(--c-primary), 0 0 80px var(--c-primary); }
+        }
+
+        .system-metrics {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(9px, 1.2vw, 12px);
             text-align: right;
-            font-size: 10px;
+            line-height: 1.8;
             opacity: 0.7;
-            letter-spacing: 1px;
-            line-height: 1.5;
+            letter-spacing: 2px;
         }
 
-        /* --- CENTER HERO --- */
-        .hero-container {
+        .metric-active {
+            color: var(--c-primary);
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49%, 100% { opacity: 1; }
+            50%, 99% { opacity: 0.3; }
+        }
+
+        /* QUANTUM HERO SECTION */
+        .hero-quantum {
             position: absolute;
-            top: 50%; left: 50%;
+            top: 50%;
+            left: 50%;
             transform: translate(-50%, -50%);
             text-align: center;
-            width: 100%;
-            padding: 0 20px;
-        }
-
-        .hero-glitch {
-            font-family: 'Syncopate', sans-serif;
-            /* Clamp ensures it fits mobile width without breaking */
-            font-size: clamp(32px, 9vw, 120px); 
-            font-weight: 700;
-            text-transform: uppercase;
-            line-height: 1;
-            position: relative;
-            color: transparent;
-            -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+            width: 90%;
+            max-width: 1200px;
             pointer-events: auto;
         }
-        
-        .hero-glitch::before {
-            content: attr(data-text);
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            color: #fff;
-            clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
-            animation: textReveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards 1s;
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(3rem, 12vw, 16rem);
+            font-weight: 900;
+            line-height: 0.8;
+            position: relative;
+            background: linear-gradient(45deg, var(--c-primary), var(--c-secondary), var(--c-tertiary));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientFlow 8s ease infinite;
+            filter: drop-shadow(0 0 40px rgba(0,255,255,0.5));
         }
 
-        @keyframes textReveal {
-            to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
-        .sub-hero {
-            margin-top: 15px;
-            font-size: clamp(12px, 3vw, 18px);
-            letter-spacing: 3px;
+        .hero-subtitle {
+            margin-top: 30px;
+            font-size: clamp(14px, 2vw, 24px);
+            letter-spacing: 8px;
             text-transform: uppercase;
             opacity: 0;
-            animation: fadeIn 1s ease forwards 2.5s;
+            animation: fadeInUp 1s ease forwards 1s;
+            position: relative;
         }
 
-        /* --- FOOTER UI --- */
-        footer {
+        @keyframes fadeInUp {
+            to { opacity: 0.9; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(20px); }
+        }
+
+        .data-stream {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 40px;
             display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
+            gap: 30px;
+            font-size: 11px;
+            opacity: 0.5;
+        }
+
+        .data-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .data-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--c-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--c-primary);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.7; }
+        }
+
+        /* INTERACTIVE NAVIGATION */
+        .nav-grid {
+            position: fixed;
+            bottom: clamp(20px, 4vw, 60px);
+            left: clamp(20px, 4vw, 60px);
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
             pointer-events: auto;
-            width: 100%;
         }
 
-        .nav-links {
+        .nav-card {
+            width: clamp(120px, 15vw, 180px);
+            height: clamp(120px, 15vw, 180px);
+            background: rgba(0, 255, 255, 0.03);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 8px;
             display: flex;
             flex-direction: column;
-        }
-
-        .nav-link {
-            display: block;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            padding: 10px 0; /* Larger touch target */
-            color: rgba(255,255,255,0.6);
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
             text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .nav-link.active, .nav-link:hover {
-            color: var(--c-accent);
-        }
-
-        .system-status {
-            text-align: right;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-        }
-
-        .progress-bar {
-            width: 100px; /* Smaller for mobile */
-            height: 2px;
-            background: rgba(255,255,255,0.1);
+            color: #fff;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             position: relative;
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
-        .progress-fill {
+        .nav-card::before {
+            content: '';
             position: absolute;
-            top: 0; left: 0;
-            height: 100%;
-            width: 0%;
-            background: var(--c-accent);
-            animation: load 2s ease-in-out forwards;
+            inset: 0;
+            background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-secondary) 100%);
+            opacity: 0;
+            transition: opacity 0.5s;
         }
 
-        @keyframes load { to { width: 100%; } }
-
-        /* --- MOBILE SPECIFIC TWEAKS --- */
-        @media (max-width: 768px) {
-            #ui-layer { padding: 20px; }
-            footer {
-                flex-direction: row; /* Keep row but adjust sizing */
-                align-items: flex-end;
-            }
-            .hero-glitch { -webkit-text-stroke: 0.5px rgba(255,255,255,0.2); }
-            
-            /* Hide custom cursor on touch devices to prevent ghost touches */
-            #cursor, #cursor-dot { display: none !important; }
+        .nav-card:hover::before {
+            opacity: 0.15;
         }
 
-        /* --- LOADING OVERLAY --- */
-        #loader {
+        .nav-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: var(--c-primary);
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.3);
+        }
+
+        .nav-number {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 900;
+            opacity: 0.2;
+            position: relative;
+            z-index: 2;
+        }
+
+        .nav-label {
+            font-size: clamp(10px, 1.2vw, 13px);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* QUANTUM CURSOR */
+        .cursor-core {
+            position: fixed;
+            width: 6px;
+            height: 6px;
+            background: var(--c-primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            box-shadow: 0 0 20px var(--c-primary);
+            mix-blend-mode: screen;
+        }
+
+        .cursor-ring {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--c-primary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+            mix-blend-mode: screen;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: var(--c-secondary);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9997;
+            opacity: 0.6;
+        }
+
+        /* LOADING SEQUENCE */
+        #quantum-loader {
             position: fixed;
             inset: 0;
             background: #000;
-            z-index: 100;
+            z-index: 999;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: var(--c-accent);
-            font-family: 'Syncopate';
-            font-weight: 700;
-            font-size: clamp(20px, 5vw, 40px);
-            transition: opacity 1s ease;
+            gap: 30px;
+        }
+
+        .loader-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(24px, 5vw, 60px);
+            font-weight: 900;
+            color: var(--c-primary);
+            text-shadow: 0 0 30px var(--c-primary);
+        }
+
+        .loader-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(0, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loader-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--c-primary), var(--c-secondary));
+            box-shadow: 0 0 20px var(--c-primary);
+            animation: loadProgress 2s ease-in-out forwards;
+        }
+
+        @keyframes loadProgress {
+            to { width: 100%; }
+        }
+
+        /* NEURAL NETWORK BACKGROUND */
+        #neural-net {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.15;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .nav-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 20px;
+            }
+            
+            .data-stream {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        /* SCANLINE EFFECT */
+        .scanlines {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(0, 255, 255, 0.02) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 5;
+            animation: scanlineMove 8s linear infinite;
+        }
+
+        @keyframes scanlineMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
         }
     </style>
 </head>
 <body>
 
-    <div id="loader">INITIALIZING...</div>
+    <!-- QUANTUM CURSOR SYSTEM -->
+    <div class="cursor-core"></div>
+    <div class="cursor-ring"></div>
 
-    <div id="cursor"></div>
-    <div id="cursor-dot"></div>
+    <!-- LOADING SEQUENCE -->
+    <div id="quantum-loader">
+        <div class="loader-text">INITIALIZING QUANTUM INTERFACE</div>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
+        </div>
+    </div>
 
-    <canvas id="webgl"></canvas>
+    <!-- MULTI-LAYER CANVAS SYSTEM -->
+    <div id="canvas-container">
+        <canvas id="webgl-particles"></canvas>
+        <canvas id="webgl-fluid"></canvas>
+        <canvas id="neural-net"></canvas>
+    </div>
 
+    <!-- SCANLINE OVERLAY -->
+    <div class="scanlines"></div>
+
+    <!-- HOLOGRAPHIC UI -->
     <div id="ui-layer">
         <header>
-            <div class="brand">SEENURI.DEV</div>
-            <div class="meta-data">
-                HYD // IND<br>
-                ONLINE
+            <div class="brand">SHIVATEJA.SYS</div>
+            <div class="system-metrics">
+                <div>SYS <span class="metric-active">ONLINE</span></div>
+                <div>GPU <span class="metric-active">97.3%</span></div>
+                <div>LAT 17.3850°N</div>
+                <div>LON 78.4867°E</div>
+                <div>NODE HYDERABAD</div>
             </div>
         </header>
 
-        <div class="hero-container">
-            <div class="hero-glitch" data-text="SHIVATEJA">SHIVATEJA</div>
-            <div class="hero-glitch" data-text="VALABOJU" style="font-size: clamp(20px, 5vw, 60px); -webkit-text-stroke: 0px; opacity: 0.6;">VALABOJU</div>
-            <div class="sub-hero">Creative Technologist</div>
+        <div class="hero-quantum">
+            <h1 class="hero-title">QUANTUM<br>ARCHITECT</h1>
+            <div class="hero-subtitle" id="subtitle-scramble">DIGITAL REALITY ENGINEER</div>
+            <div class="data-stream">
+                <div class="data-item">
+                    <div class="data-dot"></div>
+                    <span>RPA SYSTEMS</span>
+                </div>
+                <div class="data-item">
+                    <div class="data-dot" style="animation-delay: 0.5s;"></div>
+                    <span>E-COMMERCE</span>
+                </div>
+                <div class="data-item">
+                    <div class="data-dot" style="animation-delay: 1s;"></div>
+                    <span>BRAND DESIGN</span>
+                </div>
+            </div>
         </div>
 
-        <footer>
-            <div class="nav-links">
-                <a href="#" class="nav-link">01. Works</a>
-                <a href="#" class="nav-link">02. About</a>
-                <a href="mailto:spandanavalaboju06@gmail.com" class="nav-link">03. Contact</a>
-            </div>
-            <div class="system-status">
-                <div style="font-size:9px; margin-bottom:5px; opacity:0.5;">GPU ONLINE</div>
-                <div class="progress-bar"><div class="progress-fill"></div></div>
-            </div>
-        </footer>
+        <div class="nav-grid">
+            <a href="#" class="nav-card">
+                <div class="nav-number">01</div>
+                <div class="nav-label">Projects</div>
+            </a>
+            <a href="#" class="nav-card">
+                <div class="nav-number">02</div>
+                <div class="nav-label">Lab</div>
+            </a>
+            <a href="#" class="nav-card">
+                <div class="nav-number">03</div>
+                <div class="nav-label">Profile</div>
+            </a>
+            <a href="#" class="nav-card">
+                <div class="nav-number">04</div>
+                <div class="nav-label">Contact</div>
+            </a>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
     <script>
-        // DETECT MOBILE
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        /**
+         * QUANTUM PARTICLE FIELD WITH FLUID DYNAMICS
+         * Advanced WebGL implementation with multiple render passes
+         */
 
-        const CONFIG = {
-            // Lower particle count on mobile for performance (2500 vs 6000)
-            particleCount: isMobile ? 2500 : 6000, 
-            particleSize: isMobile ? 0.04 : 0.02, // Bigger particles on mobile
-            colorA: new THREE.Color('#00f3ff'), 
-            colorB: new THREE.Color('#ff0055')
-        };
-
-        class App {
+        class QuantumSystem {
             constructor() {
-                this.canvas = document.querySelector('#webgl');
+                this.canvas = document.getElementById('webgl-particles');
+                this.fluidCanvas = document.getElementById('webgl-fluid');
+                this.neuralCanvas = document.getElementById('neural-net');
+                
                 this.width = window.innerWidth;
                 this.height = window.innerHeight;
-                this.pixelRatio = Math.min(window.devicePixelRatio, 2);
-
-                this.initThree();
-                this.initParticles();
+                
+                this.initParticleSystem();
+                this.initFluidDynamics();
+                this.initNeuralNetwork();
+                this.initCursor();
                 this.addEvents();
                 this.animate();
                 
+                // Remove loader
                 setTimeout(() => {
-                    document.getElementById('loader').style.opacity = '0';
-                    setTimeout(() => document.getElementById('loader').remove(), 1000);
-                }, 1000);
+                    gsap.to('#quantum-loader', {
+                        opacity: 0,
+                        duration: 1,
+                        ease: 'power4.inOut',
+                        onComplete: () => document.getElementById('quantum-loader').remove()
+                    });
+                }, 2500);
             }
 
-            initThree() {
+            initParticleSystem() {
                 this.scene = new THREE.Scene();
-                this.scene.fog = new THREE.FogExp2(0x050505, 0.02);
-
-                this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 100);
-                // Move camera further back on mobile to see more
-                this.camera.position.set(0, 0, isMobile ? 12 : 8);
+                this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
+                this.camera.position.z = 50;
 
                 this.renderer = new THREE.WebGLRenderer({
                     canvas: this.canvas,
-                    antialias: true,
-                    powerPreference: "high-performance"
+                    alpha: true,
+                    antialias: false
                 });
                 this.renderer.setSize(this.width, this.height);
-                this.renderer.setPixelRatio(this.pixelRatio);
-                this.renderer.setClearColor(0x050505);
+                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
                 this.clock = new THREE.Clock();
-                this.mouse = new THREE.Vector2(0, 0);
-                this.targetMouse = new THREE.Vector2(0, 0);
-            }
+                this.mouse = new THREE.Vector3(0, 0, 0);
+                this.targetMouse = new THREE.Vector3(0, 0, 0);
 
-            initParticles() {
+                // Create multi-dimensional particle field
+                const particleCount = 8000;
                 const geometry = new THREE.BufferGeometry();
-                const positions = new Float32Array(CONFIG.particleCount * 3);
-                const randoms = new Float32Array(CONFIG.particleCount * 3);
-                
-                for(let i = 0; i < CONFIG.particleCount; i++) {
+                const positions = new Float32Array(particleCount * 3);
+                const velocities = new Float32Array(particleCount * 3);
+                const colors = new Float32Array(particleCount * 3);
+                const sizes = new Float32Array(particleCount);
+
+                for(let i = 0; i < particleCount; i++) {
                     const i3 = i * 3;
-                    const r = 4 * Math.cbrt(Math.random());
-                    const theta = Math.random() * 2 * Math.PI;
+                    
+                    // Create multiple layers/shells
+                    const layer = Math.floor(i / (particleCount / 5));
+                    const radius = 15 + layer * 8;
+                    const theta = Math.random() * Math.PI * 2;
                     const phi = Math.acos(2 * Math.random() - 1);
                     
-                    positions[i3] = r * Math.sin(phi) * Math.cos(theta);
-                    positions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-                    positions[i3 + 2] = r * Math.cos(phi);
+                    positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
+                    positions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+                    positions[i3 + 2] = radius * Math.cos(phi);
 
-                    randoms[i3] = Math.random();
-                    randoms[i3 + 1] = Math.random();
-                    randoms[i3 + 2] = Math.random();
+                    velocities[i3] = (Math.random() - 0.5) * 0.02;
+                    velocities[i3 + 1] = (Math.random() - 0.5) * 0.02;
+                    velocities[i3 + 2] = (Math.random() - 0.5) * 0.02;
+
+                    // Color gradient based on layer
+                    const t = layer / 5;
+                    colors[i3] = t; // R
+                    colors[i3 + 1] = 1 - t; // G
+                    colors[i3 + 2] = 1; // B
+
+                    sizes[i] = Math.random() * 3 + 1;
                 }
 
                 geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-                geometry.setAttribute('aRandom', new THREE.BufferAttribute(randoms, 3));
+                geometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
 
-                this.particleMaterial = new THREE.ShaderMaterial({
+                const material = new THREE.ShaderMaterial({
                     uniforms: {
                         uTime: { value: 0 },
-                        uMouse: { value: new THREE.Vector3(0, 0, 0) },
-                        uPixelRatio: { value: this.pixelRatio },
-                        uColorA: { value: CONFIG.colorA },
-                        uColorB: { value: CONFIG.colorB }
+                        uMouse: { value: new THREE.Vector3() },
+                        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) }
                     },
                     vertexShader: `
                         uniform float uTime;
                         uniform vec3 uMouse;
                         uniform float uPixelRatio;
-                        attribute vec3 aRandom;
+                        attribute vec3 velocity;
+                        attribute vec3 color;
+                        attribute float size;
                         varying vec3 vColor;
-                        
-                        // Simplex Noise (Compressed for brevity)
-                        vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-                        vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
-                        vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
-                        vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
-                        float snoise(vec3 v) {
-                            const vec2 C = vec2(1.0/6.0, 1.0/3.0);
-                            const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
-                            vec3 i  = floor(v + dot(v, C.yyy) );
-                            vec3 x0 = v - i + dot(i, C.xxx) ;
-                            vec3 g = step(x0.yzx, x0.xyz);
-                            vec3 l = 1.0 - g;
-                            vec3 i1 = min( g.xyz, l.zxy );
-                            vec3 i2 = max( g.xyz, l.zxy );
-                            vec3 x1 = x0 - i1 + C.xxx;
-                            vec3 x2 = x0 - i2 + C.yyy;
-                            vec3 x3 = x0 - D.yyy;
-                            i = mod289(i);
-                            vec4 p = permute( permute( permute( i.z + vec4(0.0, i1.z, i2.z, 1.0 )) + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
-                            float n_ = 0.142857142857;
-                            vec3  ns = n_ * D.wyz - D.xzx;
-                            vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
-                            vec4 x_ = floor(j * ns.z);
-                            vec4 y_ = floor(j - 7.0 * x_ );
-                            vec4 x = x_ *ns.x + ns.yyyy;
-                            vec4 y = y_ *ns.x + ns.yyyy;
-                            vec4 h = 1.0 - abs(x) - abs(y);
-                            vec4 b0 = vec4( x.xy, y.xy );
-                            vec4 b1 = vec4( x.zw, y.zw );
-                            vec4 s0 = floor(b0)*2.0 + 1.0;
-                            vec4 s1 = floor(b1)*2.0 + 1.0;
-                            vec4 sh = -step(h, vec4(0.0));
-                            vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
-                            vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
-                            vec3 p0 = vec3(a0.xy,h.x);
-                            vec3 p1 = vec3(a0.zw,h.y);
-                            vec3 p2 = vec3(a1.xy,h.z);
-                            vec3 p3 = vec3(a1.zw,h.w);
-                            vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
-                            p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
-                            vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
-                            m = m * m;
-                            return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), dot(p2,x2), dot(p3,x3) ) );
-                        }
 
                         void main() {
                             vec3 pos = position;
-                            float time = uTime * 0.2;
-
-                            // Gentle noise movement
-                            pos.x += snoise(vec3(pos.x, pos.y, time)) * 0.4;
-                            pos.y += snoise(vec3(pos.y, pos.z, time)) * 0.4;
-                            pos.z += snoise(vec3(pos.z, pos.x, time)) * 0.4;
-
-                            // Mouse Repulsion Logic
-                            float dist = distance(pos.xy, uMouse.xy * 6.0);
                             
-                            // On mobile, the "repulsion" is stronger so you can see it under your finger
-                            if(dist < 4.0) {
-                                vec3 dir = normalize(pos - vec3(uMouse.xy * 6.0, 0.0));
-                                pos += dir * (4.0 - dist) * 0.8;
+                            // Orbital motion
+                            float angle = uTime * 0.1;
+                            mat3 rotY = mat3(
+                                cos(angle), 0, sin(angle),
+                                0, 1, 0,
+                                -sin(angle), 0, cos(angle)
+                            );
+                            pos = rotY * pos;
+
+                            // Mouse attraction/repulsion field
+                            vec3 mousePos = uMouse * 30.0;
+                            float dist = distance(pos, mousePos);
+                            if(dist < 15.0) {
+                                vec3 dir = normalize(pos - mousePos);
+                                float force = (15.0 - dist) / 15.0;
+                                pos += dir * force * 3.0;
                             }
+
+                            // Wave distortion
+                            pos.y += sin(pos.x * 0.1 + uTime) * 2.0;
+                            pos.x += cos(pos.z * 0.1 + uTime) * 2.0;
 
                             vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
                             gl_Position = projectionMatrix * mvPosition;
+                            gl_PointSize = size * uPixelRatio * (30.0 / -mvPosition.z);
                             
-                            // Responsive Point Size
-                            gl_PointSize = (12.0 * uPixelRatio) * (1.0 / -mvPosition.z);
-                            
-                            // Cyberpunk Gradient
-                            vColor = mix(vec3(0.0, 0.95, 1.0), vec3(1.0, 0.0, 0.33), position.z * 0.2 + 0.5);
+                            vColor = color;
                         }
                     `,
                     fragmentShader: `
                         varying vec3 vColor;
+
                         void main() {
-                            float strength = distance(gl_PointCoord, vec2(0.5));
-                            strength = 1.0 - step(0.5, strength);
-                            if(strength < 0.5) discard;
-                            gl_FragColor = vec4(vColor, 1.0);
+                            vec2 uv = gl_PointCoord - 0.5;
+                            float dist = length(uv);
+                            
+                            if(dist > 0.5) discard;
+                            
+                            float alpha = 1.0 - smoothstep(0.3, 0.5, dist);
+                            
+                            vec3 finalColor = vec3(vColor.b, vColor.g, vColor.r);
+                            
+                            gl_FragColor = vec4(finalColor, alpha);
                         }
                     `,
                     transparent: true,
@@ -423,149 +605,210 @@
                     blending: THREE.AdditiveBlending
                 });
 
-                this.particles = new THREE.Points(geometry, this.particleMaterial);
+                this.particles = new THREE.Points(geometry, material);
                 this.scene.add(this.particles);
+
+                // Add connecting lines between nearby particles
+                this.createConnectionLines();
+            }
+
+            createConnectionLines() {
+                const lineGeometry = new THREE.BufferGeometry();
+                const lineMaterial = new THREE.LineBasicMaterial({
+                    color: 0x00ffff,
+                    transparent: true,
+                    opacity: 0.1,
+                    blending: THREE.AdditiveBlending
+                });
+
+                this.connectionLines = new THREE.LineSegments(lineGeometry, lineMaterial);
+                this.scene.add(this.connectionLines);
+            }
+
+            initFluidDynamics() {
+                // Simplified fluid simulation using 2D canvas
+                const ctx = this.fluidCanvas.getContext('2d');
+                this.fluidCanvas.width = this.width;
+                this.fluidCanvas.height = this.height;
+                
+                this.fluidCtx = ctx;
+                this.fluidParticles = [];
+                
+                for(let i = 0; i < 100; i++) {
+                    this.fluidParticles.push({
+                        x: Math.random() * this.width,
+                        y: Math.random() * this.height,
+                        vx: (Math.random() - 0.5) * 2,
+                        vy: (Math.random() - 0.5) * 2,
+                        radius: Math.random() * 3 + 1
+                    });
+                }
+            }
+
+            initNeuralNetwork() {
+                const ctx = this.neuralCanvas.getContext('2d');
+                this.neuralCanvas.width = this.width;
+                this.neuralCanvas.height = this.height;
+                
+                this.neuralCtx = ctx;
+                this.nodes = [];
+                
+                // Create grid of nodes
+                const cols = Math.floor(this.width / 100);
+                const rows = Math.floor(this.height / 100);
+                
+                for(let i = 0; i < cols; i++) {
+                    for(let j = 0; j < rows; j++) {
+                        this.nodes.push({
+                            x: (i + 0.5) * (this.width / cols),
+                            y: (j + 0.5) * (this.height / rows),
+                            vx: 0,
+                            vy: 0
+                        });
+                    }
+                }
+            }
+
+            initCursor() {
+                this.cursorCore = document.querySelector('.cursor-core');
+                this.cursorRing = document.querySelector('.cursor-ring');
+                this.cursorTrails = [];
+                
+                // Create multiple cursor trails
+                for(let i = 0; i < 5; i++) {
+                    const trail = document.createElement('div');
+                    trail.className = 'cursor-trail';
+                    document.body.appendChild(trail);
+                    this.cursorTrails.push({
+                        el: trail,
+                        x: 0,
+                        y: 0
+                    });
+                }
             }
 
             addEvents() {
                 window.addEventListener('resize', this.onResize.bind(this));
+                window.addEventListener('mousemove', this.onMouseMove.bind(this));
                 
-                // MOUSE EVENTS (Desktop)
-                window.addEventListener('mousemove', (e) => {
-                    if(isMobile) return;
-                    this.updateMouse(e.clientX, e.clientY);
-                    
-                    // Custom Cursor Logic
-                    const cursor = document.getElementById('cursor');
-                    const cursorDot = document.getElementById('cursor-dot');
-                    if(cursor) {
-                        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
-                        gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.0 });
-                    }
+                // Interactive cards
+                document.querySelectorAll('.nav-card').forEach(card => {
+                    card.addEventListener('mouseenter', () => {
+                        gsap.to(this.cursorRing, {
+                            width: 80,
+                            height: 80,
+                            duration: 0.3
+                        });
+                    });
+                    card.addEventListener('mouseleave', () => {
+                        gsap.to(this.cursorRing, {
+                            width: 40,
+                            height: 40,
+                            duration: 0.3
+                        });
+                    });
                 });
-
-                // TOUCH EVENTS (Mobile)
-                window.addEventListener('touchmove', (e) => {
-                    if (e.touches.length > 0) {
-                        this.updateMouse(e.touches[0].clientX, e.touches[0].clientY);
-                    }
-                }, { passive: true });
-                
-                window.addEventListener('touchstart', (e) => {
-                    if (e.touches.length > 0) {
-                        this.updateMouse(e.touches[0].clientX, e.touches[0].clientY);
-                    }
-                }, { passive: true });
-            }
-
-            updateMouse(x, y) {
-                // Normalize to -1 to 1 range
-                this.targetMouse.x = (x / this.width) * 2 - 1;
-                this.targetMouse.y = -(y / this.height) * 2 + 1;
             }
 
             onResize() {
                 this.width = window.innerWidth;
                 this.height = window.innerHeight;
+                
                 this.camera.aspect = this.width / this.height;
                 this.camera.updateProjectionMatrix();
+                
                 this.renderer.setSize(this.width, this.height);
-                this.particleMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
+                this.fluidCanvas.width = this.width;
+                this.fluidCanvas.height = this.height;
+                this.neuralCanvas.width = this.width;
+                this.neuralCanvas.height = this.height;
+            }
+
+            onMouseMove(e) {
+                const x = (e.clientX / this.width) * 2 - 1;
+                const y = -(e.clientY / this.height) * 2 + 1;
+                
+                this.targetMouse.set(x, y, 0);
+                
+                // Update cursor position
+                gsap.to(this.cursorCore, {
+                    x: e.clientX,
+                    y: e.clientY,
+                    duration: 0
+                });
+                
+                gsap.to(this.cursorRing, {
+                    x: e.clientX,
+                    y: e.clientY,
+                    duration: 0.15
+                });
+                
+                // Update trails with delay
+                this.cursorTrails.forEach((trail, i) => {
+                    gsap.to(trail, {
+                        x: e.clientX,
+                        y: e.clientY,
+                        duration: 0.1 * (i + 1)
+                    });
+                    trail.el.style.left = trail.x + 'px';
+                    trail.el.style.top = trail.y + 'px';
+                });
+            }
+
+            updateFluid() {
+                this.fluidCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                this.fluidCtx.fillRect(0, 0, this.width, this.height);
+                
+                this.fluidParticles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    
+                    if(p.x < 0 || p.x > this.width) p.vx *= -1;
+                    if(p.y < 0 || p.y > this.height) p.vy *= -1;
+                    
+                    const gradient = this.fluidCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.radius * 10);
+                    gradient.addColorStop(0, 'rgba(0, 255, 255, 0.3)');
+                    gradient.addColorStop(1, 'rgba(255, 0, 255, 0)');
+                    
+                    this.fluidCtx.fillStyle = gradient;
+                    this.fluidCtx.beginPath();
+                    this.fluidCtx.arc(p.x, p.y, p.radius * 10, 0, Math.PI * 2);
+                    this.fluidCtx.fill();
+                });
+            }
+
+            updateNeural() {
+                this.neuralCtx.clearRect(0, 0, this.width, this.height);
+                
+                this.nodes.forEach((node, i) => {
+                    // Draw connections to nearby nodes
+                    this.nodes.forEach((other, j) => {
+                        if(i >= j) return;
+                        
+                        const dx = node.x - other.x;
+                        const dy = node.y - other.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if(dist < 150) {
+                            const alpha = 1 - dist / 150;
+                            this.neuralCtx.strokeStyle = `rgba(0, 255, 255, ${alpha * 0.2})`;
+                            this.neuralCtx.lineWidth = 1;
+                            this.neuralCtx.beginPath();
+                            this.neuralCtx.moveTo(node.x, node.y);
+                            this.neuralCtx.lineTo(other.x, other.y);
+                            this.neuralCtx.stroke();
+                        }
+                    });
+                    
+                    // Draw node
+                    this.neuralCtx.fillStyle = 'rgba(0, 255, 255, 0.5)';
+                    this.neuralCtx.beginPath();
+                    this.neuralCtx.arc(node.x, node.y, 3, 0, Math.PI * 2);
+                    this.neuralCtx.fill();
+                });
             }
 
             animate() {
                 requestAnimationFrame(this.animate.bind(this));
                 
-                const time = this.clock.getElapsedTime();
-                
-                // Smooth Mouse Interpolation
-                this.mouse.x += (this.targetMouse.x - this.mouse.x) * 0.1;
-                this.mouse.y += (this.targetMouse.y - this.mouse.y) * 0.1;
-
-                this.particles.rotation.y = time * 0.05;
-                
-                // Tilting effect based on mouse/touch position
-                this.particles.rotation.x = this.mouse.y * 0.2;
-                this.particles.rotation.z = this.mouse.x * 0.2;
-
-                this.particleMaterial.uniforms.uTime.value = time;
-                this.particleMaterial.uniforms.uMouse.value.set(this.mouse.x, this.mouse.y, 0);
-
-                this.renderer.render(this.scene, this.camera);
-            }
-        }
-
-        class TextScramble {
-            constructor(el) {
-                this.el = el;
-                this.chars = '!<>-_\\/[]{}—=+*^?#________';
-                this.update = this.update.bind(this);
-            }
-            setText(newText) {
-                const oldText = this.el.innerText;
-                const length = Math.max(oldText.length, newText.length);
-                const promise = new Promise((resolve) => this.resolve = resolve);
-                this.queue = [];
-                for (let i = 0; i < length; i++) {
-                    const from = oldText[i] || '';
-                    const to = newText[i] || '';
-                    const start = Math.floor(Math.random() * 40);
-                    const end = start + Math.floor(Math.random() * 40);
-                    this.queue.push({ from, to, start, end });
-                }
-                cancelAnimationFrame(this.frameRequest);
-                this.frame = 0;
-                this.update();
-                return promise;
-            }
-            update() {
-                let output = '';
-                let complete = 0;
-                for (let i = 0, n = this.queue.length; i < n; i++) {
-                    let { from, to, start, end, char } = this.queue[i];
-                    if (this.frame >= end) {
-                        complete++;
-                        output += to;
-                    } else if (this.frame >= start) {
-                        if (!char || Math.random() < 0.28) {
-                            char = this.randomChar();
-                            this.queue[i].char = char;
-                        }
-                        output += `<span class="dud">${char}</span>`;
-                    } else {
-                        output += from;
-                    }
-                }
-                this.el.innerHTML = output;
-                if (complete === this.queue.length) {
-                    this.resolve();
-                } else {
-                    this.frameRequest = requestAnimationFrame(this.update);
-                    this.frame++;
-                }
-            }
-            randomChar() {
-                return this.chars[Math.floor(Math.random() * this.chars.length)];
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            const app = new App();
-            
-            const phrases = ['RPA ARCHITECT', 'WEB DEVELOPER', 'UI DESIGNER', 'DIGITAL CREATOR'];
-            const el = document.querySelector('.sub-hero');
-            const fx = new TextScramble(el);
-            
-            let counter = 0;
-            const next = () => {
-                fx.setText(phrases[counter]).then(() => {
-                    setTimeout(next, 2000);
-                });
-                counter = (counter + 1) % phrases.length;
-            };
-            
-            setTimeout(next, 3000);
-        });
-    </script>
-</body>
-</html>
+                const time = this.clock.getElapse
