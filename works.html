@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WORKS | SHIVATEJA</title>
+    <title>SEENURI WORKS | SHIVATEJA</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --c-accent: #00f3ff;
-            --c-secondary: #ff0055;
-            --c-dark: #050505;
+            --c-accent: #00f3ff;   /* Cyan */
+            --c-dark: #050505;     /* Deep Black */
             --c-white: #ffffff;
         }
 
@@ -26,7 +25,9 @@
             height: 100vh;
             width: 100vw;
             overscroll-behavior: none;
+            cursor: grab;
         }
+        body:active { cursor: grabbing; }
 
         /* --- UI LAYER --- */
         #ui-layer {
@@ -35,98 +36,94 @@
             width: 100%; height: 100%;
             z-index: 10;
             pointer-events: none;
-            padding: 30px;
+            padding: 40px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            mix-blend-mode: exclusion;
         }
 
+        /* HEADER */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            pointer-events: auto;
         }
 
         .brand {
             font-family: 'Syncopate', sans-serif;
             font-weight: 700;
-            font-size: clamp(16px, 4vw, 24px);
+            font-size: 18px;
             letter-spacing: 2px;
-            pointer-events: auto;
-            text-decoration: none;
             color: white;
+            text-decoration: none;
+            mix-blend-mode: exclusion;
         }
 
-        .page-indicator {
+        .counter {
             font-family: 'Syncopate', sans-serif;
-            font-size: 12px;
-            color: var(--c-accent);
-            letter-spacing: 2px;
-            border: 1px solid var(--c-accent);
-            padding: 5px 15px;
-            border-radius: 20px;
-        }
-
-        /* --- PROJECT TITLES --- */
-        .project-meta-container {
-            position: absolute;
-            bottom: 100px;
-            left: 30px;
-            pointer-events: none;
-            z-index: 12;
-            mix-blend-mode: normal;
-        }
-
-        .project-id {
-            color: var(--c-accent);
             font-size: 14px;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            display: block;
-            font-family: 'Syncopate', sans-serif;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 100px;
+            color: var(--c-accent);
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        /* PROJECT DETAILS (Bottom Left) */
+        .project-info {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            mix-blend-mode: exclusion;
+        }
+
+        .tags-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+        .tags-container.active { opacity: 1; transform: translateY(0); }
+
+        .tag {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid var(--c-accent);
+            color: var(--c-accent);
+            padding: 4px 10px;
+            border-radius: 4px;
         }
 
         .project-title {
             font-family: 'Syncopate', sans-serif;
             font-weight: 700;
-            font-size: clamp(40px, 8vw, 80px);
+            font-size: clamp(40px, 7vw, 100px); /* Responsive Size */
             line-height: 0.9;
+            margin-bottom: 15px;
             text-transform: uppercase;
             color: transparent;
-            -webkit-text-stroke: 1px rgba(255,255,255,0.8);
-            margin-bottom: 20px;
-            transform: translateY(20px);
+            -webkit-text-stroke: 1px white;
             opacity: 0;
-            transition: all 0.5s ease;
+            transform: translateY(30px);
+            transition: all 0.6s ease 0.1s;
         }
-        
-        .project-title.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .project-title.active { opacity: 1; transform: translateY(0); }
 
-        .project-tags {
-            display: flex;
-            gap: 10px;
+        .project-desc {
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            color: #ccc;
+            max-width: 450px;
+            line-height: 1.6;
             opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.5s ease 0.1s;
+            transition: all 0.6s ease 0.2s;
         }
-        .project-title.active + .project-tags {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .tag {
-            font-size: 12px;
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 5px 10px;
-            border-radius: 100px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: rgba(0,0,0,0.5);
-        }
+        .project-desc.active { opacity: 1; }
 
         /* --- CANVAS --- */
         #webgl {
@@ -134,32 +131,20 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: 1;
-            cursor: grab;
         }
-        #webgl:active { cursor: grabbing; }
 
-        /* --- NAVIGATION --- */
-        .back-btn {
-            pointer-events: auto;
-            color: white;
-            text-decoration: none;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            opacity: 0.7;
-            transition: opacity 0.3s;
+        /* --- MOBILE TWEAKS --- */
+        @media (max-width: 768px) {
+            #ui-layer { padding: 25px; }
+            .project-title { -webkit-text-stroke: 0.8px white; }
+            .project-desc { font-size: 13px; max-width: 100%; }
         }
-        .back-btn:hover { opacity: 1; }
-        .back-btn::before { content: '←'; font-size: 16px; }
-
-        /* --- LOADING OVERLAY --- */
+        
+        /* LOADER */
         #loader {
             position: fixed;
             inset: 0;
-            background: #000;
+            background: #050505;
             z-index: 100;
             display: flex;
             justify-content: center;
@@ -167,31 +152,33 @@
             color: var(--c-accent);
             font-family: 'Syncopate';
             font-weight: 700;
-            font-size: clamp(20px, 5vw, 40px);
+            letter-spacing: 2px;
             transition: opacity 0.5s ease;
         }
     </style>
 </head>
 <body>
 
-    <div id="loader">LOADING WORKS...</div>
+    <div id="loader">LOADING SEENURI WORKS...</div>
 
     <canvas id="webgl"></canvas>
 
     <div id="ui-layer">
         <header>
-            <a href="index.html" class="back-btn">Home</a>
-            <div class="page-indicator">SELECTED WORKS</div>
+            <a href="#" class="brand">SEENURI.</a>
+            <div class="counter"><span id="curr-idx">01</span> / 04</div>
         </header>
 
-        <div class="project-meta-container">
-            <span class="project-id" id="ui-id">01 / 03</span>
-            <h1 class="project-title active" id="ui-title">THE ZAPWASH</h1>
-            <div class="project-tags" id="ui-tags">
+        <div class="project-info">
+            <div class="tags-container active" id="ui-tags">
                 <span class="tag">Shopify</span>
-                <span class="tag">Branding</span>
                 <span class="tag">SEO</span>
             </div>
+            <h1 class="project-title active" id="ui-title">THE ZAPWASH</h1>
+            <p class="project-desc active" id="ui-desc">
+                Hyperlocal laundry aggregator built on Shopify. 
+                Full-stack setup including custom Liquid schema, Google Analytics 4, and local SEO domination in Hyderabad.
+            </p>
         </div>
     </div>
 
@@ -199,34 +186,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script>
-        // DATA: YOUR PROJECTS
-        // I'm using placeholder colors/images because I can't load external files without CORS.
-        // In a real site, replace 'color' with 'texture' loading.
+        // -------------------------------------------------------------
+        // CONFIGURATION: SHIVATEJA'S PROJECTS
+        // -------------------------------------------------------------
         const PROJECTS = [
             {
                 title: "THE ZAPWASH",
-                id: "01 / 03",
-                tags: ["Shopify", "Full Stack", "Business"],
-                color: 0x00f3ff, // Cyan
-                img: "https://images.unsplash.com/photo-1517672651691-24622a91b550?q=80&w=1000&auto=format&fit=crop"
+                desc: "Hyperlocal laundry aggregator. Built on Shopify with custom Liquid schema, Google Analytics 4 setup, and Search Console optimization.",
+                tags: ["Shopify", "SEO", "Business"],
+                color: '#00f3ff', // Cyan
+                image: 'logo-zapwash.png' 
             },
             {
                 title: "CHINKULU",
-                id: "02 / 03",
-                tags: ["Fashion", "Identity", "Strategy"],
-                color: 0xff0055, // Pink
-                img: "https://images.unsplash.com/photo-1529139574466-a302d2774d75?q=80&w=1000&auto=format&fit=crop"
+                desc: "Handcrafted fashion label. Developed brand identity, visual strategy, and digital presence for a textile heritage brand.",
+                tags: ["Fashion", "Branding", "Identity"],
+                color: '#ff0055', // Neon Pink
+                image: 'logo-chinkulu.png'
             },
             {
                 title: "VINTHAPADALU",
-                id: "03 / 03",
-                tags: ["Community", "Literature", "Content"],
-                color: 0xffd700, // Gold
-                img: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1000&auto=format&fit=crop"
+                desc: "Telugu literature community platform. Focused on reviving cultural content through modern digital storytelling.",
+                tags: ["Community", "Content", "Culture"],
+                color: '#ffcc00', // Gold
+                image: 'logo-vinthapadalu.png'
+            },
+            {
+                title: "FARM MUTTON",
+                desc: "Fresh meat e-commerce setup. Handling DNS configurations (GoDaddy/GitHub), domain strategy, and Shopify integration.",
+                tags: ["Commerce", "DNS", "Strategy"],
+                color: '#55ff00', // Lime Green
+                image: 'logo-farmmutton.png'
             }
         ];
 
-        class WorksApp {
+        class Slider {
             constructor() {
                 this.canvas = document.querySelector('#webgl');
                 this.width = window.innerWidth;
@@ -241,7 +235,7 @@
                 this.addEvents();
                 this.animate();
 
-                // Remove Loader
+                // Hide loader
                 setTimeout(() => {
                     document.getElementById('loader').style.opacity = '0';
                     setTimeout(() => document.getElementById('loader').remove(), 500);
@@ -262,75 +256,88 @@
                 this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             }
 
+            // HELPER: Create a texture with text if image fails
+            createFallbackTexture(text, color) {
+                const cvs = document.createElement('canvas');
+                cvs.width = 1024; cvs.height = 1024;
+                const ctx = cvs.getContext('2d');
+                
+                // Background
+                ctx.fillStyle = '#111';
+                ctx.fillRect(0,0,1024,1024);
+                
+                // Border
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 20;
+                ctx.strokeRect(50,50,924,924);
+                
+                // Text
+                ctx.fillStyle = color;
+                ctx.font = 'bold 80px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(text, 512, 512);
+                
+                return new THREE.CanvasTexture(cvs);
+            }
+
             initPlanes() {
                 this.group = new THREE.Group();
                 this.scene.add(this.group);
                 
                 this.planes = [];
-                const geometry = new THREE.PlaneBufferGeometry(3, 4, 32, 32); // High segments for distortion
+                const geometry = new THREE.PlaneBufferGeometry(3, 4, 32, 32); 
 
-                // SHADER MATERIAL
-                // This creates the "Bending" effect based on scroll speed
+                // CUSTOM SHADER FOR DISTORTION
                 const materialBase = new THREE.ShaderMaterial({
                     uniforms: {
-                        uTexture: { value: null }, // In real version, load textures here
-                        uColor: { value: new THREE.Color('#fff') },
+                        uTexture: { value: null },
                         uSpeed: { value: 0 },
-                        uTime: { value: 0 }
+                        uColor: { value: new THREE.Color(1,1,1) }
                     },
                     vertexShader: `
-                        uniform float uSpeed;
-                        uniform float uTime;
                         varying vec2 vUv;
-                        
+                        uniform float uSpeed;
                         void main() {
                             vUv = uv;
                             vec3 pos = position;
-                            
-                            // BENDING EFFECT
-                            // The faster you scroll (uSpeed), the more it bends
-                            // Only bend the z-axis based on y-position
-                            
-                            float bend = sin(uv.y * 3.14159) * uSpeed * 0.5;
-                            pos.z += bend;
-                            
-                            // Slight wave
-                            pos.z += sin(pos.x * 2.0 + uTime) * 0.05;
-
+                            // Curvature effect based on speed
+                            pos.z += sin(uv.y * 3.14159) * uSpeed * 0.25;
+                            // Tilt effect
+                            pos.x += uSpeed * 0.5 * uv.y; 
                             gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
                         }
                     `,
                     fragmentShader: `
-                        uniform vec3 uColor;
                         uniform sampler2D uTexture;
+                        uniform vec3 uColor;
                         varying vec2 vUv;
-                        
                         void main() {
-                            // Simple color placeholder since we can't do CORS textures easily in single file
-                            // In production, use: texture2D(uTexture, vUv);
-                            
-                            float border = step(0.05, vUv.x) * step(0.05, vUv.y) * step(vUv.x, 0.95) * step(vUv.y, 0.95);
-                            vec3 color = mix(uColor * 0.5, uColor, border);
-                            
-                            // Scanline effect
-                            float scan = sin(vUv.y * 100.0) * 0.1;
-                            
-                            gl_FragColor = vec4(color + scan, 0.8);
+                            vec4 tex = texture2D(uTexture, vUv);
+                            // Add a subtle color tint to the texture
+                            gl_FragColor = tex;
                         }
                     `,
-                    transparent: true,
-                    side: THREE.DoubleSide
+                    side: THREE.DoubleSide,
+                    transparent: true
                 });
 
-                // CREATE 3 PLANES (One for each project)
                 PROJECTS.forEach((proj, i) => {
                     const mat = materialBase.clone();
+                    
+                    // Try to load image, fallback if needed
+                    const textureLoader = new THREE.TextureLoader();
                     mat.uniforms.uColor.value = new THREE.Color(proj.color);
-                    
+
+                    textureLoader.load(
+                        proj.image, 
+                        (tex) => { mat.uniforms.uTexture.value = tex; }, // Success
+                        undefined,
+                        () => { mat.uniforms.uTexture.value = this.createFallbackTexture(proj.title, proj.color); } // Error/Fallback
+                    );
+
                     const mesh = new THREE.Mesh(geometry, mat);
-                    
-                    // Space them out horizontally
-                    mesh.position.x = i * 4; 
+                    mesh.position.x = i * 4; // Spacing
                     
                     this.group.add(mesh);
                     this.planes.push({ mesh, mat });
@@ -341,28 +348,20 @@
                 let isDragging = false;
                 let startX = 0;
                 
-                // TOUCH / MOUSE LOGIC
                 const onStart = (x) => {
                     isDragging = true;
                     startX = x;
-                    this.canvas.style.cursor = 'grabbing';
                 };
                 
                 const onMove = (x) => {
                     if(!isDragging) return;
-                    const diff = (x - startX) * 0.01; // Sensitivity
+                    // Adjust sensitivity here (0.015)
+                    const diff = (x - startX) * 0.015; 
                     this.scrollTarget += diff;
                     startX = x;
                 };
                 
-                const onEnd = () => {
-                    isDragging = false;
-                    this.canvas.style.cursor = 'grab';
-                    
-                    // SNAP LOGIC (Optional: Snap to nearest project)
-                    // let snap = Math.round(this.scrollTarget / 4) * 4;
-                    // gsap.to(this, { scrollTarget: snap, duration: 0.5 });
-                };
+                const onEnd = () => { isDragging = false; };
 
                 // Mouse
                 window.addEventListener('mousedown', e => onStart(e.clientX));
@@ -374,7 +373,6 @@
                 window.addEventListener('touchmove', e => onMove(e.touches[0].clientX));
                 window.addEventListener('touchend', onEnd);
                 
-                // Resize
                 window.addEventListener('resize', () => {
                     this.width = window.innerWidth;
                     this.height = window.innerHeight;
@@ -385,81 +383,86 @@
             }
 
             updateUI() {
-                // Calculate which project is centered
-                // We shift the world left, so negative scroll position relates to positive index
-                // Each plane is 4 units apart.
-                const centerIdx = Math.round(Math.abs(this.scroll) / 4) % PROJECTS.length;
+                // Determine which slide is closest to center
+                // Total distance per slide is 4 units
+                // We reverse the logic because dragging Left moves the camera Right
+                let rawIdx = Math.round(-this.scrollTarget / 4);
                 
-                // Handle negative scrolling loop logic roughly for UI
-                let safeIdx = Math.abs(Math.round(this.scroll / 4)) % PROJECTS.length;
-                // Reverse index because dragging left moves forward in array
-                if (this.scroll > 0) safeIdx = (PROJECTS.length - safeIdx) % PROJECTS.length;
+                // Wrap index for infinite loop logic (0 to Length-1)
+                let idx = ((rawIdx % PROJECTS.length) + PROJECTS.length) % PROJECTS.length;
 
-                if(safeIdx !== this.currentIdx) {
-                    this.currentIdx = safeIdx;
-                    this.changeText(PROJECTS[safeIdx]);
+                if (idx !== this.currentIdx) {
+                    this.currentIdx = idx;
+                    this.updateText(PROJECTS[idx], idx);
                 }
             }
 
-            changeText(data) {
+            updateText(data, idx) {
                 const title = document.getElementById('ui-title');
-                const id = document.getElementById('ui-id');
+                const desc = document.getElementById('ui-desc');
                 const tags = document.getElementById('ui-tags');
+                const counter = document.getElementById('curr-idx');
 
-                // Animate Out
+                // Animate OUT
                 title.classList.remove('active');
-                tags.style.opacity = '0';
-                tags.style.transform = 'translateY(20px)';
+                desc.classList.remove('active');
+                tags.classList.remove('active');
 
                 setTimeout(() => {
                     // Update Content
                     title.innerText = data.title;
-                    id.innerText = data.id;
+                    desc.innerText = data.desc;
+                    counter.innerText = `0${idx + 1}`;
                     
-                    // Update Tags
+                    // Rebuild Tags
                     tags.innerHTML = '';
                     data.tags.forEach(t => {
-                        const span = document.createElement('span');
-                        span.className = 'tag';
-                        span.innerText = t;
-                        tags.appendChild(span);
+                        const s = document.createElement('span');
+                        s.className = 'tag';
+                        s.innerText = t;
+                        s.style.borderColor = data.color;
+                        s.style.color = data.color;
+                        tags.appendChild(s);
                     });
 
-                    // Animate In
+                    // Animate IN
                     title.classList.add('active');
-                    tags.style.opacity = '1';
-                    tags.style.transform = 'translateY(0)';
-                }, 400);
+                    desc.classList.add('active');
+                    tags.classList.add('active');
+                }, 400); // Wait for transition
             }
 
             animate() {
                 requestAnimationFrame(this.animate.bind(this));
 
-                // LERP: Smooth Scroll
+                // SMOOTH SCROLL PHYSICS
                 this.scroll += (this.scrollTarget - this.scroll) * 0.1;
                 
-                // Calculate Speed for Distortion (difference between target and current)
-                const speed = (this.scrollTarget - this.scroll) * 2.0;
+                // Calculate Speed (for distortion effect)
+                const speed = (this.scrollTarget - this.scroll) * 3.0;
 
-                // Move Group
-                this.group.position.x = this.scroll * 2; // Speed multiplier
+                // Move the Group
+                this.group.position.x = this.scroll * 4;
 
-                // Infinite Scroll Logic (Teleport planes)
-                // If a plane moves too far left, move it to the right end of the line
+                // INFINITE LOOP LOGIC
+                // If a plane goes off screen, move it to the other side
+                const totalW = PROJECTS.length * 4;
+                
                 this.planes.forEach((obj, i) => {
+                    // Calculate World Position relative to camera
                     const worldX = obj.mesh.position.x + this.group.position.x;
-                    const totalWidth = PROJECTS.length * 4;
                     
-                    if(worldX < -6) {
-                         obj.mesh.position.x += totalWidth;
+                    // If too far left, move right
+                    if (worldX < -6) {
+                        obj.mesh.position.x += totalW * Math.ceil(Math.abs(worldX + 6)/totalW);
                     }
-                    if(worldX > 6 + (totalWidth - 4)) {
-                         obj.mesh.position.x -= totalWidth;
+                    // If too far right, move left
+                    if (worldX > 6 + (totalW-4)) {
+                         obj.mesh.position.x -= totalW * Math.ceil(Math.abs(worldX - 6)/totalW);
                     }
-
-                    // Update Uniforms
+                    
+                    // Apply Distortion Uniforms
                     obj.mat.uniforms.uSpeed.value = speed;
-                    obj.mat.uniforms.uTime.value += 0.05;
                 });
 
                 this.updateUI();
@@ -467,7 +470,7 @@
             }
         }
 
-        new WorksApp();
+        new Slider();
     </script>
 </body>
 </html>
