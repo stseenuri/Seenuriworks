@@ -34,7 +34,7 @@
             inset: 0;
             z-index: 10;
             pointer-events: none;
-            padding: clamp(20px, 4vw, 60px);
+            padding: clamp(30px, 5vw, 80px);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -45,6 +45,8 @@
             justify-content: space-between;
             align-items: center;
             pointer-events: auto;
+            position: relative;
+            z-index: 100;
         }
 
         .brand {
@@ -74,10 +76,12 @@
             backdrop-filter: blur(10px);
         }
 
-        /* PROJECT INFO PANEL */
+        /* PROJECT INFO PANEL - Fixed positioning */
         .project-panel {
-            max-width: 600px;
+            max-width: 500px;
             pointer-events: auto;
+            position: relative;
+            z-index: 50;
         }
 
         .project-meta {
@@ -99,19 +103,14 @@
             transition: all 0.3s;
         }
 
-        .tag:hover {
-            background: rgba(0, 255, 255, 0.2);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
-        }
-
         .project-title {
             font-family: 'Orbitron', sans-serif;
             font-weight: 900;
-            font-size: clamp(2rem, 8vw, 8rem);
-            line-height: 0.85;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            line-height: 0.9;
             margin-bottom: 20px;
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink), var(--neon-yellow));
-            background-size: 300% 300%;
+            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-pink));
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -126,7 +125,7 @@
         }
 
         .project-desc {
-            font-size: clamp(13px, 1.8vw, 18px);
+            font-size: clamp(13px, 1.5vw, 16px);
             line-height: 1.7;
             color: rgba(255,255,255,0.7);
             margin-bottom: 30px;
@@ -134,12 +133,12 @@
 
         .project-cta {
             display: inline-block;
-            padding: 15px 40px;
+            padding: 15px 35px;
             background: linear-gradient(135deg, var(--neon-cyan), var(--neon-pink));
             color: #000;
             font-family: 'Orbitron', sans-serif;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 13px;
             text-decoration: none;
             border-radius: 100px;
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -179,11 +178,11 @@
         /* NAVIGATION CONTROLS */
         .carousel-controls {
             position: fixed;
-            bottom: clamp(20px, 4vw, 60px);
-            right: clamp(20px, 4vw, 60px);
+            bottom: clamp(30px, 5vw, 80px);
+            right: clamp(30px, 5vw, 80px);
             display: flex;
             gap: 15px;
-            z-index: 20;
+            z-index: 100;
             pointer-events: auto;
         }
 
@@ -279,53 +278,16 @@
             100% { transform: translateY(4px); }
         }
 
-        /* PROGRESS INDICATOR */
-        .progress-dots {
-            position: fixed;
-            left: clamp(20px, 4vw, 60px);
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 20;
-            pointer-events: auto;
-        }
-
-        .progress-dot {
-            width: 12px;
-            height: 12px;
-            border: 2px solid rgba(0, 255, 255, 0.3);
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .progress-dot.active {
-            background: var(--neon-cyan);
-            box-shadow: 0 0 20px var(--neon-cyan);
-            border-color: var(--neon-cyan);
-        }
-
-        .progress-dot:hover {
-            border-color: var(--neon-cyan);
-            transform: scale(1.3);
-        }
-
         @media (max-width: 768px) {
+            .cursor-core, .cursor-ring { display: none; }
+            #ui-layer { padding: 25px; }
             .carousel-controls {
-                bottom: 20px;
-                right: 20px;
+                bottom: 25px;
+                right: 25px;
             }
             .control-btn {
                 width: 50px;
                 height: 50px;
-            }
-            .progress-dots {
-                display: none;
-            }
-            .cursor-core, .cursor-ring {
-                display: none;
             }
         }
     </style>
@@ -365,8 +327,6 @@
         </div>
     </div>
 
-    <div class="progress-dots" id="progress-dots"></div>
-
     <div class="carousel-controls">
         <div class="control-btn prev" id="btn-prev"></div>
         <div class="control-btn next" id="btn-next"></div>
@@ -379,29 +339,33 @@
             {
                 title: "THE ZAPWASH",
                 desc: "Hyperlocal laundry aggregator revolutionizing urban living. Full-stack Shopify implementation with custom schema, GA4 analytics, and dominating local SEO in Hyderabad.",
-                tags: ["Shopify", "SEO", "E-Commerce"],
+                tags: ["SHOPIFY", "SEO", "E-COMMERCE"],
                 color: new THREE.Color(0x00ffff),
+                image: "logo-zapwash.png",
                 link: "#zapwash"
             },
             {
                 title: "CHINKULU",
                 desc: "Handcrafted fashion label celebrating textile heritage. Comprehensive brand identity, visual strategy, and digital presence for contemporary Indian fashion.",
-                tags: ["Fashion", "Branding", "Identity"],
+                tags: ["FASHION", "BRANDING", "IDENTITY"],
                 color: new THREE.Color(0xff00ff),
+                image: "logo-chinkulu.png",
                 link: "#chinkulu"
             },
             {
                 title: "VINTHAPADALU",
                 desc: "Telugu literature community platform. Reviving cultural storytelling through modern digital experiences and content strategies for literary preservation.",
-                tags: ["Community", "Content", "Culture"],
+                tags: ["COMMUNITY", "CONTENT", "CULTURE"],
                 color: new THREE.Color(0xffff00),
+                image: "logo-vinthapadalu.png",
                 link: "#vinthapadalu"
             },
             {
                 title: "FARM MUTTON",
                 desc: "Premium fresh meat e-commerce platform. End-to-end DNS configuration, domain strategy, and Shopify integration for seamless farm-to-table experience.",
-                tags: ["E-Commerce", "DNS", "Strategy"],
+                tags: ["E-COMMERCE", "DNS", "STRATEGY"],
                 color: new THREE.Color(0x00ff00),
+                image: "fm.webp",
                 link: "#farmmutton"
             }
         ];
@@ -435,7 +399,8 @@
             initScene() {
                 this.scene = new THREE.Scene();
                 this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 1000);
-                this.camera.position.z = 15;
+                this.camera.position.set(8, 0, 12);
+                this.camera.lookAt(0, 0, 0);
 
                 this.renderer = new THREE.WebGLRenderer({
                     canvas: this.canvas,
@@ -452,28 +417,30 @@
 
             createCarousel() {
                 this.carouselGroup = new THREE.Group();
+                this.carouselGroup.position.x = 3;
                 this.scene.add(this.carouselGroup);
                 
                 this.projectCards = [];
-                const radius = 8;
+                const radius = 10;
                 const angleStep = (Math.PI * 2) / PROJECTS.length;
 
                 PROJECTS.forEach((project, i) => {
-                    // Create holographic card
-                    const geometry = new THREE.PlaneGeometry(6, 8, 32, 32);
+                    const geometry = new THREE.PlaneGeometry(5, 6.5, 32, 32);
+                    
+                    const textureLoader = new THREE.TextureLoader();
+                    const texture = textureLoader.load(project.image);
                     
                     const material = new THREE.ShaderMaterial({
                         uniforms: {
                             uTime: { value: 0 },
                             uColor: { value: project.color },
-                            uHover: { value: 0 },
-                            uActive: { value: i === 0 ? 1 : 0 }
+                            uActive: { value: i === 0 ? 1 : 0 },
+                            uTexture: { value: texture }
                         },
                         vertexShader: `
                             varying vec2 vUv;
                             varying vec3 vPosition;
                             uniform float uTime;
-                            uniform float uHover;
                             uniform float uActive;
                             
                             void main() {
@@ -481,13 +448,7 @@
                                 vPosition = position;
                                 
                                 vec3 pos = position;
-                                
-                                // Wave distortion
-                                float wave = sin(pos.y * 2.0 + uTime) * 0.1 * uHover;
-                                pos.z += wave;
-                                
-                                // Scale active card
-                                pos *= 1.0 + (uActive * 0.2);
+                                pos *= 1.0 + (uActive * 0.15);
                                 
                                 gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
                             }
@@ -496,27 +457,29 @@
                             uniform vec3 uColor;
                             uniform float uTime;
                             uniform float uActive;
+                            uniform sampler2D uTexture;
                             varying vec2 vUv;
                             varying vec3 vPosition;
                             
                             void main() {
-                                // Grid pattern
-                                vec2 grid = fract(vUv * 20.0);
-                                float gridLine = step(0.95, grid.x) + step(0.95, grid.y);
+                                vec4 texColor = texture2D(uTexture, vUv);
                                 
-                                // Holographic scan
-                                float scan = sin(vUv.y * 50.0 + uTime * 2.0) * 0.5 + 0.5;
+                                vec2 grid = fract(vUv * 25.0);
+                                float gridLine = step(0.97, max(grid.x, grid.y));
                                 
-                                // Edge glow
-                                float edge = 1.0 - smoothstep(0.0, 0.1, min(min(vUv.x, 1.0 - vUv.x), min(vUv.y, 1.0 - vUv.y)));
+                                float scan = sin(vUv.y * 60.0 + uTime * 2.0) * 0.5 + 0.5;
                                 
-                                vec3 color = uColor;
-                                color += gridLine * 0.2;
-                                color += scan * 0.1;
-                                color += edge * uColor * 0.5;
+                                float edgeDist = min(min(vUv.x, 1.0 - vUv.x), min(vUv.y, 1.0 - vUv.y));
+                                float edge = 1.0 - smoothstep(0.0, 0.08, edgeDist);
                                 
-                                float alpha = 0.3 + (uActive * 0.4);
-                                alpha += edge * 0.3;
+                                vec3 color = texColor.rgb;
+                                color += uColor * gridLine * 0.3;
+                                color += uColor * scan * 0.05;
+                                color += uColor * edge * 0.6 * uActive;
+                                
+                                float alpha = texColor.a * 0.85;
+                                alpha += edge * 0.4 * uActive;
+                                alpha += gridLine * 0.2;
                                 
                                 gl_FragColor = vec4(color, alpha);
                             }
@@ -527,7 +490,6 @@
 
                     const mesh = new THREE.Mesh(geometry, material);
                     
-                    // Position in circle
                     const angle = i * angleStep;
                     mesh.position.x = Math.sin(angle) * radius;
                     mesh.position.z = Math.cos(angle) * radius;
@@ -539,14 +501,14 @@
             }
 
             createParticleField() {
-                const count = 3000;
+                const count = 2000;
                 const geometry = new THREE.BufferGeometry();
                 const positions = new Float32Array(count * 3);
                 const colors = new Float32Array(count * 3);
 
                 for(let i = 0; i < count; i++) {
                     const i3 = i * 3;
-                    const radius = 20 + Math.random() * 30;
+                    const radius = 25 + Math.random() * 20;
                     const theta = Math.random() * Math.PI * 2;
                     const phi = Math.acos(2 * Math.random() - 1);
                     
@@ -571,7 +533,7 @@
                     size: 0.05,
                     vertexColors: true,
                     transparent: true,
-                    opacity: 0.6,
+                    opacity: 0.4,
                     blending: THREE.AdditiveBlending
                 });
 
@@ -587,15 +549,6 @@
             initControls() {
                 document.getElementById('btn-prev').addEventListener('click', () => this.navigate(-1));
                 document.getElementById('btn-next').addEventListener('click', () => this.navigate(1));
-                
-                // Create progress dots
-                const dotsContainer = document.getElementById('progress-dots');
-                PROJECTS.forEach((_, i) => {
-                    const dot = document.createElement('div');
-                    dot.className = 'progress-dot' + (i === 0 ? ' active' : '');
-                    dot.addEventListener('click', () => this.navigateTo(i));
-                    dotsContainer.appendChild(dot);
-                });
             }
 
             navigate(direction) {
@@ -618,16 +571,9 @@
                 this.updateUI();
             }
 
-            navigateTo(index) {
-                if(this.isAnimating || index === this.currentIndex) return;
-                const direction = index - this.currentIndex;
-                this.navigate(direction);
-            }
-
             updateUI() {
                 const project = PROJECTS[this.currentIndex];
                 
-                // Update content
                 gsap.to('#project-title', {
                     opacity: 0,
                     y: 20,
@@ -647,7 +593,6 @@
                     }
                 });
                 
-                // Update tags
                 const tagsContainer = document.getElementById('project-tags');
                 gsap.to(tagsContainer, {
                     opacity: 0,
@@ -664,16 +609,9 @@
                     }
                 });
                 
-                // Update counter
                 document.getElementById('current-index').textContent = String(this.currentIndex + 1).padStart(2, '0');
                 document.getElementById('total-count').textContent = String(PROJECTS.length).padStart(2, '0');
                 
-                // Update dots
-                document.querySelectorAll('.progress-dot').forEach((dot, i) => {
-                    dot.classList.toggle('active', i === this.currentIndex);
-                });
-                
-                // Update active card
                 this.projectCards.forEach((card, i) => {
                     gsap.to(card.material.uniforms.uActive, {
                         value: i === this.currentIndex ? 1 : 0,
@@ -686,13 +624,11 @@
                 window.addEventListener('resize', () => this.onResize());
                 window.addEventListener('mousemove', (e) => this.onMouseMove(e));
                 
-                // Keyboard navigation
                 window.addEventListener('keydown', (e) => {
                     if(e.key === 'ArrowLeft') this.navigate(-1);
                     if(e.key === 'ArrowRight') this.navigate(1);
                 });
                 
-                // Touch swipe
                 let touchStartX = 0;
                 this.canvas.addEventListener('touchstart', (e) => {
                     touchStartX = e.touches[0].clientX;
@@ -719,8 +655,10 @@
                 this.targetMouse.x = (e.clientX / this.width) * 2 - 1;
                 this.targetMouse.y = -(e.clientY / this.height) * 2 + 1;
                 
-                gsap.to(this.cursorCore, { x: e.clientX, y: e.clientY, duration: 0 });
-                gsap.to(this.cursorRing, { x: e.clientX, y: e.clientY, duration: 0.15 });
+                if(this.cursorCore) {
+                    gsap.to(this.cursorCore, { x: e.clientX, y: e.clientY, duration: 0 });
+                    gsap.to(this.cursorRing, { x: e.clientX, y: e.clientY, duration: 0.15 });
+                }
             }
 
             animate() {
@@ -731,18 +669,15 @@
                 this.mouse.x += (this.targetMouse.x - this.mouse.x) * 0.05;
                 this.mouse.y += (this.targetMouse.y - this.mouse.y) * 0.05;
 
-                // Rotate particles
-                this.particles.rotation.y = time * 0.05;
-                this.particles.rotation.x = time * 0.02;
+                this.particles.rotation.y = time * 0.03;
+                this.particles.rotation.x = time * 0.01;
 
-                // Update card shaders
                 this.projectCards.forEach(card => {
                     card.material.uniforms.uTime.value = time;
                 });
 
-                // Subtle camera movement
-                this.camera.position.x = this.mouse.x * 2;
-                this.camera.position.y = this.mouse.y * 2;
+                this.camera.position.x = 8 + this.mouse.x * 1.5;
+                this.camera.position.y = this.mouse.y * 1.5;
                 this.camera.lookAt(0, 0, 0);
 
                 this.renderer.render(this.scene, this.camera);
