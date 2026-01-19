@@ -462,7 +462,9 @@
                             varying vec3 vPosition;
                             
                             void main() {
-                                vec4 texColor = texture2D(uTexture, vUv);
+                                // Flip UV horizontally to fix mirror reflection
+                                vec2 flippedUv = vec2(1.0 - vUv.x, vUv.y);
+                                vec4 texColor = texture2D(uTexture, flippedUv);
                                 
                                 vec2 grid = fract(vUv * 25.0);
                                 float gridLine = step(0.97, max(grid.x, grid.y));
