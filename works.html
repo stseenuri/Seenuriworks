@@ -493,10 +493,11 @@
                     const angle = i * angleStep;
                     mesh.position.x = Math.sin(angle) * radius;
                     mesh.position.z = Math.cos(angle) * radius;
-                    mesh.rotation.y = -angle;
+                    // Don't rotate the card itself - we'll handle rotation in animate()
+                    mesh.userData.baseAngle = angle;
                     
                     this.carouselGroup.add(mesh);
-                    this.projectCards.push({ mesh, material, angle: i * angleStep });
+                    this.projectCards.push({ mesh, material, angle: angle });
                 });
             }
 
@@ -674,6 +675,9 @@
 
                 this.projectCards.forEach(card => {
                     card.material.uniforms.uTime.value = time;
+                    
+                    // Make cards always face the camera by counter-rotating
+                    card.mesh.rotation.y = -this.carouselGroup.rotation.y - card.mesh.userData.baseAngle;
                 });
 
                 this.camera.position.x = 8 + this.mouse.x * 1.5;
