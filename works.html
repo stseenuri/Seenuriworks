@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHIVATEJA | QUANTUM WORKS</title>
-    
+    <title>SHIVATEJA | SEENURI WORKS</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
             --neon-cyan: #00ffff;
@@ -16,7 +16,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         body { 
             background: #000;
             color: #fff;
@@ -377,7 +377,7 @@
                 this.height = window.innerHeight;
                 this.currentIndex = 0;
                 this.isAnimating = false;
-                
+
                 this.initScene();
                 this.createCarousel();
                 this.createParticleField();
@@ -386,7 +386,7 @@
                 this.addEvents();
                 this.animate();
                 this.updateUI();
-                
+
                 setTimeout(() => {
                     gsap.to('#loader', {
                         opacity: 0,
@@ -419,17 +419,17 @@
                 this.carouselGroup = new THREE.Group();
                 this.carouselGroup.position.x = 3;
                 this.scene.add(this.carouselGroup);
-                
+
                 this.projectCards = [];
                 const radius = 10;
                 const angleStep = (Math.PI * 2) / PROJECTS.length;
 
                 PROJECTS.forEach((project, i) => {
                     const geometry = new THREE.PlaneGeometry(5, 6.5, 32, 32);
-                    
+
                     const textureLoader = new THREE.TextureLoader();
                     const texture = textureLoader.load(project.image);
-                    
+
                     const material = new THREE.ShaderMaterial({
                         uniforms: {
                             uTime: { value: 0 },
@@ -442,14 +442,14 @@
                             varying vec3 vPosition;
                             uniform float uTime;
                             uniform float uActive;
-                            
+
                             void main() {
                                 vUv = uv;
                                 vPosition = position;
-                                
+
                                 vec3 pos = position;
                                 pos *= 1.0 + (uActive * 0.15);
-                                
+
                                 gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
                             }
                         `,
@@ -460,43 +460,42 @@
                             uniform sampler2D uTexture;
                             varying vec2 vUv;
                             varying vec3 vPosition;
-                            
+
                             void main() {
-                                // Use normal UV coordinates (no flipping)
                                 vec4 texColor = texture2D(uTexture, vUv);
-                                
+
                                 vec2 grid = fract(vUv * 25.0);
                                 float gridLine = step(0.97, max(grid.x, grid.y));
-                                
+
                                 float scan = sin(vUv.y * 60.0 + uTime * 2.0) * 0.5 + 0.5;
-                                
+
                                 float edgeDist = min(min(vUv.x, 1.0 - vUv.x), min(vUv.y, 1.0 - vUv.y));
                                 float edge = 1.0 - smoothstep(0.0, 0.08, edgeDist);
-                                
+
                                 vec3 color = texColor.rgb;
                                 color += uColor * gridLine * 0.3;
                                 color += uColor * scan * 0.05;
                                 color += uColor * edge * 0.6 * uActive;
-                                
+
                                 float alpha = texColor.a * 0.85;
                                 alpha += edge * 0.4 * uActive;
                                 alpha += gridLine * 0.2;
-                                
+
                                 gl_FragColor = vec4(color, alpha);
                             }
                         `,
                         transparent: true,
-                        side: THREE.DoubleSide
+                        side: THREE.FrontSide
                     });
 
                     const mesh = new THREE.Mesh(geometry, material);
-                    
+
                     const angle = i * angleStep;
                     mesh.position.x = Math.sin(angle) * radius;
                     mesh.position.z = Math.cos(angle) * radius;
-                    // Don't rotate the card itself - we'll handle rotation in animate()
+                    mesh.rotation.y = -angle;
                     mesh.userData.baseAngle = angle;
-                    
+
                     this.carouselGroup.add(mesh);
                     this.projectCards.push({ mesh, material, angle: angle });
                 });
@@ -513,7 +512,7 @@
                     const radius = 25 + Math.random() * 20;
                     const theta = Math.random() * Math.PI * 2;
                     const phi = Math.acos(2 * Math.random() - 1);
-                    
+
                     positions[i3] = radius * Math.sin(phi) * Math.cos(theta);
                     positions[i3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
                     positions[i3 + 2] = radius * Math.cos(phi);
@@ -556,11 +555,11 @@
             navigate(direction) {
                 if(this.isAnimating) return;
                 this.isAnimating = true;
-                
+
                 this.currentIndex = (this.currentIndex + direction + PROJECTS.length) % PROJECTS.length;
-                
+
                 const targetRotation = -(this.currentIndex * (Math.PI * 2 / PROJECTS.length));
-                
+
                 gsap.to(this.carouselGroup.rotation, {
                     y: targetRotation,
                     duration: 1.5,
@@ -569,13 +568,13 @@
                         this.isAnimating = false;
                     }
                 });
-                
+
                 this.updateUI();
             }
 
             updateUI() {
                 const project = PROJECTS[this.currentIndex];
-                
+
                 gsap.to('#project-title', {
                     opacity: 0,
                     y: 20,
@@ -585,7 +584,7 @@
                         gsap.to('#project-title', { opacity: 1, y: 0, duration: 0.5 });
                     }
                 });
-                
+
                 gsap.to('#project-desc', {
                     opacity: 0,
                     duration: 0.3,
@@ -594,7 +593,7 @@
                         gsap.to('#project-desc', { opacity: 1, duration: 0.5 });
                     }
                 });
-                
+
                 const tagsContainer = document.getElementById('project-tags');
                 gsap.to(tagsContainer, {
                     opacity: 0,
@@ -610,10 +609,10 @@
                         gsap.to(tagsContainer, { opacity: 1, duration: 0.5 });
                     }
                 });
-                
+
                 document.getElementById('current-index').textContent = String(this.currentIndex + 1).padStart(2, '0');
                 document.getElementById('total-count').textContent = String(PROJECTS.length).padStart(2, '0');
-                
+
                 this.projectCards.forEach((card, i) => {
                     gsap.to(card.material.uniforms.uActive, {
                         value: i === this.currentIndex ? 1 : 0,
@@ -625,17 +624,17 @@
             addEvents() {
                 window.addEventListener('resize', () => this.onResize());
                 window.addEventListener('mousemove', (e) => this.onMouseMove(e));
-                
+
                 window.addEventListener('keydown', (e) => {
                     if(e.key === 'ArrowLeft') this.navigate(-1);
                     if(e.key === 'ArrowRight') this.navigate(1);
                 });
-                
+
                 let touchStartX = 0;
                 this.canvas.addEventListener('touchstart', (e) => {
                     touchStartX = e.touches[0].clientX;
                 });
-                
+
                 this.canvas.addEventListener('touchend', (e) => {
                     const touchEndX = e.changedTouches[0].clientX;
                     const diff = touchStartX - touchEndX;
@@ -656,7 +655,7 @@
             onMouseMove(e) {
                 this.targetMouse.x = (e.clientX / this.width) * 2 - 1;
                 this.targetMouse.y = -(e.clientY / this.height) * 2 + 1;
-                
+
                 if(this.cursorCore) {
                     gsap.to(this.cursorCore, { x: e.clientX, y: e.clientY, duration: 0 });
                     gsap.to(this.cursorRing, { x: e.clientX, y: e.clientY, duration: 0.15 });
@@ -665,9 +664,9 @@
 
             animate() {
                 requestAnimationFrame(() => this.animate());
-                
+
                 const time = this.clock.getElapsedTime();
-                
+
                 this.mouse.x += (this.targetMouse.x - this.mouse.x) * 0.05;
                 this.mouse.y += (this.targetMouse.y - this.mouse.y) * 0.05;
 
@@ -676,9 +675,7 @@
 
                 this.projectCards.forEach(card => {
                     card.material.uniforms.uTime.value = time;
-                    
-                    // Make cards always face the camera by counter-rotating
-                    card.mesh.rotation.y = -this.carouselGroup.rotation.y - card.mesh.userData.baseAngle;
+                    card.mesh.rotation.y = -card.mesh.userData.baseAngle;
                 });
 
                 this.camera.position.x = 8 + this.mouse.x * 1.5;
