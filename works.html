@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHIVATEJA | SEENURI WORKS</title>
+    <title>SHIVATEJA | QUANTUM WORKS</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
@@ -485,7 +485,7 @@
                             }
                         `,
                         transparent: true,
-                        side: THREE.FrontSide
+                        side: THREE.DoubleSide
                     });
 
                     const mesh = new THREE.Mesh(geometry, material);
@@ -675,7 +675,8 @@
 
                 this.projectCards.forEach(card => {
                     card.material.uniforms.uTime.value = time;
-                    card.mesh.rotation.y = -card.mesh.userData.baseAngle;
+                    // Keep cards facing camera by counter-rotating the carousel rotation
+                    card.mesh.rotation.y = -this.carouselGroup.rotation.y - card.mesh.userData.baseAngle;
                 });
 
                 this.camera.position.x = 8 + this.mouse.x * 1.5;
