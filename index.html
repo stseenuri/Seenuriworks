@@ -3,30 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHIVATEJA </title>
+    <title>SHIVATEJA | MOBILE OPTIMIZED</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            /* Soft dark neumorphic base */
-            --c-bg: #0e1116;
-            --c-bg-light: #1b1f27;
-            --c-bg-dark: #05070b;
             --c-accent: #00f3ff;
-            --c-text: #e7edf7;
+            --c-dark: #050505;
+            --c-white: #ffffff;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
+        
         body { 
-            background: var(--c-bg);
-            color: var(--c-text);
+            background: var(--c-dark); 
+            color: var(--c-white); 
             font-family: 'Rajdhani', sans-serif; 
             overflow: hidden; 
             height: 100vh;
             width: 100vw;
+            /* Prevent rubber-banding on mobile */
             overscroll-behavior: none;
         }
 
@@ -39,29 +37,6 @@
             display: block;
         }
 
-        /* --- NEUMORPHIC UTILS --- */
-        .neo-surface {
-            background: var(--c-bg);
-            box-shadow:
-                10px 10px 25px rgba(0, 0, 0, 0.5),
-                -10px -10px 25px rgba(60, 70, 90, 0.35);
-            border-radius: 18px;
-        }
-
-        .neo-inset {
-            background: var(--c-bg);
-            box-shadow:
-                inset 6px 6px 14px rgba(0, 0, 0, 0.65),
-                inset -6px -6px 14px rgba(60, 70, 90, 0.45);
-            border-radius: 14px;
-        }
-
-        .neo-soft-text {
-            text-shadow:
-                2px 2px 3px rgba(0, 0, 0, 0.6),
-                -1px -1px 2px rgba(255, 255, 255, 0.09);
-        }
-
         /* --- UI LAYER --- */
         #ui-layer {
             position: fixed;
@@ -72,134 +47,86 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 24px;
+            padding: 30px; /* Reduced padding for mobile */
+            mix-blend-mode: exclusion;
         }
 
-        /* --- HEADER CARD --- */
+        /* --- HEADER --- */
         header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            pointer-events: auto;
-            padding: 10px 16px;
-            border-radius: 16px;
-            background: radial-gradient(circle at 0% 0%, #1e2430 0, var(--c-bg) 42%);
-            box-shadow:
-                6px 6px 16px rgba(0, 0, 0, 0.6),
-                -4px -4px 12px rgba(60, 70, 90, 0.3);
+            align-items: flex-start;
         }
 
         .brand {
             font-family: 'Syncopate', sans-serif;
             font-weight: 700;
-            font-size: clamp(14px, 4vw, 20px);
-            letter-spacing: 3px;
-            color: var(--c-text);
-            text-transform: uppercase;
+            font-size: clamp(16px, 4vw, 24px); /* Responsive font */
+            letter-spacing: 2px;
+            pointer-events: auto;
         }
 
         .meta-data {
             text-align: right;
-            font-size: 9px;
+            font-size: 10px;
             opacity: 0.7;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             line-height: 1.5;
         }
 
-        /* --- HERO CARD --- */
+        /* --- CENTER HERO --- */
         .hero-container {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: min(92vw, 440px);
-            padding: 22px 20px 26px;
-            pointer-events: auto;
-        }
-
-        .hero-card {
-            padding: 22px 20px 26px;
-            border-radius: 22px;
-            background: radial-gradient(circle at 20% 0%, #212837 0, var(--c-bg) 55%);
-            box-shadow:
-                12px 12px 28px rgba(0, 0, 0, 0.75),
-                -10px -10px 26px rgba(65, 78, 105, 0.35);
-            border: 1px solid rgba(255, 255, 255, 0.02);
             text-align: center;
+            width: 100%;
+            padding: 0 20px;
         }
 
         .hero-glitch {
             font-family: 'Syncopate', sans-serif;
-            font-size: clamp(30px, 9vw, 64px); 
+            /* Clamp ensures it fits mobile width without breaking */
+            font-size: clamp(32px, 9vw, 120px); 
             font-weight: 700;
             text-transform: uppercase;
             line-height: 1;
             position: relative;
             color: transparent;
-            -webkit-text-stroke: 1px rgba(231, 237, 247, 0.12);
+            -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+            pointer-events: auto;
         }
         
         .hero-glitch::before {
             content: attr(data-text);
             position: absolute;
-            inset: 0;
-            color: var(--c-text);
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            color: #fff;
             clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
             animation: textReveal 1.5s cubic-bezier(0.77, 0, 0.175, 1) forwards 1s;
-            text-shadow:
-                4px 4px 6px rgba(0, 0, 0, 0.6),
-                -2px -2px 4px rgba(255, 255, 255, 0.06);
         }
 
         @keyframes textReveal {
             to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
         }
 
-        .hero-glitch.secondary {
-            font-size: clamp(18px, 5vw, 32px);
-            -webkit-text-stroke: 0;
-            opacity: 0.7;
-        }
-
         .sub-hero {
-            margin-top: 18px;
-            font-size: clamp(11px, 3vw, 14px);
-            letter-spacing: 4px;
+            margin-top: 15px;
+            font-size: clamp(12px, 3vw, 18px);
+            letter-spacing: 3px;
             text-transform: uppercase;
             opacity: 0;
             animation: fadeIn 1s ease forwards 2.5s;
-            color: var(--c-accent);
-            text-shadow:
-                0 0 8px rgba(0, 243, 255, 0.5),
-                2px 2px 3px rgba(0, 0, 0, 0.6);
         }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-
-        /* --- FOOTER CARD --- */
+        /* --- FOOTER UI --- */
         footer {
-            pointer-events: auto;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: stretch;
-            gap: 16px;
-        }
-
-        .footer-card {
-            flex: 1;
-            padding: 14px 16px;
-            border-radius: 18px;
-            background: var(--c-bg);
-            box-shadow:
-                8px 8px 20px rgba(0, 0, 0, 0.7),
-                -6px -6px 16px rgba(60, 70, 90, 0.28);
-            border: 1px solid rgba(255, 255, 255, 0.02);
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            gap: 16px;
+            pointer-events: auto;
+            width: 100%;
         }
 
         .nav-links {
@@ -209,82 +136,64 @@
 
         .nav-link {
             display: block;
-            font-size: 11px;
+            font-size: 12px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            padding: 8px 12px;
-            color: rgba(231, 237, 247, 0.7);
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding: 10px 0; /* Larger touch target */
+            color: rgba(255,255,255,0.6);
             text-decoration: none;
-            border-radius: 999px;
-            background: var(--c-bg);
-            box-shadow:
-                4px 4px 12px rgba(0, 0, 0, 0.6),
-                -3px -3px 8px rgba(65, 78, 105, 0.36);
-            transition: all 0.2s ease-out;
+            transition: color 0.3s;
         }
         
-        .nav-link:hover,
-        .nav-link:focus-visible {
+        .nav-link.active, .nav-link:hover {
             color: var(--c-accent);
-            box-shadow:
-                inset 3px 3px 8px rgba(0, 0, 0, 0.7),
-                inset -3px -3px 8px rgba(65, 78, 105, 0.5);
-        }
-
-        .nav-link:last-child {
-            margin-bottom: 0;
         }
 
         .system-status {
-            min-width: 110px;
             text-align: right;
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            gap: 6px;
-        }
-
-        .system-label {
-            font-size: 9px;
-            opacity: 0.6;
-            letter-spacing: 2px;
-        }
-
-        .progress-wrap {
-            width: 110px;
-            padding: 6px 8px;
-            border-radius: 999px;
-            background: var(--c-bg);
-            box-shadow:
-                inset 4px 4px 10px rgba(0, 0, 0, 0.8),
-                inset -4px -4px 10px rgba(60, 70, 90, 0.45);
         }
 
         .progress-bar {
-            width: 100%;
-            height: 4px;
-            border-radius: 999px;
-            background: linear-gradient(145deg, #0b0d12, #141926);
+            width: 100px; /* Smaller for mobile */
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            position: relative;
             overflow: hidden;
         }
 
         .progress-fill {
+            position: absolute;
+            top: 0; left: 0;
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #00f3ff, #ff00a8);
-            box-shadow: 0 0 12px rgba(0, 243, 255, 0.75);
+            background: var(--c-accent);
             animation: load 2s ease-in-out forwards;
-            border-radius: inherit;
         }
 
         @keyframes load { to { width: 100%; } }
 
-        /* --- LOADER NEUMORPHIC --- */
+        /* --- MOBILE SPECIFIC TWEAKS --- */
+        @media (max-width: 768px) {
+            #ui-layer { padding: 20px; }
+            footer {
+                flex-direction: row; /* Keep row but adjust sizing */
+                align-items: flex-end;
+            }
+            .hero-glitch { -webkit-text-stroke: 0.5px rgba(255,255,255,0.2); }
+            
+            /* Hide custom cursor on touch devices to prevent ghost touches */
+            #cursor, #cursor-dot { display: none !important; }
+        }
+
+        /* --- LOADING OVERLAY --- */
         #loader {
             position: fixed;
             inset: 0;
-            background: radial-gradient(circle at 50% 0%, #202634 0, var(--c-bg) 58%);
+            background: #000;
             z-index: 100;
             display: flex;
             justify-content: center;
@@ -292,44 +201,14 @@
             color: var(--c-accent);
             font-family: 'Syncopate';
             font-weight: 700;
-            font-size: clamp(18px, 5vw, 34px);
-            transition: opacity 0.9s ease;
+            font-size: clamp(20px, 5vw, 40px);
+            transition: opacity 1s ease;
         }
-
-        #loader-inner {
-            padding: 18px 28px;
-            border-radius: 22px;
-            background: var(--c-bg);
-            box-shadow:
-                10px 10px 24px rgba(0, 0, 0, 0.7),
-                -10px -10px 24px rgba(70, 82, 110, 0.3);
-            letter-spacing: 6px;
-        }
-
-        /* --- MOBILE --- */
-        @media (max-width: 768px) {
-            #ui-layer { padding: 20px; }
-            header { padding: 8px 14px; }
-            .hero-card { padding: 18px 16px 22px; }
-            footer {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .footer-card {
-                padding: 12px 14px;
-            }
-            #cursor, #cursor-dot { display: none !important; }
-        }
-
-        /* Hide custom cursor by default in this variant (optional) */
-        #cursor, #cursor-dot { display: none; }
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <div id="loader-inner">INITIALIZING</div>
-    </div>
+    <div id="loader">INITIALIZING...</div>
 
     <div id="cursor"></div>
     <div id="cursor-dot"></div>
@@ -346,40 +225,35 @@
         </header>
 
         <div class="hero-container">
-            <div class="hero-card">
-                <div class="hero-glitch" data-text="SHIVATEJA">SHIVATEJA</div>
-                <div class="hero-glitch secondary" data-text="SEENURI">SEENURI</div>
-                <div class="sub-hero">Creative Technologist</div>
-            </div>
+            <div class="hero-glitch" data-text="SHIVATEJA">SHIVATEJA</div>
+            <div class="hero-glitch" data-text="Seenuri" style="font-size: clamp(20px, 5vw, 60px); -webkit-text-stroke: 0px; opacity: 0.6;">SEENURI</div>
+            <div class="sub-hero">Creative Technologist</div>
         </div>
 
         <footer>
-            <div class="footer-card">
-                <div class="nav-links">
-                    <a href="#" class="nav-link">01. Works</a>
-                    <a href="#" class="nav-link">02. About</a>
-                    <a href="mailto:stseenuri@outlook.com" class="nav-link">03. Contact</a>
-                </div>
-                <div class="system-status">
-                    <div class="system-label">GPU ONLINE</div>
-                    <div class="progress-wrap">
-                        <div class="progress-bar"><div class="progress-fill"></div></div>
-                    </div>
-                </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link">01. Works</a>
+                <a href="#" class="nav-link">02. About</a>
+                <a href="mailto:stseenuri@outlook.com" class="nav-link">03. Contact</a>
+            </div>
+            <div class="system-status">
+                <div style="font-size:9px; margin-bottom:5px; opacity:0.5;">GPU ONLINE</div>
+                <div class="progress-bar"><div class="progress-fill"></div></div>
             </div>
         </footer>
     </div>
 
-    <!-- THREE + GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <script>
+        // DETECT MOBILE
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
         const CONFIG = {
+            // Lower particle count on mobile for performance (2500 vs 6000)
             particleCount: isMobile ? 2500 : 6000, 
-            particleSize: isMobile ? 0.04 : 0.02,
+            particleSize: isMobile ? 0.04 : 0.02, // Bigger particles on mobile
             colorA: new THREE.Color('#00f3ff'), 
             colorB: new THREE.Color('#ff0055')
         };
@@ -398,15 +272,16 @@
                 
                 setTimeout(() => {
                     document.getElementById('loader').style.opacity = '0';
-                    setTimeout(() => document.getElementById('loader').remove(), 900);
+                    setTimeout(() => document.getElementById('loader').remove(), 1000);
                 }, 1000);
             }
 
             initThree() {
                 this.scene = new THREE.Scene();
-                this.scene.fog = new THREE.FogExp2(0x05070b, 0.022);
+                this.scene.fog = new THREE.FogExp2(0x050505, 0.02);
 
                 this.camera = new THREE.PerspectiveCamera(75, this.width / this.height, 0.1, 100);
+                // Move camera further back on mobile to see more
                 this.camera.position.set(0, 0, isMobile ? 12 : 8);
 
                 this.renderer = new THREE.WebGLRenderer({
@@ -416,7 +291,7 @@
                 });
                 this.renderer.setSize(this.width, this.height);
                 this.renderer.setPixelRatio(this.pixelRatio);
-                this.renderer.setClearColor(0x0e1116);
+                this.renderer.setClearColor(0x050505);
 
                 this.clock = new THREE.Clock();
                 this.mouse = new THREE.Vector2(0, 0);
@@ -461,6 +336,7 @@
                         attribute vec3 aRandom;
                         varying vec3 vColor;
                         
+                        // Simplex Noise (Compressed for brevity)
                         vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
                         vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
                         vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
@@ -509,11 +385,15 @@
                             vec3 pos = position;
                             float time = uTime * 0.2;
 
+                            // Gentle noise movement
                             pos.x += snoise(vec3(pos.x, pos.y, time)) * 0.4;
                             pos.y += snoise(vec3(pos.y, pos.z, time)) * 0.4;
                             pos.z += snoise(vec3(pos.z, pos.x, time)) * 0.4;
 
+                            // Mouse Repulsion Logic
                             float dist = distance(pos.xy, uMouse.xy * 6.0);
+                            
+                            // On mobile, the "repulsion" is stronger so you can see it under your finger
                             if(dist < 4.0) {
                                 vec3 dir = normalize(pos - vec3(uMouse.xy * 6.0, 0.0));
                                 pos += dir * (4.0 - dist) * 0.8;
@@ -522,8 +402,10 @@
                             vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
                             gl_Position = projectionMatrix * mvPosition;
                             
+                            // Responsive Point Size
                             gl_PointSize = (12.0 * uPixelRatio) * (1.0 / -mvPosition.z);
                             
+                            // Cyberpunk Gradient
                             vColor = mix(vec3(0.0, 0.95, 1.0), vec3(1.0, 0.0, 0.33), position.z * 0.2 + 0.5);
                         }
                     `,
@@ -548,11 +430,21 @@
             addEvents() {
                 window.addEventListener('resize', this.onResize.bind(this));
                 
+                // MOUSE EVENTS (Desktop)
                 window.addEventListener('mousemove', (e) => {
                     if(isMobile) return;
                     this.updateMouse(e.clientX, e.clientY);
+                    
+                    // Custom Cursor Logic
+                    const cursor = document.getElementById('cursor');
+                    const cursorDot = document.getElementById('cursor-dot');
+                    if(cursor) {
+                        gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.1 });
+                        gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.0 });
+                    }
                 });
 
+                // TOUCH EVENTS (Mobile)
                 window.addEventListener('touchmove', (e) => {
                     if (e.touches.length > 0) {
                         this.updateMouse(e.touches[0].clientX, e.touches[0].clientY);
@@ -567,6 +459,7 @@
             }
 
             updateMouse(x, y) {
+                // Normalize to -1 to 1 range
                 this.targetMouse.x = (x / this.width) * 2 - 1;
                 this.targetMouse.y = -(y / this.height) * 2 + 1;
             }
@@ -585,10 +478,13 @@
                 
                 const time = this.clock.getElapsedTime();
                 
+                // Smooth Mouse Interpolation
                 this.mouse.x += (this.targetMouse.x - this.mouse.x) * 0.1;
                 this.mouse.y += (this.targetMouse.y - this.mouse.y) * 0.1;
 
                 this.particles.rotation.y = time * 0.05;
+                
+                // Tilting effect based on mouse/touch position
                 this.particles.rotation.x = this.mouse.y * 0.2;
                 this.particles.rotation.z = this.mouse.x * 0.2;
 
@@ -602,7 +498,7 @@
         class TextScramble {
             constructor(el) {
                 this.el = el;
-                this.chars = '!<>-_\\\\/[]{}—=+*^?#________';
+                this.chars = '!<>-_\\/[]{}—=+*^?#________';
                 this.update = this.update.bind(this);
             }
             setText(newText) {
